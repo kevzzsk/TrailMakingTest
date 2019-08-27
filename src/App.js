@@ -1,9 +1,12 @@
 import React from 'react';
 import './App.css';
 
+import BubbleCreator from './components/BubbleCreator'
+
 function App() {
   return (
-    <div>
+    <div id="bg">
+      <BubbleCreator />
     </div>
   );
 }
