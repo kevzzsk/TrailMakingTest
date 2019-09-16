@@ -1,4 +1,45 @@
 
+a{
+  text-decoration: none;
+  color: inherit
+}
+
+a.nav-item{
+  color: grey
+}
+a.nav-item:active{
+  color: white
+}
+
+
+.experiment-bg{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: 
+  "experiment experiment side";
+  height: calc(100% - 64px);
+}
+
+.item-exp{
+  grid-area: experiment;
+  height: 100%;
+}
+
+.item-side{
+  grid-area: side;
+}
+
+.experiment{
+  margin: auto;
+  width: 30%;
+  padding: 10px;
+}
+.experiment-btn{
+  width: 100%;
+  padding: 10px;
+}
+
 .bubble {
   border-radius: 50%;
   border: 2px solid black;

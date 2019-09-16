@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
+import PropTypes from 'prop-types';
+import Trails from '@orcatech/react-neuropsych-trails';
 
-import BubbleCreator from './components/BubbleCreator'
+import ExperimentPage from './components/ExperimentPage'
+import Appbar from './components/Appbar';
+import HomePage from './components/HomePage';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-function App() {
-  return (
-    <div id="bg">
-      <BubbleCreator />
-    </div>
-  );
+class App extends Component {
+
+
+	render() {
+		return (
+			<Router>
+				<div id="bg">
+					<Appbar />
+					<Switch>
+						<Route exact path="/" component={HomePage} />
+						<Route path="/experiment" exact component={ExperimentPage} />
+					</Switch>
+				</div>
+			</Router>
+		);
+	}
 }
 
 export default App;
