@@ -1,14 +1,11 @@
 
-import React, { Component } from 'react'
-import { Grid, Button } from '@material-ui/core'
-
-import BubbleScreen from './BubbleScreen'
-import SideBar from './SideBar'
-import Trail from '../template/template1'
+import React, { Component } from 'react';
+import { Grid, Button } from '@material-ui/core';
+import BubbleScreen from './BubbleScreen';
+import SideBar from './SideBar';
+import Trail from '../template/template1';
 
 class ExperimentPage extends Component {
-
-    
 
     constructor(props){
         super(props);

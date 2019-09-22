@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 
 class LoginPage extends Component {
@@ -27,15 +27,19 @@ class LoginPage extends Component {
 
     render() {
         return (
-            <form>
-                <div>
-                    <input type="Username" className="form-control" placeholder="Username" ref={(username) => this.username = username} onChange={this.handleUsername}/>
-                    <input type="Password" className="form-control" placeholder="Password" ref={(password) => this.password = password} onChange={this.handlePassword}/>
-                    <Link innerRef={this.checkLogin} to={'/userPage'}>
-                        <button type="button" className="btn btn-dark experiment-btn" >Login ></button>
-                    </Link>
-                </div>                
-            </form>
+                <form>
+                    <div className="form-group container">
+                        <br/>
+                        <label style={{fontFamily:'Helvetica'}}>USERNAME</label>
+                        <input type="Username" className="form-control" placeholder="" ref={(username) => this.username = username} onChange={this.handleUsername}/>
+                        <label style={{paddingTop:10, fontFamily:'Helvetica'}}>PASSWORD</label>
+                        <input type="Password" className="form-control" placeholder="" ref={(password) => this.password = password} onChange={this.handlePassword}/>
+                        <br/>
+                        <Link type="submit" className="btn btn-dark experiment-btn" innerRef={this.checkLogin} to={'/user-page'}>
+                            Login >
+                        </Link>
+                    </div>                
+                </form>
         )
     }
 }
