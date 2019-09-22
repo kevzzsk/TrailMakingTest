@@ -5,7 +5,7 @@ class UserPage extends Component{
     render(){
         return (
             <div>
-                <h1>User's Profile</h1>
+                <h2>User Profile Page</h2>
             </div>
         )
     }
