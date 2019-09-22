@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import SignInLink from './SignInLink'
+import React, { Component } from 'react';
+import {AppBar, Typography, IconButton, Toolbar} from '@material-ui/core';
+import { Link } from "react-router-dom";
 
-import {AppBar,Typography,IconButton,MenuIcon,Button,Toolbar} from '@material-ui/core'
 
 class Appbar extends Component  {
     render() {
@@ -9,7 +9,9 @@ class Appbar extends Component  {
                 <AppBar position="static">
                     <Toolbar>
                         <Typography variant="h6">Trail Making Test</Typography>
-                        <IconButton edge="end" color="inherit" className="ml-auto">Login</IconButton>
+                        <Link to={'/login'}>
+                            <IconButton edge="end" color="inherit" className="ml-auto">Login</IconButton>
+                        </Link>
                     </Toolbar>
                 </AppBar>
         )
