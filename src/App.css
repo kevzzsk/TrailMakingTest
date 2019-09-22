@@ -69,3 +69,33 @@ a.nav-item:active{
 #root{
   height: 100vh;
 }
+
+.vexp-container{
+  display: grid;
+  grid-template-columns: 1fr 4fr ;
+  grid-template-rows: 1fr 1fr 9fr;
+  grid-template-areas: 
+  "back ."
+  "title title"
+  "tab tabpanel";
+  height: calc(100% - 64px);
+
+}
+
+.vexp-btn{
+  grid-area: back;
+  width: 30%;
+  height: 60%;
+  align-self: center
+}
+.vexp-title{
+  grid-area: title;
+  align-self: center
+}
+
+.vexp-tabs{
+  grid-area: tab;
+}
+.vexp-tabspanel{
+  grid-area: tabpanel
+}
