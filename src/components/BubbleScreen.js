@@ -11,8 +11,8 @@ class BubbleScreen extends Component {
         super(props);
         this.state = {
             bubble_markers: [],
-            height: 0,
-            width: 0,
+            height: 500,
+            width: 500,
             progress: 0,
             error: "",
         }
@@ -45,18 +45,21 @@ class BubbleScreen extends Component {
         const height = this.divElement.clientHeight;
         const width = this.divElement.clientWidth;
         this.setState({ height, width });
-        this.data.start = new Date().getTime()
+        this.data.start = new Date().getTime();
+        console.time("START")
     }
 
     getScaleX = () => {
         let canvas_w = this.props.trail.width;
-        let scale_x = this.state.width / canvas_w;
+        let radius = this.props.trail.diameter/2
+        let scale_x = (this.state.width-radius-5) / canvas_w;
         return scale_x
     }
 
     getScaleY = () => {
         let canvas_h = this.props.trail.height;
-        let scale_y = this.state.height / canvas_h;
+        let radius = this.props.trail.diameter/2
+        let scale_y = (this.state.height-radius-5) / canvas_h;
         return scale_y
     }
 
@@ -75,6 +78,7 @@ class BubbleScreen extends Component {
         console.log((this.data.stop - this.data.start) / 1000);
         console.log("Trails Data:");
         console.log(this.data);
+        console.timeEnd("START")
     }
 
     handleSuccess = (e, i) => {

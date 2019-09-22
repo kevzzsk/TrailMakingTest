@@ -17,7 +17,7 @@ class App extends Component {
 				<div id="bg">
 					<Appbar />
 					<Switch>
-						<Route exact path="/" component={ViewExperiment} />
+						<Route exact path="/" component={HomePage} />
 						<Route path="/experiment" exact component={ExperimentPage} />
 						<Route path="/completion" exact component={CompletionPage} />
 						<Route path="/login" exact component={LoginPage} />

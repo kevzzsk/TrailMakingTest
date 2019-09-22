@@ -3,6 +3,9 @@ a{
   text-decoration: none;
   color: inherit
 }
+a:hover{
+color: inherit;
+}
 
 a.nav-item{
   color: grey
@@ -92,6 +95,7 @@ a.nav-item:active{
   grid-area: title;
   align-self: center
 }
+
 
 .vexp-tabs{
   grid-area: tab;
