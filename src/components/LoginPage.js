@@ -8,7 +8,7 @@ class LoginPage extends Component {
                 <div>
                     <input type="Username" className="form-control" placeholder="Username" />
                     <input type="Password" className="form-control" placeholder="Password" />
-                    <Link to={'/'}><button type="button" className="btn btn-dark experiment-btn" >Login</button></Link>
+                    <Link to={'/userPage'}><button type="button" className="btn btn-dark experiment-btn" >Login ></button></Link>
                 </div>                
             </form>
         )

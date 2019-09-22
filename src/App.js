@@ -6,6 +6,7 @@ import ExperimentPage from './components/ExperimentPage'
 import Appbar from './components/Appbar';
 import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
+import UserPage from './components/UserPage';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 class App extends Component {
@@ -18,6 +19,7 @@ class App extends Component {
 						<Route exact path="/" component={HomePage} />
 						<Route path="/experiment" exact component={ExperimentPage} />
 						<Route path="/login" exact component={LoginPage} />
+						<Route path="/userPage" component={UserPage} />
 					</Switch>
 				</div>
 			</Router>

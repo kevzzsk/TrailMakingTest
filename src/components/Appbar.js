@@ -8,10 +8,15 @@ class Appbar extends Component {
         return (
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography variant="h6">Trail Making Test</Typography>
+                        
+                        <Link to={'/'}>
+                            <Typography variant="h6">Trail Making Test</Typography>
+                        </Link>
+
                         <Link to={'/login'}>
                             <IconButton edge="end" color="inherit" className="ml-auto">Login</IconButton>
                         </Link>
+
                     </Toolbar>
                 </AppBar>
         )
