@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {AppBar, Typography, IconButton, Toolbar} from '@material-ui/core';
 import { Link } from "react-router-dom";
 
-class Appbar extends Component {
 
+class Appbar extends Component  {
     render() {
         return (
                 <AppBar position="static">

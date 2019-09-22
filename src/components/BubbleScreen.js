@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
-import template1 from "./template1"
 import Bubble from "./Bubble"
 import Theme from "./Theme"
 import { minHeight } from '@material-ui/system';
+import PopUp from './Popup'
 
 class BubbleScreen extends Component {
 
@@ -13,14 +13,33 @@ class BubbleScreen extends Component {
             bubble_markers: [],
             height: 0,
             width: 0,
-            progress:0
+            progress: 0,
+            error: "",
         }
         this.data = {
-			start: undefined,
-			stop: undefined,
-			events: []
-		};
+            start: undefined,
+            stop: undefined,
+            events: []
+        };
     }
+
+    static defaultProps = {
+        //beginEndLabels: false,
+        //part: "A",
+        feedback: true,
+        errorText: "X",
+        errorDuration: 500,
+        completedText: "Completed!",
+        progress: 0,
+        retry: false,
+        retryText: "Would you like to retry?",
+        onRetry: () => { },
+        onSuccess: (date, token) => { },
+        onError: (date, correctToken, selectedToken) => { },
+        onCompleted: (date) => { },
+        onMiss: (date, correctToken, x, y) => { }
+    }
+
 
     componentDidMount() {
         const height = this.divElement.clientHeight;
@@ -30,54 +49,77 @@ class BubbleScreen extends Component {
     }
 
     getScaleX = () => {
-        let canvas_w = template1.width;
-        let scale_x = this.state.width/canvas_w;
+        let canvas_w = this.props.trail.width;
+        let scale_x = this.state.width / canvas_w;
         return scale_x
     }
 
     getScaleY = () => {
-        let canvas_h = template1.height;
-        let scale_y = this.state.height/canvas_h;
+        let canvas_h = this.props.trail.height;
+        let scale_y = this.state.height / canvas_h;
         return scale_y
     }
 
     update = (type, date, correctToken, selectedToken) => {
-		this.data.events.push({
-			stamp: date.getTime,
-			type: type,
-			correctToken: correctToken,
-			selectedToken: selectedToken
-		});
-		console.log(this.data.events[this.data.events.length-1]);
+        this.data.events.push({
+            stamp: date.getTime,
+            type: type,
+            correctToken: correctToken,
+            selectedToken: selectedToken
+        });
+        console.log(this.data.events[this.data.events.length - 1]);
     }
-    
+
     onCompleted = (date) => {
         this.data.stop = date.getTime();
-        console.log((this.data.stop - this.data.start)/1000);
-		console.log("Trails Data:");
-		console.log(this.data);
+        console.log((this.data.stop - this.data.start) / 1000);
+        console.log("Trails Data:");
+        console.log(this.data);
     }
 
-    handleSuccess = (e,i)=>{
-        this.update("Success", new Date(), template1.tokens[i], template1.tokens[i]);
+    handleSuccess = (e, i) => {
+
+        this.handled = true; // to prevent handleMiss from firing
+
+        this.update("Success", new Date(), this.props.trail.tokens[i], this.props.trail.tokens[i]);
         this.setState(prev => ({ progress: ++prev.progress }));
 
-        if (this.state.progress >= template1.tokens.length-1) {
-			this.onCompleted(new Date());
-		}
-
-        console.log("SUCCESS")
+        if (this.state.progress >= this.props.trail.tokens.length - 1) {
+            this.onCompleted(new Date());
+        }
     }
 
-    handleError = (e,i)=>{
+    handleError = (e, i) => {
 
-        this.update("Error", new Date(), template1.tokens[this.state.progress], template1.tokens[i]);
-        console.log("ERROR")
+        this.handled = true; // to prevent handleMiss from firing
+
+        this.update("Error", new Date(), this.props.trail.tokens[this.state.progress], this.props.trail.tokens[i]);
+        if (this.props.feedback) {
+            this.setState({ error: this.props.errorText });
+
+            // remove the error after a predetermined duration
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(
+                () => {
+                    this.setState({ error: "" });
+                },
+                this.props.errorDuration
+            );
+        }
+    }
+
+    handleMiss = (e) => {
+        if (this.state.progress < this.props.trail.tokens.length - 1) { // stop handler when test is completed
+            if (!this.handled) {
+                this.update("Miss", new Date(), this.props.trail.tokens[this.state.progress], { text: "", x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
+            }
+            this.handled = false;
+        }
     }
 
     renderBubbles = () => {
-        let tokens = template1.tokens;
-        let diameter = template1.diameter;
+        let tokens = this.props.trail.tokens;
+        let diameter = this.props.trail.diameter;
         let scale_x = this.getScaleX();
         let scale_y = this.getScaleY();
         let bubbles = []
@@ -104,15 +146,32 @@ class BubbleScreen extends Component {
                 <Bubble
                     cx={Math.floor(tokens[i].x * scale_x)}
                     cy={Math.floor(tokens[i].y * scale_y)}
-                    fontSize={Math.floor(diameter / 2 * Math.min(scale_x,scale_y))}
+                    fontSize={Math.floor(diameter / 2 * Math.min(scale_x, scale_y))}
                     key={"trails-marker-" + tokens[i].text}
                     onClick={handler}
-                    r={Math.floor(diameter / 2 * Math.min(scale_x,scale_y))}
+                    r={Math.floor(diameter / 2 * Math.min(scale_x, scale_y))}
                     text={tokens[i].text}
                     theme={theme}
                 />);
         }
         return bubbles;
+    }
+
+    renderCompletionContent = () => {
+        if (this.props.retry === false) {
+            return this.props.completedText;
+        }
+        return (
+            <div style={{ marginTop: '10px' }}>
+                <p>{this.props.retryText}</p>
+                <button
+                    onClick={this.props.onRetry} // TODO: remove retry
+                    style={{ color: 'white', background: '#333', border: 'none', fontSize: '2rem', marginTop: '10px' }}
+                >
+                    Retry
+				</button>
+            </div>
+        );
     }
 
     render() {
@@ -124,6 +183,22 @@ class BubbleScreen extends Component {
                     xmlns="http://www.w3.org/2000/svg">
                     {this.renderBubbles()}
                 </svg>
+                <PopUp
+                    fontSize="3em"
+                    onlyIf={this.state.error !== ""}
+                    theme={Theme.error}
+                    width={this.state.width}
+                >
+                    {this.props.errorText}
+                </PopUp>
+                <PopUp
+                    onlyIf={this.state.progress >= this.props.trail.tokens.length}
+                    theme={Theme.success}
+                    retry={this.props.retry}
+                    width={this.state.width}
+                >
+                    {this.renderCompletionContent()}
+                </PopUp>
             </div>
         )
     }
