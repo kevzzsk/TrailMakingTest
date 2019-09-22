@@ -24,6 +24,11 @@ a.nav-item:active{
 .item-exp{
   grid-area: experiment;
   height: 100%;
+  text-align: center
+}
+.button-wrapper{
+  position: absolute;
+  top:50%
 }
 
 .item-side{

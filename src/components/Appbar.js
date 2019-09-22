@@ -3,7 +3,7 @@ import SignInLink from './SignInLink'
 
 import {AppBar,Typography,IconButton,MenuIcon,Button,Toolbar} from '@material-ui/core'
 
-class Appbar extends Component {
+class Appbar extends Component  {
     render() {
         return (
                 <AppBar position="static">
