@@ -4,7 +4,7 @@ class ViewExperiments extends Component{
     render(){
         return(
             <div>
-                <h2>View Experiment</h2>
+                <h2>Your Experiments</h2>
             </div>
         )
     }
