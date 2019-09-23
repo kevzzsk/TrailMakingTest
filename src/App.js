@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
+
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+import ExperimentPage from './components/ExperimentPage'
 import ExperimentPage from './components/ExperimentPage';
 import Appbar from './components/Appbar';
 import HomePage from './components/HomePage';
@@ -10,7 +14,6 @@ import ViewExperiments from './components/ViewExperiments';
 import CreateExperiment from './components/CreateExperiment';
 import SignUpPage from './components/SignUpPage';
 import ForgetPassPage from './components/ForgetPassPage';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 class App extends Component {
 	render() {
