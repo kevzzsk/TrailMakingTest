@@ -9,7 +9,6 @@ class ForgetPassPage extends Component{
             </div>
         )
     }
-
 }
 
 export default ForgetPassPage;

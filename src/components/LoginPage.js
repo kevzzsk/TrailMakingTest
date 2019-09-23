@@ -28,25 +28,26 @@ class LoginPage extends Component {
     render() {
         return (
                 <form>
-                    <div className="form-group container">
+                    <div className="form-group experiment">
                         <br/>
                         <label style={{fontFamily:'Helvetica'}}>USERNAME</label>
                         <input type="Username" className="form-control" placeholder="" ref={(username) => this.username = username} onChange={this.handleUsername}/>
                         <label style={{paddingTop:10, fontFamily:'Helvetica'}}>PASSWORD</label>
                         <input type="Password" className="form-control" placeholder="" ref={(password) => this.password = password} onChange={this.handlePassword}/>
                         <br/>
+                        
                         <Link type="submit" className="btn btn-dark experiment-btn" innerRef={this.checkLogin} to={'/user-page'}>
                             Login >
                         </Link>
                         
                         <Link to={'/sign-up-page'}>
-                            <span>Sign up</span>
+                            <span style={{color:"#A0A0A0"}}>Sign up</span>
                         </Link>
                         
                         <br/>
                         
                         <Link to={'/forget-password'}>
-                            <span>Don't remember your password?</span>
+                            <span style={{color:"#A0A0A0"}}>Don't remember your password?</span>
                         </Link>
                     </div>                
                 </form>
