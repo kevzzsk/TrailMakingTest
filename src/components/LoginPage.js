@@ -38,6 +38,16 @@ class LoginPage extends Component {
                         <Link type="submit" className="btn btn-dark experiment-btn" innerRef={this.checkLogin} to={'/user-page'}>
                             Login >
                         </Link>
+                        
+                        <Link to={'/sign-up-page'}>
+                            <span>Sign up</span>
+                        </Link>
+                        
+                        <br/>
+                        
+                        <Link to={'/forget-password'}>
+                            <span>Don't remember your password?</span>
+                        </Link>
                     </div>                
                 </form>
         )
