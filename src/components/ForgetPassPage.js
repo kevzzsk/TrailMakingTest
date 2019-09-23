@@ -1,11 +1,22 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 
 class ForgetPassPage extends Component{
 
     render(){
         return(
             <div>
-                <span>Forget Password Page</span>
+                <form onSubmit={this.handleSubmit}>
+                    <div className="form-group experiment" style={{fontFamily:'Helvetica'}}>
+                        <br/>
+                        <label>Enter your account's email address: </label>
+                        <input type="email" className="form-control" placeholder="Email address"></input>
+                        <br/>
+                        <Link to={'/login'}>
+                            <button type="submit" className="btn btn-dark experiment-btn">Submit</button>
+                        </Link>
+                    </div>
+                </form>
             </div>
         )
     }

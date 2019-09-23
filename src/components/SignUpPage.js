@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 class SignUpPage extends Component{
 
@@ -12,19 +12,20 @@ class SignUpPage extends Component{
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group experiment" style={{fontFamily:'Helvetica'}}>
-                        <label>REGISTER YOUR USERNAME</label>
+                        <br/>
+                        <label>Register your username</label>
                         <input type="username" className="form-control" placeholder="Username"></input>
                         <br/>
-                        <label>ENTER YOUR EMAIL ADDRESS</label>
+                        <label>Enter your email address</label>
                         <input type="email" className="form-control" placeholder="Email address"></input>
                         <br/>
-                        <label>ENTER A PASSWORD</label>
+                        <label>Enter a password</label>
                         <input type="password" className="form-control" placeholder="Password"></input>
                         <br/>
-                        <label>RE-ENTER YOUR PASSWORD</label>
+                        <label>Re-enter your password</label>
                         <input type="password" className="form-control" placeholder="Password"></input>
                         <br/>
-                        <Link>
+                        <Link to={'/login'}>
                             <button type="submit" className="btn btn-dark experiment-btn">Submit</button>
                         </Link>
                     </div>

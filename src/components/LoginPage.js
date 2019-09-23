@@ -30,12 +30,12 @@ class LoginPage extends Component {
                 <form>
                     <div className="form-group experiment">
                         <br/>
-                        <label style={{fontFamily:'Helvetica'}}>USERNAME</label>
-                        <input type="Username" className="form-control" placeholder="" ref={(username) => this.username = username} onChange={this.handleUsername}/>
-                        <label style={{paddingTop:10, fontFamily:'Helvetica'}}>PASSWORD</label>
-                        <input type="Password" className="form-control" placeholder="" ref={(password) => this.password = password} onChange={this.handlePassword}/>
+                        <label style={{fontFamily:'Helvetica'}}>Enter your username</label>
+                        <input type="Username" className="form-control" placeholder="Username" ref={(username) => this.username = username} onChange={this.handleUsername}/>
+                        <label style={{paddingTop:10, fontFamily:'Helvetica'}}>Enter your password</label>
+                        <input type="Password" className="form-control" placeholder="Password" ref={(password) => this.password = password} onChange={this.handlePassword}/>
                         <br/>
-                        
+
                         <Link type="submit" className="btn btn-dark experiment-btn" innerRef={this.checkLogin} to={'/user-page'}>
                             Login >
                         </Link>
