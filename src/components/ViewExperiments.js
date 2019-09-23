@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 
 class ViewExperiments extends Component{
     render(){
         return(
-            <div>
-                <h2>Your Experiments</h2>
-            </div>
         )
     }
 }

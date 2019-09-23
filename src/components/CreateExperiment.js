@@ -4,7 +4,7 @@ class CreateExperiment extends Component{
     render(){
         return(
             <div>
-                <h2>Create New Experiment</h2>
+                <span>Create New Experiment</span>
             </div>
         )
     }
