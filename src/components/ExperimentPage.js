@@ -7,7 +7,7 @@ import Trail from '../template/template1';
 
 class ExperimentPage extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             id: null,
@@ -22,9 +22,9 @@ class ExperimentPage extends Component {
         this.init()
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate(prevProps) {
         console.log("DidUpdate")
-        if (prevProps.location.key !== this.props.location.key){
+        if (prevProps.location.key !== this.props.location.key) {
             console.log("newKey")
             this.init()
         }
@@ -32,15 +32,12 @@ class ExperimentPage extends Component {
 
     init = () => {
         const { experimentID, expIndex, } = this.props.location.state
-        this.getTrail(experimentID, expIndex)
         this.setState({
             id: experimentID,
             expIndex,
-        })    }
-
-    getTrail = (id,expIndex) => {
-        // TODO: search for trail using ID
-        this.setState({ trail: Trail.experiment[expIndex] })
+            ready: false,
+            trail: Trail.experiment[expIndex]
+        })
     }
 
     handleBegin = () => {
@@ -65,7 +62,7 @@ class ExperimentPage extends Component {
                     }
                 </div>
                 <div className="item-side">
-                    <SideBar id={this.state.id} expIndex={this.state.expIndex} />
+                    <SideBar id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} />
                 </div>
             </div>
         )

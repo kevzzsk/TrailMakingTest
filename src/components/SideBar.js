@@ -4,6 +4,7 @@ import { Grid, Paper, Typography, Button, ButtonGroup } from '@material-ui/core'
 import {Link} from 'react-router-dom'
 
 class SideBar extends Component {
+
     render() {
         return (
             <div className="h-100">

@@ -8,7 +8,6 @@ class Appbar extends Component  {
         return (
                 <AppBar position="static">
                     <Toolbar>
-                        
                         <Link to={'/'}>
                             <Typography variant="h6">Trail Making Test</Typography>
                         </Link>

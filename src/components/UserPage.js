@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
+import UserPageCard from './UserPageCard';
 
 class UserPage extends Component {
+
     render() {
         return (
             <div class="container">
@@ -9,9 +11,9 @@ class UserPage extends Component {
                 <div class="card">
                     <div class="row">
                         <div class="card">
-                            <img class="rounded-circle" src={require('./profile.png')} />
-                            <Link to={"./view-experiments"} type="button" class="btn btn-outline-secondary">View Your Experiments</Link>
-                            <Link to={"./create-experiment"} type="button" class="btn btn-outline-secondary">Create New Experiments</Link>
+                            <img className="rounded-circle" src={require('./profile.png')} />
+                            <Link to={"./view-experiments"} type="button" className="btn btn-outline-secondary">View Your Experiments</Link>
+                            <Link to={"./create-experiment"} type="button" className="btn btn-outline-secondary">Create New Experiments</Link>
                         </div>
                         <div class="col-6">
                             <div class="card">
@@ -20,6 +22,7 @@ class UserPage extends Component {
                                     <h5>Recent Experiments</h5>
                                     <div class="card border" style={{ backgroundColor: "#d3d3d3" }}>
                                         <span>Experiment ID: 123456789</span>
+                                        <UserPageCard/>
                                     </div>
                                 </div>
                             </div>
