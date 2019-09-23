@@ -3,7 +3,6 @@ import './App.css';
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import ExperimentPage from './components/ExperimentPage'
 import ExperimentPage from './components/ExperimentPage';
 import Appbar from './components/Appbar';
 import HomePage from './components/HomePage';

@@ -11,7 +11,7 @@ class Appbar extends Component  {
                         <Link to={'/'}><Typography variant="h6">Trail Making Test</Typography></Link>
                         <Link to={'/login'} className="ml-auto">
                             <IconButton edge="end" color="inherit">Login</IconButton>
-                        
+                        </Link>
                         <Link to={'/'}>
                             <Typography variant="h6">Trail Making Test</Typography>
                         </Link>
