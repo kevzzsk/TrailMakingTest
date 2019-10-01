@@ -12,7 +12,7 @@ class UserPage extends Component {
                     <div class="row">
                         <div class="card">
                             <img className="rounded-circle" src={require('./profile.png')} />
-                            <Link to={"./view-experiments"} type="button" className="btn btn-outline-secondary">View Your Experiments</Link>
+                            <Link to={"/user-page/view-experiments"} type="button" className="btn btn-outline-secondary">View Your Experiments</Link>
                             <Link to={"./create-experiment"} type="button" className="btn btn-outline-secondary">Create New Experiments</Link>
                         </div>
                         <div class="col-6">

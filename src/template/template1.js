@@ -65,7 +65,9 @@ export default {
                 "y": 418,
                 "text": "12"
             }
-            ]
+            ],
+            "description": "When you are ready, click BEGIN.\nThere are numbers in circles on this page.\nPlease click on the circles from one number to the next, in order. Start at 1 , then go to 2 , then go to 3 , and so on.\nWork as quickly and accurately as you can.\n\nAt the end of the test please click on CONTINUE button",
+            "heading": "Part A"
         },
         {
             "width": 610,
@@ -112,7 +114,9 @@ export default {
                     "y": 85,
                     "text": "D"
                 }
-            ]
+            ],
+            "description": "When you are ready, click BEGIN.\nThere are numbers and letters in circles on this page.\nPlease click on the circles from one number to the next, in order. Start at number 1 , then go to the first letter A , then go to number 2 , and then the next letter B and so on.\nWork as quickly and accurately as you can.\n\nAt the end of the test please click on CONTINUE button",
+            "heading": "Part B"
         }
     ]
 };

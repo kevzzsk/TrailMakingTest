@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from "react-router-dom";
 import { Button, Snackbar, SnackbarContent } from '@material-ui/core';
+import axios from 'axios';
 
 class LoginPage extends Component {
 
@@ -25,7 +26,6 @@ class LoginPage extends Component {
     checkLogin = () => {
         console.log(this.state)
         // checks login details against DB
-        const axios = require('axios');
         axios.post('https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/Login/login', this.state)
             .then(res => {
                 console.log(res)
@@ -57,7 +57,7 @@ class LoginPage extends Component {
 
                     </Button>
 
-                    <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={this.state.success == false} autoHideDuration={600}>
+                    <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={this.state.success === false} autoHideDuration={600}>
                         <SnackbarContent variant="error" message="Wrong Username/Password!" />
                     </Snackbar>
 

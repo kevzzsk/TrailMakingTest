@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Typography, Button, Box, makeStyles } from '@material-ui/core'
 import { fontSize } from '@material-ui/system';
+import {Link} from 'react-router-dom'
 
 import exData from '../template/exData'
 import ExperimentCard from './ExperimentCard'
@@ -50,28 +51,28 @@ function ViewExperiment() {
         switch (index) {
             case 0:
                 return exData.Experiments.map((item) => {
-                    return <ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} />
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
                 });
                 break;
             case 1:
                 return exData.Experiments.filter((item) => { return item.status === "Active" }).map((item) => {
-                    return <ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} />
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
                 });
                 break;
             case 2:
                 return exData.Experiments.filter((item) => { return item.status === "Draft" }).map((item) => {
-                    return <ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} />
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
                 });
                 break;
             case 3:
                 return exData.Experiments.filter((item) => { return item.status === "Completed" }).map((item) => {
-                    return <ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} />
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
                 });
                 break;
 
             default:
                 return exData.Experiments.map((item) => {
-                    return <ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} />
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
                 });
                 break;
         }
@@ -79,7 +80,7 @@ function ViewExperiment() {
 
     return (
         <div className="vexp-container m-4 ">
-            <Button variant="contained" className="vexp-btn">Back</Button>
+            <Link to="/user-page"><Button variant="contained" className="vexp-btn">Back</Button></Link>
             <Typography variant="h3" className="vexp-title">View Experiment</Typography>
             <Tabs
                 orientation="vertical"

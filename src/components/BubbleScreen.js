@@ -17,6 +17,7 @@ class BubbleScreen extends Component {
             error: "",
         }
         this.data = {
+            heading : this.props.trail.heading,
             start: undefined,
             stop: undefined,
             events: []
@@ -46,7 +47,7 @@ class BubbleScreen extends Component {
         const width = this.divElement.clientWidth;
         this.setState({ height, width });
         this.data.start = new Date().getTime();
-        console.time("START")
+        //console.time("START")
     }
 
     getScaleX = () => {
@@ -65,7 +66,7 @@ class BubbleScreen extends Component {
 
     update = (type, date, correctToken, selectedToken) => {
         this.data.events.push({
-            stamp: date.getTime,
+            stamp: date.getTime(),
             type: type,
             correctToken: correctToken,
             selectedToken: selectedToken
@@ -75,10 +76,11 @@ class BubbleScreen extends Component {
 
     onCompleted = (date) => {
         this.data.stop = date.getTime();
-        console.log((this.data.stop - this.data.start) / 1000);
-        console.log("Trails Data:");
-        console.log(this.data);
-        console.timeEnd("START")
+        //console.log((this.data.stop - this.data.start) / 1000);
+        //console.log("Trails Data:");
+        //console.log(this.data);
+        //console.timeEnd("START");
+        this.props.onCompleted(this.data)
     }
 
     handleSuccess = (e, i) => {

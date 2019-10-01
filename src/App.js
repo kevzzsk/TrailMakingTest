@@ -13,6 +13,8 @@ import ViewExperiment from './components/ViewExperiment';
 import CreateExperiment from './components/CreateExperiment';
 import SignUpPage from './components/SignUpPage';
 import ForgetPassPage from './components/ForgetPassPage';
+import ExperimentTest from './components/ExperimentTest';
+import ExperimentStat from './components/ExperimentStat';
 
 class App extends Component {
 	render() {
@@ -24,9 +26,11 @@ class App extends Component {
 						<Route exact path="/" component={HomePage} />
 						<Route path="/experiment" exact component={ExperimentPage} />
 						<Route path="/completion" exact component={CompletionPage} />
+						<Route path="/test" exact component={ExperimentTest} />
 						<Route path="/login" exact component={LoginPage} />
 						<Route path="/user-page" exact component={UserPage} />
-						<Route path="/view-experiments" exact component={ViewExperiment}/>
+						<Route path="/user-page/view-experiments" exact component={ViewExperiment}/>
+						<Route path="/user-page/view-experiments/:id" exact component={ExperimentStat}/>
 						<Route path="/create-experiment" exact component={CreateExperiment}/>
 						<Route path="/sign-up-page" exact component={SignUpPage}/>
 						<Route path="/forget-password" exact component={ForgetPassPage}/>
