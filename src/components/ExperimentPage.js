@@ -19,8 +19,8 @@ class ExperimentPage extends PureComponent {
         };
     }
 
-    componentDidMount() {
-        console.log("DidMount")
+    componentWillMount() {
+        console.log("WillMount")
         this.init()
     }
 
@@ -38,7 +38,7 @@ class ExperimentPage extends PureComponent {
             id: experimentID,
             expIndex,
             ready: false,
-            trail: Trail.experiment[expIndex]
+            trail: Trail.experiment[expIndex].trail
         })
         if (this.props.location.state.payload){
             this.setState({
@@ -69,19 +69,20 @@ class ExperimentPage extends PureComponent {
     }
 
     render() {
+        const {trail} = this.state
         return (
             <div className="experiment-bg">
                 <Prompt when={this.state.shouldBlock} message={location => `Are you sure you want to leave this page?`} />
                 <div className="item-exp">
                     {this.state.ready ?
-                        (<BubbleScreen trail={this.state.trail} onCompleted={this.onCompleted} />) :
+                        (<BubbleScreen trail={trail} onCompleted={this.onCompleted} />) :
                         (<Button variant="contained" size="large" className="mx-auto w-50 d-block button-wrapper" onClick={this.handleBegin}>
                             Begin
                         </Button>)
                     }
                 </div>
                 <div className="item-side">
-                    <SideBar setShouldBlock={this.setShouldBlock} data={this.state.data} id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={false} heading={Trail.experiment[this.props.location.state.expIndex].heading} instruction={Trail.experiment[this.props.location.state.expIndex].description} />
+                    <SideBar setShouldBlock={this.setShouldBlock} data={this.state.data} id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={false} heading={trail.heading} instruction={trail.description} />
                 </div>
             </div>
         )

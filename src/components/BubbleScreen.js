@@ -15,9 +15,10 @@ class BubbleScreen extends Component {
             width: 500,
             progress: 0,
             error: "",
+            trail: null
         }
         this.data = {
-            heading : this.props.trail.heading,
+            heading : "",
             start: undefined,
             stop: undefined,
             events: []
@@ -27,6 +28,7 @@ class BubbleScreen extends Component {
     static defaultProps = {
         //beginEndLabels: false,
         //part: "A",
+        trail: null,
         feedback: true,
         errorText: "X",
         errorDuration: 500,
@@ -45,9 +47,19 @@ class BubbleScreen extends Component {
     componentDidMount() {
         const height = this.divElement.clientHeight;
         const width = this.divElement.clientWidth;
-        this.setState({ height, width });
+        this.setState({ height, width ,trail:this.props.trail });
         this.data.start = new Date().getTime();
+        this.data.heading =this.props.trail.heading
         //console.time("START")
+    }
+
+    componentDidUpdate(){
+        if(this.state.trail !== this.props.trail){
+            this.setState({
+                trail: this.props.trail,
+                progress: 0
+            })
+        }
     }
 
     getScaleX = () => {

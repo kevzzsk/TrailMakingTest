@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Grid, Paper, Typography, Button, ButtonGroup } from '@material-ui/core'
-import { Link, Prompt } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class SideBar extends Component {
 

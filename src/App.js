@@ -10,7 +10,7 @@ import CompletionPage from './components/CompletionPage'
 import LoginPage from './components/LoginPage';
 import UserPage from './components/UserPage';
 import ViewExperiment from './components/ViewExperiment';
-import CreateExperiment from './components/CreateExperiment';
+import CreateExperiment from './components/createNewExp/CreateExperiment';
 import SignUpPage from './components/SignUpPage';
 import ForgetPassPage from './components/ForgetPassPage';
 import ExperimentTest from './components/ExperimentTest';

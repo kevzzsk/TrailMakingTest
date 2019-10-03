@@ -23,7 +23,7 @@ class ExperimentTest extends Component {
                         <BubbleScreen trail={this.state.trail} />
                 </div>
                 <div className="item-side">
-                    <SideBar id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={true} heading={Trail.experiment[0].heading} instruction={Trail.experiment[0].description}/>
+                    <SideBar id={this.props.location.state.experimentID} expIndex={this.state.expIndex} ready={this.state.ready} test={true} heading={Trail.experiment[0].heading} instruction={Trail.experiment[0].description}/>
                 </div>
             </div>
         )
