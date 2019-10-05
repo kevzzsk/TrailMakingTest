@@ -4,7 +4,7 @@ import {Paper,Button, Typography} from '@material-ui/core';
 import {Link} from 'react-router-dom'
 
 function CompletionPage(props) {
-    const {experimentID, payload} = props.location.state
+    const {ExperimentID, payload,ExperimentName} = props.location.state
     
     // KEEP INFO IN DATABASE
 
@@ -19,7 +19,7 @@ function CompletionPage(props) {
                 </Typography>
                 </div>
                 <br />
-                <Typography variant="h4" className="card-title ">Experiment {experimentID}</Typography>
+                <Typography variant="h4" className="card-title ">Experiment {ExperimentName}({ExperimentID}</Typography>
                 {payload.map((item) => {
                     return <Paper className="card-body text-justify w-25 mx-auto my-3">
                         <Typography variant="h6">{item.heading}</Typography>

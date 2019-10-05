@@ -15,6 +15,8 @@ import SignUpPage from './components/SignUpPage';
 import ForgetPassPage from './components/ForgetPassPage';
 import ExperimentTest from './components/ExperimentTest';
 import ExperimentStat from './components/ExperimentStat';
+import CreateExperimentForm from "./components/createNewExp/CreateExperimentForm"
+import CreateCompleted from "./components/createNewExp/CreateCompleted"
 
 class App extends Component {
 	render() {
@@ -31,7 +33,9 @@ class App extends Component {
 						<Route path="/user-page" exact component={UserPage} />
 						<Route path="/user-page/view-experiments" exact component={ViewExperiment}/>
 						<Route path="/user-page/view-experiments/:id" exact component={ExperimentStat}/>
-						<Route path="/create-experiment" exact component={CreateExperiment}/>
+						<Route path="/user-page/create-experiment" exact component={CreateExperimentForm}/>
+						<Route path="/user-page/create-experiment/:id(\d+)" exact component={CreateExperiment}/>
+						<Route path="/user-page/create-experiment/completed" exact component={CreateCompleted}/>
 						<Route path="/sign-up-page" exact component={SignUpPage}/>
 						<Route path="/forget-password" exact component={ForgetPassPage}/>
 					</Switch>

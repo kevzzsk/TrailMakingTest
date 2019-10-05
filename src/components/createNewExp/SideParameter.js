@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 
-import { Grid, Paper, Typography, Button, IconButton, FormControl, InputLabel, Select, TextField, InputAdornment, Tooltip, ButtonGroup, } from '@material-ui/core'
+import { Grid, Paper, Typography, Button, MenuItem, FormControl, InputLabel, Select, TextField, InputAdornment, MobileStepper, ButtonGroup, } from '@material-ui/core'
 import DateFnsUtils from '@date-io/date-fns';
 import {
     MuiPickersUtilsProvider,
@@ -9,43 +9,47 @@ import {
 import 'date-fns';
 import { differenceInCalendarDays, toDate } from 'date-fns'
 
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 class SideParameter extends PureComponent {
 
     static defaultProps = {
-        onChangeTemplate: () => { },
-        templates: []
+        onChangeTrail: () => { },
+        trails: []
     }
 
     constructor(props) {
         super(props);
         this.state = {
-            template: "null",
+            trail: props.trail,
             labelWidth: 0,
             startDate: toDate(new Date()),
             endDate: toDate(new Date()),
             duration: 0,
             heading: "",
             instructions: "",
-            ExperimentID: 0
+            ExperimentID: 0,
+            ExperimentName: "",
         }
         this.inputLabel = React.createRef(null)
-        this.startRef = React.createRef(null)
     }
 
     componentDidMount() {
         this.setState({
-            labelWidth: this.inputLabel.current.offsetWidth
+            labelWidth: this.inputLabel.current.offsetWidth,
+            ExperimentID: this.props.metaData.ExperimentID,
+            ExperimentName: this.props.metaData.ExperimentName,
+            startDate: this.props.metaData.startDate,
+            endDate: this.props.metaData.endDate,
+            duration: this.props.metaData.duration,
+            trail:this.props.trail
         })
-        this.reGenerateID()
     }
-
-    handleTemplateChange = (event) => {
+    handleTrailChange = (event) => {
         this.setState({
-            [event.target.name]: event.target.value
+            trail: this.props.trails.find((item)=> String(item.id)=== event.target.value)
         })
-        this.props.onChangeTemplate(event.target.value)
+        this.props.onChangeTrail(event.target.value)
     }
 
     genTemplateOptions = (templates) => {
@@ -57,160 +61,163 @@ class SideParameter extends PureComponent {
             [event.target.name]: event.target.value
         })
     }
-    handleStartDateChange = (date) => {
-        this.setState({
-            startDate: date
-        }, () => this.calcDuration())
+
+    goBack = () => {
+        this.props.history.goBack()
     }
 
-    handleEndDateChange = (date) => {
-        this.setState({
-            endDate: date
-        }, () => this.calcDuration())
-    }
-
-    calcDuration = () => {
-        if (this.state.startDate !== null && this.state.endDate !== null) {
-            this.setState({
-                duration: differenceInCalendarDays(this.state.endDate, this.state.startDate)
-            })
+    getPathName = (metadata) => {
+        if (metadata.numTemplates > parseInt(this.props.match.params.id)) {
+            return "/user-page/create-experiment/" + (parseInt(this.props.match.params.id) + 1)
+        } else {
+            return "/user-page/create-experiment/completed"
         }
-    }
-
-    reGenerateID = () => {
-        let first = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 1).toUpperCase();
-        let ranID = String((Math.random() * 10000).toFixed(0)).padStart(4, "0");
-        this.setState({
-            ExperimentID: first + ranID
-        })
     }
 
 
     render() {
         return (
-                <div className="h-100">
-                    <Grid container spacing={0} direction="column" justify="space-between" alignItems="stretch" className="h-100">
-                        <Grid item>
-                            <Grid container spacing={2} direction="column" justify="center" alignItems="stretch" className="nested-grid-top">
-                                <Grid item >
-                                    <Paper className="p-4 mt-3 mx-3 d-flex align-items-baseline justify-content-between">
-                                        <Typography variant="h5" display="inline" >Experiment ID:</Typography><Typography display="inline" variant="h5" className="float-right">{this.state.ExperimentID} <Tooltip title="re-generate"><IconButton onClick={this.reGenerateID} className="ml-1 px-2 py-auto"><i className="fas fa-redo fa-lg"></i></IconButton></Tooltip></Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item >
-                                    <Paper className="p-4 mx-3">
-                                        <FormControl variant="outlined" className="w-100">
-                                            <InputLabel ref={this.inputLabel} htmlFor="outlined-age-native-simple">
-                                                Template
-                                            </InputLabel>
-                                            <Select
-                                                native
-                                                value={this.state.template}
-                                                onChange={this.handleTemplateChange}
-                                                name="template"
-                                                labelWidth={this.state.labelWidth}
-                                            >
-                                                {this.genTemplateOptions(this.props.templates)}
-                                            </Select>
-                                        </FormControl>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardDatePicker
-                                                disableToolbar
-                                                ref={this.startRef}
-                                                variant="inline"
-                                                inputVariant="outlined"
-                                                format="dd/MM/yyyy"
-                                                margin="normal"
-                                                disablePast
-                                                id="startDate"
-                                                label="Start Date"
-                                                value={this.state.startDate}
-                                                onChange={this.handleStartDateChange}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change start date',
-                                                }}
-                                                className="w-100"
-                                            />
-                                        </MuiPickersUtilsProvider>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardDatePicker
-                                                disableToolbar
-                                                ref={this.startRef}
-                                                variant="inline"
-                                                inputVariant="outlined"
-                                                format="dd/MM/yyyy"
-                                                margin="normal"
-                                                id="endDate"
-                                                label="End Date"
-                                                minDate={this.state.startDate}
-                                                minDateMessage="End Date should not be before Start Date"
-                                                value={this.state.endDate}
-                                                onChange={this.handleEndDateChange}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change start date',
-                                                }}
-                                                className="w-100"
-                                            />
-                                        </MuiPickersUtilsProvider>
-                                        <FormControl variant="outlined" className="w-100">
-                                            <TextField
-                                                id="outlined-duration"
-                                                label="Duration"
-                                                value={this.state.duration}
-                                                margin="normal"
-                                                variant="outlined"
-                                                InputProps={{
-                                                    endAdornment: <InputAdornment position="end">Days</InputAdornment>,
-                                                    readOnly: true
-                                                }}
-
-                                            />
-                                        </FormControl>
-                                        <FormControl variant="outlined" className="w-100">
-                                            <TextField
-                                                label="Heading"
-                                                name="heading"
-                                                value={this.state.heading}
-                                                onChange={this.handleChange}
-                                                margin="normal"
-                                                variant="outlined"
-                                                multiline
-                                            />
-                                        </FormControl>
-                                        <FormControl variant="outlined" className="w-100">
-                                            <TextField
-                                                label="Instructions"
-                                                name="instructions"
-                                                value={this.state.instructions}
-                                                onChange={this.handleChange}
-                                                margin="normal"
-                                                variant="outlined"
-                                                multiline
-                                            />
-                                        </FormControl>
-                                    </Paper>
-                                </Grid>
+            <div className="h-100">
+                <Grid container spacing={0} direction="column" justify="space-between" alignItems="stretch" className="h-100">
+                    <Grid item>
+                        <Grid container spacing={2} direction="column" justify="center" alignItems="stretch" className="nested-grid-top">
+                            <Grid item >
+                                <Paper className="p-4 mt-3 mx-3">
+                                    <div className="d-flex align-items-baseline justify-content-between">
+                                        <Typography variant="h5" display="inline" >Experiment ID:</Typography><Typography display="inline" variant="h5" className="float-right font-weight-bold">{this.state.ExperimentID}</Typography>
+                                    </div>
+                                    <div className="d-flex align-items-baseline justify-content-between">
+                                        <Typography variant="h5" display="inline" >Experiment Name:</Typography><Typography display="inline" variant="h5" className="float-right font-weight-bold">{this.state.ExperimentName}</Typography>
+                                    </div>
+                                </Paper>
                             </Grid>
-                        </Grid>
-                        <Grid item className="w-100 mb-4">
-                            <Grid container spacing={0} direction="row" justify="center" alignItems="center" className="nested-grid-bot">
-                                <Grid item >
-                                    <ButtonGroup>
-                                        <Link to="/"><Button variant="text" className="mr-1" size="large" >Cancel</Button></Link>
-                                        <Link to={{
-                                            pathname: "/",
-                                            state: {
-                                            }
-                                        }}><Button variant="contained">Continue</Button></Link>
-                                    </ButtonGroup>
-                                </Grid>
+                            <Grid item >
+                                <Paper className="p-4 mx-3">
+                                    <FormControl variant="outlined" className="w-100">
+                                        <InputLabel ref={this.inputLabel} htmlFor="outlined-age-native-simple">
+                                            Trail
+                                            </InputLabel>
+                                        <Select
+                                            native
+                                            value={this.state.trail.id}
+                                            onChange={this.handleTrailChange}
+                                            name="trail"
+                                            labelWidth={this.state.labelWidth}
+                                        >  
+                                            {this.genTemplateOptions(this.props.trails)}
+                                        </Select>
+                                    </FormControl>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <KeyboardDatePicker
+                                            disableToolbar
+                                            variant="inline"
+                                            inputVariant="outlined"
+                                            format="dd/MM/yyyy"
+                                            margin="normal"
+                                            disablePast
+                                            id="startDate"
+                                            label="Start Date"
+                                            value={this.state.startDate}
+                                            readOnly
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change start date',
+                                            }}
+                                            className="w-100"
+                                        />
+                                    </MuiPickersUtilsProvider>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <KeyboardDatePicker
+                                            disableToolbar
+                                            variant="inline"
+                                            inputVariant="outlined"
+                                            format="dd/MM/yyyy"
+                                            margin="normal"
+                                            id="endDate"
+                                            label="End Date"
+                                            minDate={this.state.startDate}
+                                            minDateMessage="End Date should not be before Start Date"
+                                            value={this.state.endDate}
+                                            readOnly
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change start date',
+                                            }}
+                                            className="w-100"
+                                        />
+                                    </MuiPickersUtilsProvider>
+                                    <FormControl variant="outlined" className="w-100">
+                                        <TextField
+                                            id="outlined-duration"
+                                            label="Duration"
+                                            value={this.state.duration}
+                                            margin="normal"
+                                            variant="outlined"
+                                            InputProps={{
+                                                endAdornment: <InputAdornment position="end">Days</InputAdornment>,
+                                                readOnly: true
+                                            }}
+
+                                        />
+                                    </FormControl>
+                                    <FormControl variant="outlined" className="w-100">
+                                        <TextField
+                                            label="Heading"
+                                            name="heading"
+                                            value={this.state.heading}
+                                            onChange={this.handleChange}
+                                            margin="normal"
+                                            variant="outlined"
+                                            multiline
+                                        />
+                                    </FormControl>
+                                    <FormControl variant="outlined" className="w-100">
+                                        <TextField
+                                            label="Instructions"
+                                            name="instructions"
+                                            value={this.state.instructions}
+                                            onChange={this.handleChange}
+                                            margin="normal"
+                                            variant="outlined"
+                                            multiline
+                                        />
+                                    </FormControl>
+                                </Paper>
                             </Grid>
                         </Grid>
                     </Grid>
-                </div>
+                    <Grid item className="w-100 mb-4">
+                        <Grid container spacing={0} direction="column" justify="center" alignItems="center" className="nested-grid-bot">
+                            <Grid item>
+                            <MobileStepper
+                                    variant="dots"
+                                    steps={this.props.metaData.numTemplates}
+                                    position="static"
+                                    activeStep={parseInt(this.props.match.params.id)-1}
+                                />
+                            </Grid>
+                            <Grid item >
+                                <ButtonGroup>
+                                    <Button variant="text" className="mr-1" size="large" onClick={this.goBack} >Back</Button>
+                                    <Link to={{
+                                        pathname: this.getPathName(this.props.metaData),
+                                        state: {
+                                            metaData: this.props.metaData,
+                                            payload: [...this.props.payload, {
+                                                trailName: this.state.trail.name,
+                                                trailID: this.state.trail.id,
+                                                heading: this.state.heading,
+                                                instructions: this.state.instructions
+                                            }]
+                                        }
+                                    }}><Button variant="contained">Continue</Button></Link>
+                                </ButtonGroup>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </div>
         )
     }
 }
 
 
-export default SideParameter;
+export default withRouter(SideParameter);

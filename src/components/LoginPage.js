@@ -5,10 +5,17 @@ import axios from 'axios';
 
 class LoginPage extends Component {
 
+    cancelToken = axios.CancelToken;
+    souce = this.cancelToken.source();
+
     state = {
         username: null,
         password: null,
         success: null
+    }
+
+    componentWillUnmount() {
+        this.souce.cancel("Operation Cancelled")
     }
 
     handleUsername = (e) => {
@@ -23,22 +30,35 @@ class LoginPage extends Component {
         })
     }
 
-    checkLogin = () => {
-        console.log(this.state)
-        // checks login details against DB
-        axios.post('https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/Login/login', this.state)
-            .then(res => {
-                console.log(res)
-                this.setState({
-                    success: true
-                })
+    checkLogin =  () => {
+        try {
+            console.log(this.state)
+            // checks login details against DB
+            axios.get('https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/login', {
+                params: {
+                    username: this.state.username,
+                    password: this.state.password
+                }
             })
-            .catch(e => {
-                console.log(e)
-                this.setState({
-                    success: false
+                .then(res => {
+                    console.log(res)
+
+                    this.setState({
+                        success: res.data.result === "success" ? true : false
+                    })
                 })
-            });
+                .catch(e => {
+                    //console.log(e)
+                    this.setState({
+                        success: false
+                    })
+                });
+        } catch(err){
+            if( axios.isCancel(err)){
+                console.log("Request cancelled", err.message);
+
+            }
+        }
     }
 
     render() {
