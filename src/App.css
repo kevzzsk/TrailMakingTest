@@ -7,12 +7,6 @@ a:hover{
 color: inherit;
 }
 
-a.nav-item{
-  color: grey
-}
-a.nav-item:active{
-  color: white
-}
 
 .create-experiment-bg{
   display: grid;
@@ -59,6 +53,10 @@ a.nav-item:active{
 .experiment-btn{
   width: 100%;
   padding: 10px;
+  background-color: rgb(0, 93, 231);
+  color:black;
+  font-weight: 600;
+  font-size:1.5rem
 }
 
 .bubble {
@@ -117,4 +115,201 @@ a.nav-item:active{
 .vexp-tabspanel{
   grid-area: tabpanel;
   overflow-y: scroll
+}
+
+ /*------------- APP BAR -------------------*/
+.appbar{
+  position:sticky ;
+  top:0px;
+  z-index: 99;
+  background: #fff;
+  width: 100%;
+  margin: 0 auto;  
+  padding: 12px 0;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  -webkit-box-shadow: 0px 10px 54px -11px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 10px 54px -11px rgba(0,0,0,0.75);
+  box-shadow: 0px 10px 54px -11px rgba(0,0,0,0.75);
+}
+
+.appbar ul{
+  width: 100%;
+  display: grid;
+  list-style: none;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+.appbar ul:first-of-type{
+  grid-template-columns: 1fr;
+}
+.appbar ul:first-of-type li{
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-indent: 30px;
+}
+.appbar ul:first-of-type li span {
+  font-weight: 500;
+  color: #444;
+}
+
+.appbar ul:last-of-type{
+  grid-template-columns: repeat(4, 1fr);
+
+}
+
+.appbar ul li a{
+  color:#111;
+  text-decoration: none; 
+  font-weight: bold;
+  display: block;
+
+}
+
+/*------------- HEADER -------------------*/
+
+header.header-bg {
+  height: 550px;
+  width: 100%;
+  background-color: rgba(255,255,255,0.70);
+  background-image: url("./images/cover.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60%;
+  background-blend-mode: soft-light;
+  
+}
+header div.head{
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: 70%;
+  grid-template-columns: 7fr 3fr;
+  margin: 0 auto;
+  padding-top: 8%;
+  align-items: center;
+}
+
+header div h1{
+  font-size: 4rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-top: 0px;
+  margin: 0;
+  letter-spacing: 4px;
+  border-right: 2px solid #111;
+}
+
+header div p{
+  padding-left:30px;
+  font-size:1.2rem;
+  font-weight: 600
+}
+
+/*------------- TEXT IN HEADER -------------------*/
+section.intro{
+  width: 70%;
+  padding: 50px 0;
+  margin: 50px auto 150px auto;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  align-items: center;
+}
+
+section.intro h2{
+  font-size: 4.3rem;
+  color: #ddd;
+  text-transform: uppercase;
+ line-height: 4.2rem; 
+ padding-right: 10px;
+ border-right: 3px solid #ddd;
+}
+
+section.intro div p{
+padding-left: 10px;
+}
+
+
+/*------------- SERVICES -------------------*/
+
+div.top-services h2{
+  text-transform: uppercase;
+  font-size: 3rem;
+  text-align: center;
+  color: #888;
+}
+
+div.services {
+  display: grid;
+  height: auto;
+  grid-template-columns: repeat(3,1fr);
+ padding: 10px;
+
+}
+
+.services div {
+  text-align: center;
+  background: #fff;
+  width: 90%;
+  border-radius: 10px;
+  margin: 10px auto 50px auto;
+  
+  -webkit-box-shadow: 0px 10px 30px -9px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 10px 30px -9px rgba(0,0,0,0.75);
+  box-shadow: 0px 10px 30px -9px rgba(0,0,0,0.75);
+  
+}
+
+.services p.service-icon {
+  font-size: 3.4rem;
+  padding: 30px 0px 30px 90px;
+  margin: 0px 0px 30px 0px;
+  text-align: left;
+  color: rgb(0, 99, 248);
+  filter: grayscale(0%);
+  border-bottom: 2px solid rgb(0, 99, 248);
+}
+.services p.service-title{
+  font-size: 3.1rem;
+  text-align: start;
+  padding: 0;
+  padding-left: 15% ;
+  margin: 0;
+}
+
+.services p:last-of-type{
+  padding: 0px 90px 20px 90px; 
+  text-align: left;
+}
+
+/*------------- FOOTER -------------------*/
+footer {
+  background: rgb(0, 93, 231);
+  color: #fff;
+  padding: 20px;
+  margin-top: 80px;
+  display: grid;
+  grid-template-columns:1fr 1fr 1fr;
+  align-items: center;
+  text-align: center;
+ 
+}
+
+footer p{
+  margin:0;
+}
+
+footer ul {
+  
+  list-style: none;
+  display: grid;
+  padding: 0;
+  margin: 0;
+  grid-template-columns: repeat(5,1fr);
+  justify-items: center;
+}
+
+footer ul li a {
+  color: #eee;
 }

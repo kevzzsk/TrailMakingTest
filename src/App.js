@@ -19,25 +19,40 @@ import CreateExperimentForm from "./components/createNewExp/CreateExperimentForm
 import CreateCompleted from "./components/createNewExp/CreateCompleted"
 
 class App extends Component {
+	constructor(props) {
+		super(props)
+		window.onclick = () => {
+			this.setState({
+				pathname: window.location.pathname,
+			})
+		}
+		this.state = {
+			pathname: window.location.pathname,
+			aboutRef: React.createRef(null)
+		}
+	}
+
+	
+
 	render() {
 		return (
 			<Router>
 				<div id="bg">
-					<Appbar />
+					<Appbar pathname={this.state.pathname} aboutRef={this.state.aboutRef} ></Appbar>
 					<Switch>
-						<Route exact path="/" component={HomePage} />
+						<Route exact path="/" render={(props) => <HomePage {...props} aboutRef={this.state.aboutRef} />} />
 						<Route path="/experiment" exact component={ExperimentPage} />
 						<Route path="/completion" exact component={CompletionPage} />
 						<Route path="/test" exact component={ExperimentTest} />
 						<Route path="/login" exact component={LoginPage} />
 						<Route path="/user-page" exact component={UserPage} />
-						<Route path="/user-page/view-experiments" exact component={ViewExperiment}/>
-						<Route path="/user-page/view-experiments/:id" exact component={ExperimentStat}/>
-						<Route path="/user-page/create-experiment" exact component={CreateExperimentForm}/>
-						<Route path="/user-page/create-experiment/:id(\d+)" exact component={CreateExperiment}/>
-						<Route path="/user-page/create-experiment/completed" exact component={CreateCompleted}/>
-						<Route path="/sign-up-page" exact component={SignUpPage}/>
-						<Route path="/forget-password" exact component={ForgetPassPage}/>
+						<Route path="/user-page/view-experiments" exact component={ViewExperiment} />
+						<Route path="/user-page/view-experiments/:id" exact component={ExperimentStat} />
+						<Route path="/user-page/create-experiment" exact component={CreateExperimentForm} />
+						<Route path="/user-page/create-experiment/:id(\d+)" exact component={CreateExperiment} />
+						<Route path="/user-page/create-experiment/completed" exact component={CreateCompleted} />
+						<Route path="/sign-up-page" exact component={SignUpPage} />
+						<Route path="/forget-password" exact component={ForgetPassPage} />
 					</Switch>
 				</div>
 			</Router>
