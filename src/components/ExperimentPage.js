@@ -1,11 +1,12 @@
 
-import React, { Component } from 'react';
+import React, { Component,PureComponent } from 'react';
 import { Grid, Button } from '@material-ui/core';
 import BubbleScreen from './BubbleScreen';
 import SideBar from './SideBar';
 import Trail from '../template/template1';
+import {Prompt } from 'react-router-dom'
 
-class ExperimentPage extends Component {
+class ExperimentPage extends PureComponent {
 
     constructor(props) {
         super(props);
@@ -13,12 +14,13 @@ class ExperimentPage extends Component {
             id: null,
             ready: false,
             expIndex: 0,
-            trail: null
-        }
+            trail: null,
+            shouldBlock: true
+        };
     }
 
-    componentDidMount() {
-        console.log("DidMount")
+    componentWillMount() {
+        console.log("WillMount")
         this.init()
     }
 
@@ -31,13 +33,22 @@ class ExperimentPage extends Component {
     }
 
     init = () => {
-        const { experimentID, expIndex, } = this.props.location.state
+        const { experimentID, expIndex } = this.props.location.state
         this.setState({
             id: experimentID,
             expIndex,
             ready: false,
-            trail: Trail.experiment[expIndex]
+            trail: Trail.experiment[expIndex].trail
         })
+        if (this.props.location.state.payload){
+            this.setState({
+                data:this.props.location.state.payload
+            })
+        } else {
+            this.setState({
+                data:[]
+            })
+        }
     }
 
     handleBegin = () => {
@@ -48,21 +59,30 @@ class ExperimentPage extends Component {
         })
     }
 
-
+    onCompleted = (data) =>{
+        this.setState(prevState => {
+            return {
+                data: [...prevState.data,data],
+                shouldBlock:false
+            }
+        })
+    }
 
     render() {
+        const {trail} = this.state
         return (
             <div className="experiment-bg">
+                <Prompt when={this.state.shouldBlock} message={location => `Are you sure you want to leave this page?`} />
                 <div className="item-exp">
                     {this.state.ready ?
-                        (<BubbleScreen trail={this.state.trail} />) :
+                        (<BubbleScreen trail={trail} onCompleted={this.onCompleted} />) :
                         (<Button variant="contained" size="large" className="mx-auto w-50 d-block button-wrapper" onClick={this.handleBegin}>
                             Begin
                         </Button>)
                     }
                 </div>
                 <div className="item-side">
-                    <SideBar id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} />
+                    <SideBar setShouldBlock={this.setShouldBlock} data={this.state.data} id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={false} heading={trail.heading} instruction={trail.description} />
                 </div>
             </div>
         )

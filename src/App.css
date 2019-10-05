@@ -14,6 +14,19 @@ a.nav-item:active{
   color: white
 }
 
+.create-experiment-bg{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 9fr;
+  grid-template-areas: 
+  "title title side"
+  "experiment experiment side";
+  height: calc(100% - 64px);
+
+}
+.c-item-title{
+  grid-area: title;
+}
 
 .experiment-bg{
   display: grid;
@@ -71,6 +84,7 @@ a.nav-item:active{
 }
 #root{
   height: 100vh;
+  overflow: auto
 }
 
 .vexp-container{
@@ -101,5 +115,6 @@ a.nav-item:active{
   grid-area: tab;
 }
 .vexp-tabspanel{
-  grid-area: tabpanel
+  grid-area: tabpanel;
+  overflow-y: scroll
 }

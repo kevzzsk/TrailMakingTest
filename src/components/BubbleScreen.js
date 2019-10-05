@@ -15,8 +15,10 @@ class BubbleScreen extends Component {
             width: 500,
             progress: 0,
             error: "",
+            trail: null
         }
         this.data = {
+            heading : "",
             start: undefined,
             stop: undefined,
             events: []
@@ -26,6 +28,7 @@ class BubbleScreen extends Component {
     static defaultProps = {
         //beginEndLabels: false,
         //part: "A",
+        trail: null,
         feedback: true,
         errorText: "X",
         errorDuration: 500,
@@ -44,9 +47,19 @@ class BubbleScreen extends Component {
     componentDidMount() {
         const height = this.divElement.clientHeight;
         const width = this.divElement.clientWidth;
-        this.setState({ height, width });
+        this.setState({ height, width ,trail:this.props.trail });
         this.data.start = new Date().getTime();
-        console.time("START")
+        this.data.heading =this.props.trail.heading
+        //console.time("START")
+    }
+
+    componentDidUpdate(){
+        if(this.state.trail !== this.props.trail){
+            this.setState({
+                trail: this.props.trail,
+                progress: 0
+            })
+        }
     }
 
     getScaleX = () => {
@@ -65,7 +78,7 @@ class BubbleScreen extends Component {
 
     update = (type, date, correctToken, selectedToken) => {
         this.data.events.push({
-            stamp: date.getTime,
+            stamp: date.getTime(),
             type: type,
             correctToken: correctToken,
             selectedToken: selectedToken
@@ -75,10 +88,11 @@ class BubbleScreen extends Component {
 
     onCompleted = (date) => {
         this.data.stop = date.getTime();
-        console.log((this.data.stop - this.data.start) / 1000);
-        console.log("Trails Data:");
-        console.log(this.data);
-        console.timeEnd("START")
+        //console.log((this.data.stop - this.data.start) / 1000);
+        //console.log("Trails Data:");
+        //console.log(this.data);
+        //console.timeEnd("START");
+        this.props.onCompleted(this.data)
     }
 
     handleSuccess = (e, i) => {

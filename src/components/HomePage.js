@@ -28,7 +28,7 @@ class HomePage extends Component {
                         <input type="email" className="form-control" aria-describedby="emailHelp" placeholder="Experiment ID" ref={(id)=> this.id = id} onChange={this.handleChange}/>
                         <small className="form-text text-muted">By continuing you comply with tnc.</small>
                         <Link to={{
-                            pathname: '/experiment', state: {
+                            pathname: '/test', state: {
                                 experimentID:this.state.id,
                                 expIndex:0
                             },
