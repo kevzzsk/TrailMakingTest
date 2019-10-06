@@ -40,7 +40,8 @@ class HomePage extends Component {
                         <Link to={{
                             pathname: '/test', state: {
                                 experimentID: this.state.id,
-                                expIndex: 0
+                                expIndex: 0,
+                                activeStep:0
                             },
 
                         }}><button type="submit" className="btn experiment-btn" >Continue</button></Link>

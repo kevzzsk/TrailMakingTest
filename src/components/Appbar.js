@@ -19,9 +19,9 @@ class Appbar extends Component {
                 </ul>
 
                 <ul>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Mission</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="/">About</a></li>
+                    <li><a href="/">Mission</a></li>
+                    <li><a href="/">Contact</a></li>
                     <li><Link to={'/login'}>
                         Login
                         </Link>

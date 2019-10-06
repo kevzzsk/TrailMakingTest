@@ -7,6 +7,10 @@ import Trail from '../template/testTemplate';
 
 class ExperimentTest extends Component {
 
+    static defaultProps={
+        activeStep:1
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +27,7 @@ class ExperimentTest extends Component {
                         <BubbleScreen trail={this.state.trail} />
                 </div>
                 <div className="item-side">
-                    <SideBar id={this.props.location.state.experimentID} expIndex={this.state.expIndex} ready={this.state.ready} test={true} heading={Trail.experiment[0].heading} instruction={Trail.experiment[0].description}/>
+                    <SideBar goBack={this.props.history.goBack}  activeStep={this.props.activeStep} id={this.props.location.state.experimentID} expIndex={this.state.expIndex} ready={this.state.ready} test={true} heading={Trail.experiment[0].heading} instruction={Trail.experiment[0].description}/>
                 </div>
             </div>
         )

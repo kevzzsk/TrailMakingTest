@@ -8,6 +8,10 @@ import {Prompt } from 'react-router-dom'
 
 class ExperimentPage extends PureComponent {
 
+    static defaultProps ={
+        activeStep:0
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -82,7 +86,7 @@ class ExperimentPage extends PureComponent {
                     }
                 </div>
                 <div className="item-side">
-                    <SideBar setShouldBlock={this.setShouldBlock} data={this.state.data} id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={false} heading={trail.heading} instruction={trail.description} />
+                    <SideBar goBack={this.props.history.goBack} activeStep={this.props.location.state.activeStep} setShouldBlock={this.setShouldBlock} data={this.state.data} id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={false} heading={trail.heading} instruction={trail.description} />
                 </div>
             </div>
         )
