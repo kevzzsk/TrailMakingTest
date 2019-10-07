@@ -11,7 +11,8 @@ class LoginPage extends Component {
     state = {
         username: null,
         password: null,
-        success: null
+        success: null,
+        accountType: 0
     }
 
     componentWillUnmount() {
@@ -37,14 +38,16 @@ class LoginPage extends Component {
             axios.get('https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/login', {
                 params: {
                     username: this.state.username,
-                    password: this.state.password
+                    password: this.state.password,
+                    accountType: this.state.accountType
                 }
             })
                 .then(res => {
                     console.log(res)
 
                     this.setState({
-                        success: res.data.result === "success" ? true : false
+                        success: res.data.result === "success" ? true : false,
+                        accountType: res.data.accountType
                     })
                 })
                 .catch(e => {
@@ -73,7 +76,7 @@ class LoginPage extends Component {
                     <br />
 
                     <Button className="btn btn-dark experiment-btn" onClick={this.checkLogin}>
-                        Login > {this.state.success ? <Redirect to={'/user-page'} /> : null}
+                        Login > {this.state.success ? (this.state.accountType ? <Redirect to={'/doctor-page'} /> : <Redirect to={'/user-page'} />) : null}
 
                     </Button>
 

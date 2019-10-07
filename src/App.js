@@ -17,6 +17,7 @@ import ExperimentTest from './components/ExperimentTest';
 import ExperimentStat from './components/ExperimentStat';
 import CreateExperimentForm from "./components/createNewExp/CreateExperimentForm"
 import CreateCompleted from "./components/createNewExp/CreateCompleted"
+import DoctorPage from './components/DoctorPage';
 
 class App extends Component {
 	constructor(props) {
@@ -53,6 +54,7 @@ class App extends Component {
 						<Route path="/user-page/create-experiment/completed" exact component={CreateCompleted} />
 						<Route path="/sign-up-page" exact component={SignUpPage} />
 						<Route path="/forget-password" exact component={ForgetPassPage} />
+						<Route path="/doctor-page" exact component={DoctorPage} />
 					</Switch>
 				</div>
 			</Router>
