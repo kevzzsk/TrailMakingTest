@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Typography, Button, Box, makeStyles } from '@material-ui/core'
-import { fontSize } from '@material-ui/system';
 import {Link} from 'react-router-dom'
+import {isBefore} from "date-fns"
 
 import exData from '../template/exData'
 import ExperimentCard from './ExperimentCard'
@@ -47,32 +47,46 @@ function ViewExperiment() {
         setValue(newValue);
     }
 
+    const getStatus = (startDate, endDate) => {
+        let start = new Date(startDate);
+        let end = new Date(endDate);
+        if (isBefore(new Date(), start)) {
+            return "Draft"
+        }
+        else if (isBefore(new Date(), end)) {
+            return "Active"
+        }
+        else {
+            return "Completed"
+        }
+    }
+
     function genCards(index) {
         switch (index) {
             case 0:
                 return exData.Experiments.map((item) => {
-                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item}/></Link>
                 });
                 break;
             case 1:
-                return exData.Experiments.filter((item) => { return item.status === "Active" }).map((item) => {
-                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
+                return exData.Experiments.filter((item) => { return getStatus(item.startDate,item.endDate) === "Active" }).map((item) => {
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>
                 });
                 break;
             case 2:
-                return exData.Experiments.filter((item) => { return item.status === "Draft" }).map((item) => {
-                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
+                return exData.Experiments.filter((item) => { return getStatus(item.startDate,item.endDate)  === "Draft" }).map((item) => {
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard  {...item} /></Link>
                 });
                 break;
             case 3:
-                return exData.Experiments.filter((item) => { return item.status === "Completed" }).map((item) => {
-                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
+                return exData.Experiments.filter((item) => { return getStatus(item.startDate,item.endDate)  === "Completed" }).map((item) => {
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard  {...item} /></Link>
                 });
                 break;
 
             default:
                 return exData.Experiments.map((item) => {
-                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard title={item.title} subheader={item.experimentID} description={item.description} /></Link>
+                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item}  /></Link>
                 });
                 break;
         }

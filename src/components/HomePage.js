@@ -35,7 +35,7 @@ class HomePage extends Component {
                 <form onSubmit={this.submitFormHandler}>
                     <div className="form-group experiment">
                         <br />
-                        <input type="email" className="form-control" aria-describedby="emailHelp" placeholder="Experiment ID" ref={(id) => this.id = id} onChange={this.handleChange} />
+                        <input type="email" className="form-control" aria-describedby="emailHelp" placeholder="Experiment ID (e.g. R1232)" ref={(id) => this.id = id} onChange={this.handleChange} />
                         <small className="form-text text-muted">By continuing you comply with tnc.</small>
                         <Link to={{
                             pathname: '/test', state: {

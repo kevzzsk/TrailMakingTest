@@ -168,6 +168,13 @@ color: inherit;
 
 }
 
+div.circle{
+  width: 10px;
+  height: 10px;
+  background-color: blue;
+  border-radius: 5px
+}
+
 /*------------- HEADER -------------------*/
 
 header.header-bg {
@@ -186,7 +193,7 @@ header div.head{
   z-index: 2;
   display: grid;
   width: 70%;
-  grid-template-columns: 7fr 3fr;
+  grid-template-columns: 6fr 4fr;
   margin: 0 auto;
   padding-top: 8%;
   align-items: center;
