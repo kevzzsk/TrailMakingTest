@@ -12,7 +12,7 @@ export default {
             "startDate": "2019-10-05",
             "endDate": "2019-11-05",
             "templateExperiments": [{
-                TemplateA1,
+                "template":TemplateA1,
                 "experimentResults": [{
                     "participantID": 1,
                     "totalTime": 10.123,
@@ -42,6 +42,46 @@ export default {
                     "participantID": 5,
                     "totalTime": 9.65,
                     "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                }, {
+                    "participantID": 6,
+                    "totalTime": 9.80,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 2,
+                }]
+            },{
+                "template":TemplateB1,
+                "experimentResults": [{
+                    "participantID": 1,
+                    "totalTime": 9.123,
+                    "success": 12,
+                    "error": 7,
+                    "miss": 2,
+                },
+                {
+                    "participantID": 2,
+                    "totalTime": 9.53,
+                    "success": 12,
+                    "error": 4,
+                    "miss": 0,
+                }, {
+                    "participantID": 3,
+                    "totalTime": 8.21,
+                    "success": 12,
+                    "error": 0,
+                    "miss": 0,
+                }, {
+                    "participantID": 4,
+                    "totalTime": 9.34,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 8,
+                }, {
+                    "participantID": 5,
+                    "totalTime": 10.65,
+                    "success": 12,
                     "error": 1,
                     "miss": 9,
                 }, {
@@ -51,7 +91,9 @@ export default {
                     "error": 2,
                     "miss": 5,
                 }]
-            }]
+            
+            }
+        ]
         }
         ,
         {
@@ -62,7 +104,7 @@ export default {
             "startDate": " 2019-11-11",
             "endDate": "2019-12-11",
             "templateExperiments": [{
-                TemplateB1,
+                "template":TemplateB1,
                 "experimentResults": [{
                     "participantID": 1,
                     "totalTime": 8.13,

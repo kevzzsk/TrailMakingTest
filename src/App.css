@@ -175,6 +175,12 @@ div.circle{
   border-radius: 5px
 }
 
+
+div.chart-wrapper{
+  display: grid;
+  grid-template-columns: repeat(2,1fr)
+}
+
 /*------------- HEADER -------------------*/
 
 header.header-bg {
