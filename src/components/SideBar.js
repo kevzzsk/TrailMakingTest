@@ -3,7 +3,18 @@ import React, { Component } from 'react'
 import { Grid, Paper, Typography, Button, ButtonGroup } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
+import Steppers from "./Steppers"
 class SideBar extends Component {
+
+    static defaultProps={
+        activeStep: 0,
+        test: false,
+        id: 0,
+        heading:"",
+        instruction:"",
+        expIndex:0,
+        data: ""
+    }
 
     getPath = (props) => {
         if (props.test === true) {
@@ -14,7 +25,6 @@ class SideBar extends Component {
             return "/experiment"
         }
     }
-
 
 
     render() {
@@ -40,15 +50,17 @@ class SideBar extends Component {
                     </Grid>
                     <Grid item className="w-100 mb-4">
                         <Grid container spacing={0} direction="row" justify="center" alignItems="center" className="nested-grid-bot">
+                        <Steppers activeStep={this.props.activeStep}/>
                             <Grid item >
                                 <ButtonGroup>
-                                    <Link to="/"><Button variant="text" className="mr-1" size="large" >Cancel</Button></Link>
+                                    <Button variant="text" className="mr-1" size="large" onClick={()=> this.props.goBack()} >Cancel</Button>
                                     <Link to={{
                                         pathname: this.getPath(this.props),
                                         state: {
                                             experimentID: this.props.id,
                                             expIndex: this.props.test ? this.props.expIndex : this.props.expIndex + 1,
-                                            payload: this.props.data
+                                            payload: this.props.data,
+                                            activeStep:this.props.activeStep+1
                                         }
                                     }}><Button variant="contained">Continue</Button></Link>
 

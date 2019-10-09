@@ -53,8 +53,8 @@ color: inherit;
 .experiment-btn{
   width: 100%;
   padding: 10px;
-  background-color: rgb(0, 93, 231);
-  color:black;
+  background-color: rgba(23, 6, 255, 0.767);
+  color:white;
   font-weight: 600;
   font-size:1.5rem
 }
@@ -82,7 +82,8 @@ color: inherit;
 }
 #root{
   height: 100vh;
-  overflow: auto
+  overflow: auto;
+  overflow-x: hidden
 }
 
 .vexp-container{
@@ -128,9 +129,9 @@ color: inherit;
   padding: 12px 0;
   display: grid;
   grid-template-columns: 3fr 1fr;
-  -webkit-box-shadow: 0px 10px 54px -11px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 10px 54px -11px rgba(0,0,0,0.75);
-  box-shadow: 0px 10px 54px -11px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 5px 20px -11px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 5px 20px -11px rgba(0,0,0,0.75);
+  box-shadow: 0px 5px 20px -11px rgba(0,0,0,0.75);
 }
 
 .appbar ul{
@@ -167,16 +168,29 @@ color: inherit;
 
 }
 
+div.circle{
+  width: 10px;
+  height: 10px;
+  background-color: blue;
+  border-radius: 5px
+}
+
+
+div.chart-wrapper{
+  display: grid;
+  grid-template-columns: repeat(2,1fr)
+}
+
 /*------------- HEADER -------------------*/
 
 header.header-bg {
-  height: 550px;
+  height: 600px;
   width: 100%;
   background-color: rgba(255,255,255,0.70);
   background-image: url("./images/cover.jpg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 60%;
+  background-size: contain;
   background-blend-mode: soft-light;
   
 }
@@ -185,7 +199,7 @@ header div.head{
   z-index: 2;
   display: grid;
   width: 70%;
-  grid-template-columns: 7fr 3fr;
+  grid-template-columns: 6fr 4fr;
   margin: 0 auto;
   padding-top: 8%;
   align-items: center;
