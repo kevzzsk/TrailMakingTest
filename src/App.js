@@ -17,6 +17,7 @@ import ExperimentTest from './components/ExperimentTest';
 import ExperimentStat from './components/ExperimentStat';
 import CreateExperimentForm from "./components/createNewExp/CreateExperimentForm"
 import CreateCompleted from "./components/createNewExp/CreateCompleted"
+import PersonalParticulars from "./components/PersonalParticulars"
 
 class App extends Component {
 	constructor(props) {
@@ -32,7 +33,7 @@ class App extends Component {
 		}
 	}
 
-	
+
 
 	render() {
 		return (
@@ -43,6 +44,7 @@ class App extends Component {
 						<Route exact path="/" render={(props) => <HomePage {...props} aboutRef={this.state.aboutRef} />} />
 						<Route path="/experiment" exact component={ExperimentPage} />
 						<Route path="/completion" exact component={CompletionPage} />
+						<Route path="/form" exact component={PersonalParticulars} />
 						<Route path="/test" exact component={ExperimentTest} />
 						<Route path="/login" exact component={LoginPage} />
 						<Route path="/user-page" exact component={UserPage} />
