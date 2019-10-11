@@ -8,7 +8,13 @@ import Trail from '../template/testTemplate';
 class ExperimentTest extends Component {
 
     static defaultProps={
-        activeStep:1
+        activeStep:1,
+        location:{
+            state:{
+                experimentID:0,
+                participantDetails:{}
+            }
+        }
     }
 
     constructor(props) {
@@ -21,13 +27,14 @@ class ExperimentTest extends Component {
         }
     }
     render() {
+        const {participantDetails, experimentID,activeStep,trail} = this.props.location.state
         return (
             <div className="experiment-bg">
                 <div className="item-exp">
                         <BubbleScreen trail={this.state.trail} />
                 </div>
                 <div className="item-side">
-                    <SideBar goBack={this.props.history.goBack}  activeStep={this.props.activeStep} id={this.props.location.state.experimentID} expIndex={this.state.expIndex} ready={this.state.ready} test={true} heading={Trail.experiment[0].heading} instruction={Trail.experiment[0].description}/>
+                    <SideBar goBack={this.props.history.goBack} trail={trail}  participantDetails={participantDetails}  activeStep={activeStep} id={experimentID} expIndex={this.state.expIndex} ready={this.state.ready} test={true}/>
                 </div>
             </div>
         )

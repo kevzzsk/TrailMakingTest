@@ -10,10 +10,12 @@ class SideBar extends Component {
         activeStep: 0,
         test: false,
         id: 0,
-        heading:"",
-        instruction:"",
+        heading:"SAMPLE PART A",
+        description:"THIS IS NOT PART OF THE EXPERIMENT!\n\nThere are numbers in circles on this page.\nPlease click on the circles from one number to the next, in order. Start at 1 , then go to 2 , then go to 3 , and so on.\nWork as quickly and accurately as you can.\n\nAt the end of the test please click on CONTINUE button",
         expIndex:0,
-        data: ""
+        data: "",
+        participantDetails: {},
+        trail: []
     }
 
     getPath = (props) => {
@@ -28,6 +30,7 @@ class SideBar extends Component {
 
 
     render() {
+        const {trail,expIndex,test,heading,description} = this.props
         return (
             <div className="h-100">
                 <Grid container spacing={0} direction="column" justify="space-between" alignItems="stretch" className="h-100">
@@ -35,15 +38,15 @@ class SideBar extends Component {
                         <Grid container spacing={2} direction="column" justify="center" alignItems="stretch" className="nested-grid-top">
                             <Grid item >
                                 <Paper className="p-4 mt-3 mx-3">
-                                    <Typography variant="h5">Experiment ID: {this.props.test ? "TEST" : this.props.id}</Typography>
+                                    <Typography variant="h5">Experiment ID: {test ? "TEST" : this.props.id}</Typography>
                                 </Paper>
                             </Grid>
                             <Grid item >
                                 <Paper className="p-4 mx-3">
-                                    <Typography variant="h4">{this.props.heading}</Typography>
+                                    <Typography variant="h4">{test? heading : trail[expIndex].heading}</Typography>
                                     <br />
                                     <Typography variant="h5">Instructions:</Typography>
-                                    <Typography variant="body2" style={{ whiteSpace: "pre-wrap" }}>{this.props.instruction}</Typography>
+                                    <Typography variant="body2" style={{ whiteSpace: "pre-wrap" }}>{test? description: trail[expIndex].description}</Typography>
                                 </Paper>
                             </Grid>
                         </Grid>
@@ -58,9 +61,11 @@ class SideBar extends Component {
                                         pathname: this.getPath(this.props),
                                         state: {
                                             experimentID: this.props.id,
-                                            expIndex: this.props.test ? this.props.expIndex : this.props.expIndex + 1,
+                                            expIndex: test ? expIndex : expIndex + 1,
                                             payload: this.props.data,
-                                            activeStep:this.props.activeStep+1
+                                            activeStep:this.props.activeStep+1,
+                                            participantDetails:this.props.participantDetails,
+                                            trail:trail
                                         }
                                     }}><Button variant="contained">Continue</Button></Link>
 
