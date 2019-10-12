@@ -42,23 +42,27 @@ class SideParameter extends PureComponent {
             startDate: this.props.metaData.startDate,
             endDate: this.props.metaData.endDate,
             duration: this.props.metaData.duration,
-            trail:this.props.trail
+            trail:this.props.trail,
+            heading:this.props.trail.heading,
+            instructions:this.props.trail.description
         })
     }
     handleTrailChange = (event) => {
         this.setState({
-            trail: this.props.trails.find((item)=> String(item.id)=== event.target.value)
+            trail: this.props.metaData.trails.find((item)=> String(item.templateExperimentID)=== event.target.value),
+            heading: this.props.metaData.trails.find((item)=> String(item.templateExperimentID)=== event.target.value).heading,
+            instructions:this.props.metaData.trails.find((item)=> String(item.templateExperimentID)=== event.target.value).description
         })
         this.props.onChangeTrail(event.target.value)
     }
 
     genTemplateOptions = (templates) => {
-        return templates.map(item => <option key={item.id} value={item.id}>{item.name}</option>)
+        return templates.map(item => <option key={item.templateExperimentID} value={item.templateExperimentID}>{item.templateName}</option>)
     }
 
     handleChange = (event) => {
         this.setState({
-            [event.target.name]: event.target.value
+            [event.target.name]: event.target.value,
         })
     }
 
@@ -78,7 +82,7 @@ class SideParameter extends PureComponent {
     render() {
         return (
             <div className="h-100">
-                <Grid container spacing={0} direction="column" justify="space-between" alignItems="stretch" className="h-100">
+                <Grid container spacing={0} direction="column" justify="space-between" alignItems="stretch" className="h-100 sideParam-grid">
                     <Grid item>
                         <Grid container spacing={2} direction="column" justify="center" alignItems="stretch" className="nested-grid-top">
                             <Grid item >
@@ -99,12 +103,12 @@ class SideParameter extends PureComponent {
                                             </InputLabel>
                                         <Select
                                             native
-                                            value={this.state.trail.id}
+                                            value={this.state.trail.templateExperimentID}
                                             onChange={this.handleTrailChange}
                                             name="trail"
                                             labelWidth={this.state.labelWidth}
                                         >  
-                                            {this.genTemplateOptions(this.props.trails)}
+                                            {this.genTemplateOptions(this.props.metaData.trails)}
                                         </Select>
                                     </FormControl>
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -163,10 +167,10 @@ class SideParameter extends PureComponent {
                                             label="Heading"
                                             name="heading"
                                             value={this.state.heading}
-                                            onChange={this.handleChange}
                                             margin="normal"
                                             variant="outlined"
                                             multiline
+                                            readOnly
                                         />
                                     </FormControl>
                                     <FormControl variant="outlined" className="w-100">
@@ -174,17 +178,18 @@ class SideParameter extends PureComponent {
                                             label="Instructions"
                                             name="instructions"
                                             value={this.state.instructions}
-                                            onChange={this.handleChange}
                                             margin="normal"
                                             variant="outlined"
                                             multiline
+                                            rowsMax={8}
+                                            readOnly
                                         />
                                     </FormControl>
                                 </Paper>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item className="w-100 mb-4">
+                    <Grid item className="w-100 mt-3">
                         <Grid container spacing={0} direction="column" justify="center" alignItems="center" className="nested-grid-bot">
                             <Grid item>
                             <MobileStepper
@@ -202,8 +207,8 @@ class SideParameter extends PureComponent {
                                         state: {
                                             metaData: this.props.metaData,
                                             payload: [...this.props.payload, {
-                                                trailName: this.state.trail.name,
-                                                trailID: this.state.trail.id,
+                                                trailName: this.state.trail.templateName,
+                                                trailID: this.state.trail.templateExperimentID,
                                                 heading: this.state.heading,
                                                 instructions: this.state.instructions
                                             }]

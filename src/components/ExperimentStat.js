@@ -1,15 +1,11 @@
 import React, { Component } from 'react'
-import {
-    XYPlot,
-    XAxis,
-    YAxis,
-    VerticalGridLines,
-    HorizontalGridLines,
-    WhiskerSeries,
-    ChartLabel
-} from 'react-vis';
-
-import { Tabs, Tab, withStyles, Button, Typography, Box } from "@material-ui/core"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import { withStyles } from '@material-ui/core/styles';
+import Button from "@material-ui/core/Button"
+import Typography from "@material-ui/core/Typography"
+import Skeleton from "@material-ui/lab/Skeleton"
+import axios from "axios"
 
 import CanvasJS from '../assets/canvasjs.react'
 import exData from '../template/exData'
@@ -25,24 +21,46 @@ class ExperimentStat extends Component {
             data: {},
             processedData: [],
             timeBins: [],
-            selectedTab: 0
+            selectedTab: 0,
+            loading:false
         }
+    }
+
+    hideLoader = () => {
+        this.setState({ loading: false });
+    }
+
+    showLoader = () => {
+        this.setState({ loading: true });
     }
 
     componentWillMount() {
         // GET DATA based on Match ID
-
-        this.setState({
-            data: exData.Experiments.find((item) => item.experimentID === this.props.match.params.id)
-        }, () => {
-            this.getAllMetrics(this.state.data);
-            this.discretizeTime();
+        this.showLoader()
+        axios.get("https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/viewExperiment",{
+            params:{
+                experimentID:this.props.match.params.id
+            }
         })
+            .then(res=>{
+                console.log(res.data)
+                this.setState({
+                    data:res.data
+                },() => {
+                    this.getAllMetrics(this.state.data);
+                    this.discretizeTime();
+                });
+                this.hideLoader()
+            })
+            .catch(err=>{
+                console.log(err)
+                this.hideLoader()
+            })
     }
 
     getAllMetrics = (data) => {
         let metrics = ["totalTime", "success", "error", "miss", "error_rate", "miss_rate"]
-        let processedData = data.templateExperiments.map(experiment => { return { 'label': experiment.template.trail.heading, "data": this.getMetrics(experiment, metrics) } })
+        let processedData = data.templateExperiments.map(experiment => { return { 'label': experiment.heading, "data": this.getMetrics(experiment, metrics) } })
         //console.log(processedData)
         this.setState({ processedData })
     }
@@ -122,16 +140,6 @@ class ExperimentStat extends Component {
         })
     }
 
-    genBody = (index) => {
-        switch (index) {
-            case 0:
-                return this.getCharts()
-            case 1:
-                return <DatasetView />
-            default:
-                break;
-        }
-    }
 
     time_chart = (data) => {
         return {
@@ -205,6 +213,9 @@ class ExperimentStat extends Component {
         }
 
         for (let index = 0; index < data.length; index++) {
+            if(data[index].length === 0){
+                break
+            }
             let min = Math.floor(Math.min(...data[index]))
             let max = Math.ceil(Math.max(...data[index]))
             let bins = Math.ceil((max - min) / range)
@@ -236,13 +247,28 @@ class ExperimentStat extends Component {
     }
 
     scatter_chart = (timeBins) => {
-        if(timeBins.length === 0){
-            return null
+        if(timeBins.data.length === 0){
+            return {
+                title: {
+                    text: "Completion Time"
+                },
+                axisY:{
+                    includeZero:true,
+                    title:"Number of Participants"
+                },
+                axisX:{
+                    title:"Completion Time"
+                },
+                data: [{
+                    type:"column",
+                    dataPoints:[]
+                }
+                ]
+            }
         }
-        console.log(timeBins.data[0].data_bins.map((bin,i) => {
-            return {y:bin.length,x:timeBins.data[0].min+(i*timeBins.range)}
-        }))
         return {
+            theme: "light2",
+            animationEnabled: true,
             title: {
                 text: "Completion Time"
             },
@@ -254,7 +280,7 @@ class ExperimentStat extends Component {
                 minimum:timeBins.data[0].min,
                 maximum:timeBins.data[0].max,
                 interval:timeBins.range,
-                title:"Completion Time"
+                title:"Completion Time in seconds"
             },
             data: [
                 {
@@ -293,6 +319,7 @@ class ExperimentStat extends Component {
 
 
     getCharts = () => {
+
         return <div className="w-100 chart-wrapper">
             <CanvasJSChart options={this.time_chart(this.state.processedData)} />
             <CanvasJSChart options={this.scatter_chart(this.state.timeBins)} />
@@ -302,18 +329,40 @@ class ExperimentStat extends Component {
         </div>
     }
 
+    genSkeleton=()=>{
+        return <div className="skeleton-graph">
+            <Skeleton width="100%" height={400}/>
+            <Skeleton width="100%" height={400}/>
+            <Skeleton width="100%" height={400}/>
+            <Skeleton width="100%" height={400}/>
+        </div>
+    }
+
+    genBody = (index) => {
+        switch (index) {
+            case 0:
+                return this.getCharts()
+            case 1:
+                return <DatasetView data={this.state.data} />
+            default:
+                break;
+        }
+    }
+
     render() {
         return (
             <div >
                 <div className="d-inline-flex pb-1 pt-2 pl-3 align-items-center">
-                    <Button size="large" variant="outlined" className="mr-2">Back</Button><Typography variant="h4" style={{ fontWeight: "600" }} display="inline">{this.state.data.experimentName}({this.state.data.experimentID})</Typography>
+                    <Button size="large" variant="outlined" className="mr-2" onClick={()=>this.props.history.goBack()}>Back</Button>
+                    {this.state.loading? <Skeleton width={300} height={40}/>:<Typography  variant="h4" style={{ fontWeight: "600" }} display="inline">{this.state.data.experimentName}({this.state.data.experimentID})</Typography>}
+                    
                 </div>
                 <this.StyledTabs value={this.state.selectedTab} onChange={this.onTabChange} aria-label="styled tabs example">
                     <this.StyledTab label="Charts" />
                     <this.StyledTab label="Datasets" />
                     <this.StyledTab label="Settings" />
                 </this.StyledTabs>
-                {this.genBody(this.state.selectedTab)}
+                {this.state.loading?this.genSkeleton() :this.genBody(this.state.selectedTab)}
             </div>
         )
     }

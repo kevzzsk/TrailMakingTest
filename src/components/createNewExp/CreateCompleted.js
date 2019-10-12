@@ -22,16 +22,14 @@ function CreateCompleted(props) {
                 <Typography variant="h5">End Date: {format(toDate(endDate),'do MMM yyyy')}</Typography>
                 <Typography variant="h5">Description: {description}</Typography>
                 
-                {payload.map((item) => {
-                    return <Paper className="card-body text-justify w-25 mx-auto my-3">
+                {payload.map((item,i) => {
+                    return <Paper key={i} className="card-body text-justify mx-auto my-3 w-25">
                         <Typography variant="h6">{item.heading}</Typography>
                         <Typography display="inline">Trail Name: </Typography> <Typography display="inline" className="float-right">{item.trailName}</Typography> <br />
                         <Typography display="inline">Trail ID: </Typography><Typography display="inline" className="float-right">{item.trailID}</Typography> <br />
-                        <Typography display="inline">Heading: </Typography><Typography display="inline" className="float-right">{item.heading}</Typography> <br/>
-                        <Typography display="inline">Instruction: </Typography><Typography display="inline" className="float-right">{item.instructions}</Typography> <br/>
                     </Paper>
                 })}
-                <Button variant="text" className="mb-3" onClick={()=>this.props.history.goBack()}>Back</Button>
+                <Button variant="text" className="mb-3" onClick={()=>props.history.goBack()}>Back</Button>
                 <Link to="/user-page"><Button variant="contained" className="mb-3">Create</Button></Link>
             </Paper>
         </div>
