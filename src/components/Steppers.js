@@ -10,7 +10,7 @@ export default function Steppers(props) {
   const steps = ['Personal Particulars', 'Test Trail', 'Part A', 'Part B','Yay Completed!'];
 
   return (
-      <Stepper activeStep={props.activeStep} alternativeLabel>
+      <Stepper activeStep={props.activeStep} alternativeLabel className={`${props.className}`}>
         {steps.map(label => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>

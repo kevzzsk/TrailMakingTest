@@ -1,21 +1,59 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { FormControl, TextField, CircularProgress } from "@material-ui/core"
 import Footer from './Footer'
 import Appbar from './Appbar'
+import axios from "axios"
+
 class HomePage extends Component {
 
     state = {
-        id: null
+        id: null,
+        error: "",
+        loading: false
     }
 
     submitFormHandler = (event) => {
         event.preventDefault();
-
-        console.log(this.id)
+        console.log("SUBMIT")
+        this.showLoader()
+        axios.get(`https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/viewExperiment?experimentID=${this.state.id}`)
+            .then(res => {
+                this.setState({
+                    error: ""
+                })
+                console.log(res)
+                this.hideLoader()
+                this.props.history.push({
+                    pathname: '/form', state: {
+                        experimentID: this.state.id,
+                        expIndex: 0,
+                        activeStep: 0,
+                        trails: res.data.templateExperiments
+                    }
+                })
+            })
+            .catch(err => {
+                this.setState({
+                    error: "Enter a valid ID"
+                })
+                this.hideLoader()
+            })
     }
-    handleChange = (e) => {
+
+
+    hideLoader = () => {
+        this.setState({ loading: false });
+    }
+
+    showLoader = () => {
+        this.setState({ loading: true });
+    }
+
+    handleOnChange = (e) => {
         this.setState({
-            id: e.target.value
+            [e.target.name]: e.target.value,
+            error: ""
         })
     }
 
@@ -35,16 +73,28 @@ class HomePage extends Component {
                 <form onSubmit={this.submitFormHandler}>
                     <div className="form-group experiment">
                         <br />
-                        <input type="email" className="form-control" aria-describedby="emailHelp" placeholder="Experiment ID (e.g. R1232)" ref={(id) => this.id = id} onChange={this.handleChange} />
+                        <FormControl variant="outlined" className="w-100">
+                            <TextField
+                                required
+                                id="outlined-id"
+                                label="Experiment ID"
+                                placeholder="U001"
+                                name="id"
+                                error={this.state.error.length > 0}
+                                onChange={this.handleOnChange}
+                                value={this.state.id}
+                                margin="normal"
+                                variant="outlined"
+                                type="text"
+                                rowsMax={1}
+                            />
+                        </FormControl>
+                        {this.state.error.length > 0 && <small style={{ color: "#D8000C" }}>{this.state.error}</small>}
                         <small className="form-text text-muted">By continuing you comply with tnc.</small>
-                        <Link to={{
-                            pathname: '/test', state: {
-                                experimentID: this.state.id,
-                                expIndex: 0,
-                                activeStep:0
-                            },
-
-                        }}><button type="submit" className="btn experiment-btn" >Continue</button></Link>
+                        <div className="position-relative">
+                            <button disabled={this.state.loading} type="submit" className="btn experiment-btn" >Continue</button>
+                            {this.state.loading && <CircularProgress size={40} className="button-loading" />}
+                        </div>
                     </div>
                 </form>
                 <section className="intro" ref={this.props.aboutRef}>

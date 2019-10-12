@@ -3,7 +3,6 @@ import React, { Component,PureComponent } from 'react';
 import { Grid, Button } from '@material-ui/core';
 import BubbleScreen from './BubbleScreen';
 import SideBar from './SideBar';
-import Trail from '../template/template1';
 import {Prompt } from 'react-router-dom'
 
 class ExperimentPage extends PureComponent {
@@ -18,7 +17,6 @@ class ExperimentPage extends PureComponent {
             id: null,
             ready: false,
             expIndex: 0,
-            trail: null,
             shouldBlock: true
         };
     }
@@ -41,8 +39,7 @@ class ExperimentPage extends PureComponent {
         this.setState({
             id: experimentID,
             expIndex,
-            ready: false,
-            trail: Trail.experiment[expIndex].trail
+            ready: false
         })
         if (this.props.location.state.payload){
             this.setState({
@@ -73,20 +70,20 @@ class ExperimentPage extends PureComponent {
     }
 
     render() {
-        const {trail} = this.state
+        const {participantDetails,activeStep,trail} = this.props.location.state
         return (
             <div className="experiment-bg">
                 <Prompt when={this.state.shouldBlock} message={location => `Are you sure you want to leave this page?`} />
                 <div className="item-exp">
                     {this.state.ready ?
-                        (<BubbleScreen trail={trail} onCompleted={this.onCompleted} />) :
+                        (<BubbleScreen trail={trail[this.state.expIndex]} onCompleted={this.onCompleted} />) :
                         (<Button variant="contained" size="large" className="mx-auto w-50 d-block button-wrapper" onClick={this.handleBegin}>
                             Begin
                         </Button>)
                     }
                 </div>
                 <div className="item-side">
-                    <SideBar goBack={this.props.history.goBack} activeStep={this.props.location.state.activeStep} setShouldBlock={this.setShouldBlock} data={this.state.data} id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={false} heading={trail.heading} instruction={trail.description} />
+                    <SideBar goBack={this.props.history.goBack} trail={trail} participantDetails={participantDetails} activeStep={activeStep} setShouldBlock={this.setShouldBlock} data={this.state.data} id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={false} />
                 </div>
             </div>
         )

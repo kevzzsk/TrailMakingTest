@@ -94,7 +94,7 @@ class CreateExperimentForm extends Component {
 
     render() {
         return (
-            <div className="h-100">
+            <div className="cexp-bg">
                 <Grid container spacing={0} direction="column" justify="flex-start" alignItems="stretch" className="h-100">
                     <Grid item className="text-center mt-3">
                         <Typography variant="h3">Create New Experiment</Typography>

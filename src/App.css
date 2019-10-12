@@ -45,12 +45,18 @@ color: inherit;
   grid-area: side;
 }
 
+div.form-container{
+  width: 35%;
+  display:grid;
+
+}
+
 .experiment{
   margin: auto;
   width: 30%;
   padding: 10px;
 }
-.experiment-btn{
+button.experiment-btn{
   width: 100%;
   padding: 10px;
   background-color: rgba(23, 6, 255, 0.767);
@@ -76,9 +82,15 @@ color: inherit;
   height: 500px
 }
 
+.bg-minus-app{
+  height: calc(100% - 57px)
+
+}
+
 #bg {
   height: 100%;
   width: 100%;
+  overflow-y: auto;
 }
 #root{
   height: 100vh;
@@ -109,7 +121,6 @@ color: inherit;
   align-self: center
 }
 
-
 .vexp-tabs{
   grid-area: tab;
 }
@@ -118,15 +129,41 @@ color: inherit;
   overflow-y: scroll
 }
 
+.button-loading{
+    color: blue;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -18px;
+}
+
+.login-bg{
+  display:grid;
+  height: calc(100% - 60px);
+  text-align: center;
+  align-items: center;
+}
+.login-item{
+  display:grid;
+}
+
+.cexp-bg{
+  height: calc(100%-64px);
+  overflow-x: hidden;
+}
+
  /*------------- APP BAR -------------------*/
 .appbar{
   position:sticky ;
   top:0px;
   z-index: 99;
+  max-height: 64px;
+  min-height: 60px;
   background: #fff;
   width: 100%;
   margin: 0 auto;  
-  padding: 12px 0;
+  padding: auto 0;
   display: grid;
   grid-template-columns: 3fr 1fr;
   -webkit-box-shadow: 0px 5px 20px -11px rgba(0,0,0,0.75);
@@ -178,7 +215,10 @@ div.circle{
 
 div.chart-wrapper{
   display: grid;
-  grid-template-columns: repeat(2,1fr)
+  grid-template-columns: repeat(2,1fr);
+  column-gap: 10px;
+  row-gap: 5px;
+
 }
 
 /*------------- HEADER -------------------*/
