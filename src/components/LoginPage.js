@@ -22,7 +22,8 @@ class LoginPage extends Component {
         password: null,
         success: null,
         error: "",
-        loading: false
+        loading: false,
+        accountType: 0
     }
 
     componentWillUnmount() {
@@ -52,14 +53,14 @@ class LoginPage extends Component {
             axios.get('https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/login', {
                 params: {
                     username: this.state.username,
-                    password: this.state.password
+                    password: this.state.password,
+                    accountType: this.state.accountType
                 }
             })
                 .then(res => {
                     console.log(res)
                     this.hideLoader()
                     this.props.login()
-                    
                 })
                 .catch(e => {
                     //console.log(e)
