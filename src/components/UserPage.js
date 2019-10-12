@@ -20,6 +20,7 @@ render() {
                         <img className="rounded-circle" src={require('./profile.png')} />
                         <Link to={"/user-page/view-experiments"} type="button" className="btn btn-outline-secondary">View Your Experiments</Link>
                         <Link to={"/user-page/create-experiment"} type="button" className="btn btn-outline-secondary">Create New Experiments</Link>
+                        <Link to={"/user-page/create-template"} type="button" className="btn btn-outline-secondary">Create New Template</Link>
                     </div>
                     <div className="col-6">
                         <div className="card">

@@ -152,7 +152,25 @@ button.experiment-btn{
   height: calc(100%-64px);
   overflow-x: hidden;
 }
+.cexp-form-item{
+  width: 25%;
+  min-width: 400px;
+}
 
+.ctemp-bg{
+  height: calc(100% - 100px);
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+}
+
+.ctemp-left{
+  display: grid;
+  grid-template-rows: 1fr 20fr;
+}
+
+.ctemp-bg div.ctemp-side{
+  display: grid;
+}
  /*------------- APP BAR -------------------*/
 .appbar{
   position:sticky ;

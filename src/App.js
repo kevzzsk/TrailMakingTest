@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import {Route, Switch,withRouter } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 
 import ExperimentPage from './components/ExperimentPage';
 import Appbar from './components/Appbar';
@@ -19,7 +19,7 @@ import CreateExperimentForm from "./components/createNewExp/CreateExperimentForm
 import CreateCompleted from "./components/createNewExp/CreateCompleted"
 import PersonalParticulars from "./components/PersonalParticulars"
 import DoctorPage from './components/DoctorPage';
-
+import CreateTemplate from './components/CreateTemplate'
 
 class App extends Component {
 	constructor(props) {
@@ -36,24 +36,28 @@ class App extends Component {
 		}
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		this.setState({
-			isAuthenticated: localStorage.getItem("isAuthenticated")=== null ? false :localStorage.getItem("isAuthenticated") === "true"
+			isAuthenticated: localStorage.getItem("isAuthenticated") === null ? false : localStorage.getItem("isAuthenticated") === "true"
 		})
 	}
 
-	login = ()=>{
-		localStorage.setItem("isAuthenticated","true")
+	login = (accType) => {
+		localStorage.setItem("isAuthenticated", "true")
 		this.setState({
-			isAuthenticated:true
+			isAuthenticated: true
 		})
-		this.props.history.replace("/user-page")
+		if (accType === 0) {
+			this.props.history.replace("/doctor-page")
+		} else if (accType === 1) {
+			this.props.history.replace("/user-page")
+		}
 	}
 
-	logout = ()=>{
-		localStorage.setItem("isAuthenticated","false")
+	logout = () => {
+		localStorage.setItem("isAuthenticated", "false")
 		this.setState({
-			isAuthenticated:false
+			isAuthenticated: false
 		})
 		this.props.history.push("/login")
 	}
@@ -62,26 +66,27 @@ class App extends Component {
 
 	render() {
 		return (
-				<div id="bg">
-					<Appbar pathname={this.state.pathname} aboutRef={this.state.aboutRef} isAuthenticated={this.state.isAuthenticated} logout={this.logout} history={this.props.history} ></Appbar>
-					<Switch>
-						<Route exact path="/" render={(props) => <HomePage {...props} aboutRef={this.state.aboutRef} />} />
-						<Route path="/experiment" exact component={ExperimentPage} />
-						<Route path="/completion" exact component={CompletionPage} />
-						<Route path="/form" exact component={PersonalParticulars} />
-						<Route path="/test" exact component={ExperimentTest} />
-						<Route path="/login" exact render={props => <LoginPage {...props} login={this.login}/>} />
-						<Route path="/user-page" exact component={UserPage} />
-						<Route path="/user-page/view-experiments" exact component={ViewExperiment} />
-						<Route path="/user-page/view-experiments/:id" exact component={ExperimentStat} />
-						<Route path="/user-page/create-experiment" exact component={CreateExperimentForm} />
-						<Route path="/user-page/create-experiment/:id(\d+)" exact component={CreateExperiment} />
-						<Route path="/user-page/create-experiment/completed" exact component={CreateCompleted} />
-						<Route path="/sign-up-page" exact component={SignUpPage} />
-						<Route path="/forget-password" exact component={ForgetPassPage} />
-						<Route path="/doctor-page" exact component={DoctorPage} />
-					</Switch>
-				</div>
+			<div id="bg">
+				<Appbar pathname={this.state.pathname} aboutRef={this.state.aboutRef} isAuthenticated={this.state.isAuthenticated} logout={this.logout} history={this.props.history} ></Appbar>
+				<Switch>
+					<Route exact path="/" render={(props) => <HomePage {...props} aboutRef={this.state.aboutRef} />} />
+					<Route path="/experiment" exact component={ExperimentPage} />
+					<Route path="/completion" exact component={CompletionPage} />
+					<Route path="/form" exact component={PersonalParticulars} />
+					<Route path="/test" exact component={ExperimentTest} />
+					<Route path="/login" exact render={props => <LoginPage {...props} login={this.login} />} />
+					<Route path="/user-page" exact component={UserPage} />
+					<Route path="/user-page/view-experiments" exact component={ViewExperiment} />
+					<Route path="/user-page/view-experiments/:id" exact component={ExperimentStat} />
+					<Route path="/user-page/create-experiment" exact component={CreateExperimentForm} />
+					<Route path="/user-page/create-experiment/:id(\d+)" exact component={CreateExperiment} />
+					<Route path="/user-page/create-experiment/completed" exact component={CreateCompleted} />
+					<Route path="/sign-up-page" exact component={SignUpPage} />
+					<Route path="/forget-password" exact component={ForgetPassPage} />
+					<Route path="/doctor-page" exact component={DoctorPage} />
+					<Route path="/user-page/create-template" exact component={CreateTemplate}/>
+				</Switch>
+			</div>
 		);
 	}
 }

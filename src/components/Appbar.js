@@ -7,7 +7,8 @@ class Appbar extends Component {
 
 
     state = {
-        anchorEl: null
+        anchorEl: null,
+        accName: "R"
     }
 
 
@@ -44,7 +45,7 @@ class Appbar extends Component {
                 color="inherit"
                 className="p-1"
             >
-                <Avatar>AA</Avatar>
+                <Avatar>{this.state.accName}</Avatar>
             </IconButton>
             <Menu
                 id="menu-appbar"

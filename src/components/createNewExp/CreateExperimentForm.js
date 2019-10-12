@@ -26,26 +26,26 @@ class CreateExperimentForm extends Component {
             description: "",
             ExperimentName: "",
             ExperimentID: 0,
-            numTemplates:2,
+            numTemplates: 2,
         }
     }
-    marks =[
+    marks = [
         {
             value: 1,
             label: '1',
-          },
-          {
+        },
+        {
             value: 2,
             label: '2',
-          },
-          {
+        },
+        {
             value: 3,
             label: '3',
-          },
-          {
+        },
+        {
             value: 4,
             label: '4',
-          },
+        },
     ]
 
     componentDidMount() {
@@ -58,7 +58,7 @@ class CreateExperimentForm extends Component {
         })
     }
 
-    handleSliderChange = (e,val)=>{
+    handleSliderChange = (e, val) => {
         this.setState({
             numTemplates: val
         })
@@ -95,18 +95,18 @@ class CreateExperimentForm extends Component {
     render() {
         return (
             <div className="cexp-bg">
-                <Grid container spacing={0} direction="column" justify="flex-start" alignItems="stretch" className="h-100">
+                <Grid container spacing={0} direction="column" justify="flex-start" alignItems="stretch" className="h-100 w-100">
                     <Grid item className="text-center mt-3">
                         <Typography variant="h3">Create New Experiment</Typography>
                     </Grid>
                     <Grid item>
                         <Grid container spacing={2} direction="column" justify="center" alignItems="center" className="nested-grid-top">
-                            <Grid item className="w-25" >
+                            <Grid item className="cexp-form-item" >
                                 <Paper className="p-4 mt-3 d-flex align-items-baseline justify-content-between">
                                     <Typography variant="h5" display="inline" >Experiment ID:</Typography><Typography display="inline" variant="h5" className="float-right">{this.state.ExperimentID}<Tooltip title="re-generate"><IconButton onClick={this.reGenerateID} className="px-2 py-auto"><i className="fas fa-redo fa-lg"></i></IconButton></Tooltip></Typography>
                                 </Paper>
                             </Grid>
-                            <Grid item className="w-25" >
+                            <Grid item className="cexp-form-item" >
                                 <Paper className="p-4">
                                     <Grid container spacing={2} direction="column" justify="flex-start" alignItems="flex-start">
                                         <FormControl variant="outlined" className="w-100">
@@ -128,7 +128,7 @@ class CreateExperimentForm extends Component {
                                             name="numTemplates"
                                             value={this.state.numTemplates}
                                             valueLabelDisplay="auto"
-                                            marks ={this.marks}
+                                            marks={this.marks}
                                             onChange={this.handleSliderChange}
                                             min={1}
                                             max={4}
@@ -200,7 +200,7 @@ class CreateExperimentForm extends Component {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item className="w-100 mb-4">
+                    <Grid item className="w-100 mb-4 mt-4">
                         <Grid container spacing={0} direction="row" justify="center" alignItems="center" className="nested-grid-bot">
                             <Grid item >
                                 <ButtonGroup>

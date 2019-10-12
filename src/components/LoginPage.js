@@ -53,14 +53,13 @@ class LoginPage extends Component {
             axios.get('https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/login', {
                 params: {
                     username: this.state.username,
-                    password: this.state.password,
-                    accountType: this.state.accountType
+                    password: this.state.password
                 }
             })
                 .then(res => {
                     console.log(res)
                     this.hideLoader()
-                    this.props.login()
+                    this.props.login(res.data.accountType)
                 })
                 .catch(e => {
                     //console.log(e)
