@@ -24,6 +24,7 @@ class ExperimentStat extends Component {
         this.state = {
             data: {},
             processedData: [],
+            timeBins: [],
             selectedTab: 0
         }
     }
@@ -33,7 +34,10 @@ class ExperimentStat extends Component {
 
         this.setState({
             data: exData.Experiments.find((item) => item.experimentID === this.props.match.params.id)
-        }, () => this.getAllMetrics(this.state.data))
+        }, () => {
+            this.getAllMetrics(this.state.data);
+            this.discretizeTime();
+        })
     }
 
     getAllMetrics = (data) => {
@@ -58,10 +62,10 @@ class ExperimentStat extends Component {
     }
 
     calcMetrics = (exp, metric) => {
-        let data_array= []
+        let data_array = []
         if (["error_rate", "miss_rate"].includes(metric)) {
             let real_metric = metric.split("_")[0]
-            data_array = exp.experimentResults.map(result => (result[real_metric]*100 / result["success"]))
+            data_array = exp.experimentResults.map(result => (result[real_metric] * 100 / result["success"]))
 
         } else {
             data_array = exp.experimentResults.map(result => result[metric])
@@ -97,7 +101,7 @@ class ExperimentStat extends Component {
                 backgroundColor: '#635ee7',
             },
         },
-    })(props => <Tabs {...props} style={{position:"sticky",top:'57px',zIndex:10,backgroundColor:'white'}} TabIndicatorProps={{ children: <div /> }} />);
+    })(props => <Tabs {...props} style={{ position: "sticky", top: '57px', zIndex: 10, backgroundColor: 'white' }} TabIndicatorProps={{ children: <div /> }} />);
 
     StyledTab = withStyles(theme => ({
         root: {
@@ -191,55 +195,98 @@ class ExperimentStat extends Component {
         }
     }
 
-    scatter_chart = (data) => {
+    discretizeTime = () => {
+        let data = this.state.data.templateExperiments.map(each => each.experimentResults.map(participant => participant.totalTime))
+        console.log(data)
+        let range = 0.5
+        let timeBins = {
+            range: range,
+            data: []
+        }
+
+        for (let index = 0; index < data.length; index++) {
+            let min = Math.floor(Math.min(...data[index]))
+            let max = Math.ceil(Math.max(...data[index]))
+            let bins = Math.ceil((max - min) / range)
+            let data_bins = new Array(bins).fill(0)
+            for (let j = 0; j < data[index].length; j++) {
+                let calc_bin = Math.ceil((data[index][j] - min) / range) - 1
+                if (data_bins[calc_bin] === 0) {
+                    data_bins[calc_bin] = []
+                    data_bins[calc_bin].push(data[index][j])
+                } else {
+                    data_bins[calc_bin].push(data[index][j])
+                }
+            }
+            timeBins.data.push({
+                min:min,
+                max:max,
+                data_bins:data_bins.map(bin => {
+                    if (bin === 0) {
+                        return []
+                    }
+                    else return bin
+                })
+            })
+
+        }
+        this.setState({
+            timeBins
+        })
+    }
+
+    scatter_chart = (timeBins) => {
+        if(timeBins.length === 0){
+            return null
+        }
+        console.log(timeBins.data[0].data_bins.map((bin,i) => {
+            return {y:bin.length,x:timeBins.data[0].min+(i*timeBins.range)}
+        }))
         return {
-			theme: "light2",
-			animationEnabled: true,
-			zoomEnabled: true,
-			title:{
-				text: ""
-			},
-			axisX: {
-				title:"Temperature (in °C)",
-				suffix: "°C",
-				crosshair: {
-					enabled: true,
-					snapToDataPoint: true
-				}
-			},
-			axisY:{
-				title: "Sales",
-				includeZero: false,
-				crosshair: {
-					enabled: true,
-					snapToDataPoint: false
-				}
-			},
-			data: [{
-				type: "scatter",
-				markerSize: 15,
-				toolTipContent: "<b>Temperature: </b>{x}°C<br/><b>Sales: </b>{y}",
-				dataPoints: [
-					{ x: 14.2, y: 215},
-					{ x: 12.9, y: 175},
-					{ x: 16.4, y: 325},
-					{ x: 26.9, y: 635},
-					{ x: 32.5, y: 464},
-					{ x: 22.1, y: 522},
-					{ x: 19.4, y: 412},
-					{ x: 25.1, y: 614},
-					{ x: 34.9, y: 374},
-					{ x: 28.7, y: 625},
-					{ x: 23.4, y: 544},
-					{ x: 31.4, y: 502},
-					{ x: 40.8, y: 262},
-					{ x: 37.4, y: 312},
-					{ x: 42.3, y: 202},
-					{ x: 39.1, y: 302},
-					{ x: 17.2, y: 408}
-				]
-			}]
-		}
+            title: {
+                text: "Completion Time"
+            },
+            axisY:{
+                includeZero:true,
+                title:"Number of Participants"
+            },
+            axisX:{
+                minimum:timeBins.data[0].min,
+                maximum:timeBins.data[0].max,
+                interval:timeBins.range,
+                title:"Completion Time"
+            },
+            data: [
+                {
+                    // Change type to "doughnut", "line", "splineArea", etc.
+                    type: "column",
+                    dataPoints: timeBins.data[0].data_bins.map((bin,i) => {
+                        return {y:bin.length,x:timeBins.data[0].min+(i*timeBins.range)+(timeBins.range/2)}
+                    })
+                },
+                {
+                    // Change type to "doughnut", "line", "splineArea", etc.
+                    type: "column",
+                    dataPoints: timeBins.data[1].data_bins.map((bin,i) => {
+                        return {y:bin.length,x:timeBins.data[1].min+(i*timeBins.range)+(timeBins.range/2)}
+                    })
+                },
+                {
+                    // Change type to "doughnut", "line", "splineArea", etc.
+                    type: "line",
+                    dataPoints: timeBins.data[0].data_bins.map((bin,i) => {
+                        return {y:bin.reduce((a,b) => a + b, 0) / bin.length,x:timeBins.data[0].min+(i*timeBins.range)}
+                    })
+                },
+                {
+                    // Change type to "doughnut", "line", "splineArea", etc.
+                    type: "line",
+                    dataPoints: timeBins.data[1].data_bins.map((bin,i) => {
+                        return {y:bin.reduce((a,b) => a + b, 0) / bin.length,x:timeBins.data[1].min+(i*timeBins.range)}
+                    })
+                }
+            ]
+        }
     }
 
 
@@ -248,10 +295,10 @@ class ExperimentStat extends Component {
     getCharts = () => {
         return <div className="w-100 chart-wrapper">
             <CanvasJSChart options={this.time_chart(this.state.processedData)} />
-            <CanvasJSChart options={this.scatter_chart(this.state.processedData)} />
+            <CanvasJSChart options={this.scatter_chart(this.state.timeBins)} />
             <CanvasJSChart options={this.metrics_chart(this.state.processedData)} />
             <CanvasJSChart options={this.metricsRate_chart(this.state.processedData)} />
-            
+
         </div>
     }
 
@@ -259,7 +306,7 @@ class ExperimentStat extends Component {
         return (
             <div >
                 <div className="d-inline-flex pb-1 pt-2 pl-3 align-items-center">
-                    <Button size="large" variant="outlined" className="mr-2">Back</Button><Typography variant="h4" style={{fontWeight:"600"}} display="inline">{this.state.data.experimentName}({this.state.data.experimentID})</Typography>
+                    <Button size="large" variant="outlined" className="mr-2">Back</Button><Typography variant="h4" style={{ fontWeight: "600" }} display="inline">{this.state.data.experimentName}({this.state.data.experimentID})</Typography>
                 </div>
                 <this.StyledTabs value={this.state.selectedTab} onChange={this.onTabChange} aria-label="styled tabs example">
                     <this.StyledTab label="Charts" />
