@@ -16,6 +16,7 @@ color: inherit;
   "title title side"
   "experiment experiment side";
   height: calc(100% - 64px);
+  overflow-x:hidden
 
 }
 .c-item-title{
@@ -29,6 +30,7 @@ color: inherit;
   grid-template-areas: 
   "experiment experiment side";
   height: calc(100% - 64px);
+  overflow-x:hidden
 }
 
 .item-exp{
@@ -101,12 +103,8 @@ button.experiment-btn{
 .vexp-container{
   display: grid;
   grid-template-columns: 1fr 4fr ;
-  grid-template-rows: 1fr 1fr 9fr;
   grid-template-areas: 
-  "back ."
-  "title title"
   "tab tabpanel";
-  height: calc(100% - 64px);
 
 }
 
@@ -118,7 +116,8 @@ button.experiment-btn{
 }
 .vexp-title{
   grid-area: title;
-  align-self: center
+  align-self: center;
+  align-items: center;
 }
 
 .vexp-tabs{
@@ -126,7 +125,12 @@ button.experiment-btn{
 }
 .vexp-tabspanel{
   grid-area: tabpanel;
-  overflow-y: scroll
+  overflow-y: auto
+}
+
+div.vexp-settings-trail {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
 }
 
 .button-loading{
@@ -152,7 +156,56 @@ button.experiment-btn{
   height: calc(100%-64px);
   overflow-x: hidden;
 }
+.cexp-form-item{
+  width: 25%;
+  min-width: 400px;
+}
 
+.ctemp-bg{
+  height: calc(100% - 100px);
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+}
+
+.ctemp-left{
+  display: grid;
+  grid-template-rows: 1fr 20fr;
+}
+
+.ctemp-bg div.ctemp-side{
+  display: grid;
+}
+
+.skeleton-graph{
+  display: grid;
+  grid-template-rows: repeat(2,1fr);
+  grid-template-columns: repeat(2,1fr);
+  column-gap: 20px;
+}
+div.sideParam-grid{
+  display: grid;
+}
+
+.blog-bg{
+  height: calc(100% - 60px);
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+}
+.card-left{
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+}
+
+.dashboard-bg{
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+  height: calc(100% - 64px);
+}
+.dashboard-left{
+  display: grid;
+  grid-template-rows: 2fr 8fr;
+  justify-items: center;
+}
  /*------------- APP BAR -------------------*/
 .appbar{
   position:sticky ;

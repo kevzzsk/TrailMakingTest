@@ -7,7 +7,8 @@ class Appbar extends Component {
 
 
     state = {
-        anchorEl: null
+        anchorEl: null,
+        accName: "R"
     }
 
 
@@ -44,7 +45,7 @@ class Appbar extends Component {
                 color="inherit"
                 className="p-1"
             >
-                <Avatar>AA</Avatar>
+                <Avatar>{this.state.accName}</Avatar>
             </IconButton>
             <Menu
                 id="menu-appbar"
@@ -87,7 +88,7 @@ class Appbar extends Component {
 
                 <ul>
                     <li><a href="/">About</a></li>
-                    <li><a href="/">Mission</a></li>
+                    <li><Link to={'/blog'}>Blog</Link></li>
                     <li><a href="/">Contact</a></li>
                     {this.props.isAuthenticated ? this.renderLogout() : this.renderLogin()}
 

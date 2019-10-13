@@ -50,7 +50,55 @@ export default {
                     "success": 12,
                     "error": 2,
                     "miss": 2,
-                }]
+                },{
+                    "participantID": 7,
+                    "totalTime": 9.35,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 8,
+                    "totalTime": 9.215,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 9,
+                    "totalTime": 8.65,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 10,
+                    "totalTime": 8.85,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 11,
+                    "totalTime": 9.99,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 12,
+                    "totalTime": 9.54,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 13,
+                    "totalTime": 10.82,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 14,
+                    "totalTime": 8.32,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },]
             },{
                 "template":TemplateB1,
                 "experimentResults": [{
@@ -90,7 +138,55 @@ export default {
                     "success": 12,
                     "error": 2,
                     "miss": 5,
-                }]
+                },{
+                    "participantID": 7,
+                    "totalTime": 10.35,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 8,
+                    "totalTime": 10.45,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 9,
+                    "totalTime": 9.25,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 10,
+                    "totalTime": 10.35,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 11,
+                    "totalTime": 10.99,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 12,
+                    "totalTime": 9.04,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 13,
+                    "totalTime": 9.22,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },{
+                    "participantID": 14,
+                    "totalTime": 8.82,
+                    "success": 12,
+                    "error": 2,
+                    "miss": 7,
+                },]
             
             }
         ]

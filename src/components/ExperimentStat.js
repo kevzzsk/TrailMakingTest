@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
-import {
-    XYPlot,
-    XAxis,
-    YAxis,
-    VerticalGridLines,
-    HorizontalGridLines,
-    WhiskerSeries,
-    ChartLabel
-} from 'react-vis';
-
-import { Tabs, Tab, withStyles, Button, Typography, Box } from "@material-ui/core"
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import { withStyles } from '@material-ui/core/styles';
+import Button from "@material-ui/core/Button"
+import Typography from "@material-ui/core/Typography"
+import Skeleton from "@material-ui/lab/Skeleton"
+import axios from "axios"
 
 import CanvasJS from '../assets/canvasjs.react'
 import exData from '../template/exData'
 import DatasetView from './DatasetView'
+import ExperimentSettings from "./ExperimentSettings"
 
 var CanvasJSChart = CanvasJS.CanvasJSChart;
 
@@ -24,21 +21,47 @@ class ExperimentStat extends Component {
         this.state = {
             data: {},
             processedData: [],
-            selectedTab: 0
+            timeBins: [],
+            selectedTab: 0,
+            loading:false
         }
+    }
+
+    hideLoader = () => {
+        this.setState({ loading: false });
+    }
+
+    showLoader = () => {
+        this.setState({ loading: true });
     }
 
     componentWillMount() {
         // GET DATA based on Match ID
-
-        this.setState({
-            data: exData.Experiments.find((item) => item.experimentID === this.props.match.params.id)
-        }, () => this.getAllMetrics(this.state.data))
+        this.showLoader()
+        axios.get("https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/viewExperiment",{
+            params:{
+                experimentID:this.props.match.params.id
+            }
+        })
+            .then(res=>{
+                console.log(res.data)
+                this.setState({
+                    data:res.data
+                },() => {
+                    this.getAllMetrics(this.state.data);
+                    this.discretizeTime();
+                });
+                this.hideLoader()
+            })
+            .catch(err=>{
+                console.log(err)
+                this.hideLoader()
+            })
     }
 
     getAllMetrics = (data) => {
         let metrics = ["totalTime", "success", "error", "miss", "error_rate", "miss_rate"]
-        let processedData = data.templateExperiments.map(experiment => { return { 'label': experiment.template.trail.heading, "data": this.getMetrics(experiment, metrics) } })
+        let processedData = data.templateExperiments.map(experiment => { return { 'label': experiment.heading, "data": this.getMetrics(experiment, metrics) } })
         //console.log(processedData)
         this.setState({ processedData })
     }
@@ -58,10 +81,10 @@ class ExperimentStat extends Component {
     }
 
     calcMetrics = (exp, metric) => {
-        let data_array= []
+        let data_array = []
         if (["error_rate", "miss_rate"].includes(metric)) {
             let real_metric = metric.split("_")[0]
-            data_array = exp.experimentResults.map(result => (result[real_metric]*100 / result["success"]))
+            data_array = exp.experimentResults.map(result => (result[real_metric] * 100 / result["success"]))
 
         } else {
             data_array = exp.experimentResults.map(result => result[metric])
@@ -97,7 +120,7 @@ class ExperimentStat extends Component {
                 backgroundColor: '#635ee7',
             },
         },
-    })(props => <Tabs {...props} style={{position:"sticky",top:'57px',zIndex:10,backgroundColor:'white'}} TabIndicatorProps={{ children: <div /> }} />);
+    })(props => <Tabs {...props} style={{ position: "sticky", top: '57px', zIndex: 10, backgroundColor: 'white' }} TabIndicatorProps={{ children: <div /> }} />);
 
     StyledTab = withStyles(theme => ({
         root: {
@@ -118,16 +141,6 @@ class ExperimentStat extends Component {
         })
     }
 
-    genBody = (index) => {
-        switch (index) {
-            case 0:
-                return this.getCharts()
-            case 1:
-                return <DatasetView />
-            default:
-                break;
-        }
-    }
 
     time_chart = (data) => {
         return {
@@ -191,82 +204,168 @@ class ExperimentStat extends Component {
         }
     }
 
-    scatter_chart = (data) => {
+    discretizeTime = () => {
+        let data = this.state.data.templateExperiments.map(each => each.experimentResults.map(participant => participant.totalTime))
+        console.log(data)
+        let range = 0.5
+        let timeBins = {
+            range: range,
+            data: []
+        }
+
+        for (let index = 0; index < data.length; index++) {
+            if(data[index].length === 0){
+                break
+            }
+            let min = Math.floor(Math.min(...data[index]))
+            let max = Math.ceil(Math.max(...data[index]))
+            let bins = Math.ceil((max - min) / range)
+            let data_bins = new Array(bins).fill(0)
+            for (let j = 0; j < data[index].length; j++) {
+                let calc_bin = Math.ceil((data[index][j] - min) / range) - 1
+                if (data_bins[calc_bin] === 0) {
+                    data_bins[calc_bin] = []
+                    data_bins[calc_bin].push(data[index][j])
+                } else {
+                    data_bins[calc_bin].push(data[index][j])
+                }
+            }
+            timeBins.data.push({
+                min:min,
+                max:max,
+                data_bins:data_bins.map(bin => {
+                    if (bin === 0) {
+                        return []
+                    }
+                    else return bin
+                })
+            })
+
+        }
+        this.setState({
+            timeBins
+        })
+    }
+
+    scatter_chart = (timeBins) => {
+        if(timeBins.data.length === 0){
+            return {
+                title: {
+                    text: "Completion Time"
+                },
+                axisY:{
+                    includeZero:true,
+                    title:"Number of Participants"
+                },
+                axisX:{
+                    title:"Completion Time"
+                },
+                data: [{
+                    type:"column",
+                    dataPoints:[]
+                }
+                ]
+            }
+        }
         return {
-			theme: "light2",
-			animationEnabled: true,
-			zoomEnabled: true,
-			title:{
-				text: ""
-			},
-			axisX: {
-				title:"Temperature (in °C)",
-				suffix: "°C",
-				crosshair: {
-					enabled: true,
-					snapToDataPoint: true
-				}
-			},
-			axisY:{
-				title: "Sales",
-				includeZero: false,
-				crosshair: {
-					enabled: true,
-					snapToDataPoint: false
-				}
-			},
-			data: [{
-				type: "scatter",
-				markerSize: 15,
-				toolTipContent: "<b>Temperature: </b>{x}°C<br/><b>Sales: </b>{y}",
-				dataPoints: [
-					{ x: 14.2, y: 215},
-					{ x: 12.9, y: 175},
-					{ x: 16.4, y: 325},
-					{ x: 26.9, y: 635},
-					{ x: 32.5, y: 464},
-					{ x: 22.1, y: 522},
-					{ x: 19.4, y: 412},
-					{ x: 25.1, y: 614},
-					{ x: 34.9, y: 374},
-					{ x: 28.7, y: 625},
-					{ x: 23.4, y: 544},
-					{ x: 31.4, y: 502},
-					{ x: 40.8, y: 262},
-					{ x: 37.4, y: 312},
-					{ x: 42.3, y: 202},
-					{ x: 39.1, y: 302},
-					{ x: 17.2, y: 408}
-				]
-			}]
-		}
+            theme: "light2",
+            animationEnabled: true,
+            title: {
+                text: "Completion Time"
+            },
+            axisY:{
+                includeZero:true,
+                title:"Number of Participants"
+            },
+            axisX:{
+                minimum:timeBins.data[0].min,
+                maximum:timeBins.data[0].max,
+                interval:timeBins.range,
+                title:"Completion Time in seconds"
+            },
+            data: [
+                {
+                    // Change type to "doughnut", "line", "splineArea", etc.
+                    type: "column",
+                    dataPoints: timeBins.data[0].data_bins.map((bin,i) => {
+                        return {y:bin.length,x:timeBins.data[0].min+(i*timeBins.range)+(timeBins.range/2)}
+                    })
+                },
+                {
+                    // Change type to "doughnut", "line", "splineArea", etc.
+                    type: "column",
+                    dataPoints: timeBins.data[1].data_bins.map((bin,i) => {
+                        return {y:bin.length,x:timeBins.data[1].min+(i*timeBins.range)+(timeBins.range/2)}
+                    })
+                },
+                {
+                    // Change type to "doughnut", "line", "splineArea", etc.
+                    type: "line",
+                    dataPoints: timeBins.data[0].data_bins.map((bin,i) => {
+                        return {y:bin.reduce((a,b) => a + b, 0) / bin.length,x:timeBins.data[0].min+(i*timeBins.range)}
+                    })
+                },
+                {
+                    // Change type to "doughnut", "line", "splineArea", etc.
+                    type: "line",
+                    dataPoints: timeBins.data[1].data_bins.map((bin,i) => {
+                        return {y:bin.reduce((a,b) => a + b, 0) / bin.length,x:timeBins.data[1].min+(i*timeBins.range)}
+                    })
+                }
+            ]
+        }
     }
 
 
 
 
     getCharts = () => {
+
         return <div className="w-100 chart-wrapper">
             <CanvasJSChart options={this.time_chart(this.state.processedData)} />
-            <CanvasJSChart options={this.scatter_chart(this.state.processedData)} />
+            <CanvasJSChart options={this.scatter_chart(this.state.timeBins)} />
             <CanvasJSChart options={this.metrics_chart(this.state.processedData)} />
             <CanvasJSChart options={this.metricsRate_chart(this.state.processedData)} />
-            
+
         </div>
+    }
+
+    genSkeleton=()=>{
+        return <div className="skeleton-graph">
+            <Skeleton width="100%" height={400}/>
+            <Skeleton width="100%" height={400}/>
+            <Skeleton width="100%" height={400}/>
+            <Skeleton width="100%" height={400}/>
+        </div>
+    }
+
+    genBody = (index) => {
+        switch (index) {
+            case 0:
+                return this.getCharts()
+            case 1:
+                return <DatasetView data={this.state.data} />
+            case 2:
+                return <ExperimentSettings data={this.state.data} history={this.props.history} />
+            default:
+                break;
+        }
     }
 
     render() {
         return (
             <div >
                 <div className="d-inline-flex pb-1 pt-2 pl-3 align-items-center">
-                    <Button size="large" variant="outlined" className="mr-2">Back</Button><Typography variant="h4" style={{fontWeight:"600"}} display="inline">{this.state.data.experimentName}({this.state.data.experimentID})</Typography>
+                    <Button size="large" variant="outlined" className="mr-2" onClick={()=>this.props.history.goBack()}>Back</Button>
+                    {this.state.loading? <Skeleton width={300} height={40}/>:<Typography  variant="h4" style={{ fontWeight: "600" }} display="inline">{this.state.data.experimentName}({this.state.data.experimentID})</Typography>}
+                    
                 </div>
                 <this.StyledTabs value={this.state.selectedTab} onChange={this.onTabChange} aria-label="styled tabs example">
                     <this.StyledTab label="Charts" />
                     <this.StyledTab label="Datasets" />
                     <this.StyledTab label="Settings" />
                 </this.StyledTabs>
-                {this.genBody(this.state.selectedTab)}
+                {this.state.loading?this.genSkeleton() :this.genBody(this.state.selectedTab)}
             </div>
         )
     }

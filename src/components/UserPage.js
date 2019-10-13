@@ -1,42 +1,41 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
+import Button from "@material-ui/core/Button"
 import UserPageCard from './UserPageCard';
 import exData from '../template/exData';
 
+import ViewExperiment from "./ViewExperiment"
+
 class UserPage extends Component {
+
+
+    componentDidMount(){
+
+    }
+
     genCards = () => {
         return exData.Experiments.map((item, index) => {
-            return (<Link to={`/user-page/view-experiments/${item.experimentID}`}><UserPageCard key={index} title={item.title} experimentID={item.experimentID} status={item.status} daysOnline={item.daysOnline} respondents={item.respondents} createDate={item.createDate} startDate={item.startDate} endDate={item.endDate}/></Link>)
+            return (<Link key={index} to={`/user-page/view-experiments/${item.experimentID}`}><UserPageCard key={index} title={item.title} experimentID={item.experimentID} status={item.status} daysOnline={item.daysOnline} respondents={item.respondents} createDate={item.createDate} startDate={item.startDate} endDate={item.endDate} /></Link>)
         })
     }
 
-render() {
-    return (
-        <div className="container-fluid">
-            <br />
-            <div className="card">
-                <div className="row">
-                    <div className="card">
-                        <img className="rounded-circle" src={require('./profile.png')} />
-                        <Link to={"/user-page/view-experiments"} type="button" className="btn btn-outline-secondary">View Your Experiments</Link>
-                        <Link to={"/user-page/create-experiment"} type="button" className="btn btn-outline-secondary">Create New Experiments</Link>
-                    </div>
-                    <div className="col-6">
-                        <div className="card">
-                            <h4>Welcome Researcher01,</h4>
-                            <div className="card" style={{ backgroundColor: "#6b6a68" }}>
-                                <h5>Recent Experiments</h5>
-                                <div className="card border" style={{ backgroundColor: "#d3d3d3" }}>
-                                    {this.genCards()}
-                                </div>
-                            </div>
-                        </div>
+    render() {
+        return (
+            <div className="dashboard-bg p-3">
+                <div className="dashboard-left">
+                    <img className="rounded-circle" src={require('./profile.png')} />
+                    <div className="w-100 align-content-stretch">
+                        <Link to={"/user-page/create-experiment"}><Button size="large" color="primary" variant="contained" className="w-100">Create Experiments</Button></Link>
+                        <Link to={"/user-page/create-template"}><Button size="large" color="primary" variant="contained" className="w-100 mt-2">Create Template</Button></Link>
                     </div>
                 </div>
+                <div className="w-100 h-100">
+                        <h4>Welcome Researcher01,</h4>
+                        <ViewExperiment />
+                </div>
             </div>
-        </div>
-    )
-}
+        )
+    }
 }
 
 export default UserPage;

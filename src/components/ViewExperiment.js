@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types';
-import { Tabs, Tab, Typography, Button, Box, makeStyles } from '@material-ui/core'
+import Tabs from "@material-ui/core/Tabs"
+import Tab from "@material-ui/core/Tab"
+import Typography from "@material-ui/core/Typography"
+import Button from "@material-ui/core/Button"
+import Box from "@material-ui/core/Box"
+import Skeleton from "@material-ui/lab/Skeleton"
 import { Link } from 'react-router-dom'
 import { isBefore } from "date-fns"
 
 import exData from '../template/exData'
 import ExperimentCard from './ExperimentCard'
+import axios from 'axios';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -40,8 +46,11 @@ function a11yProps(index) {
 
 
 
-function ViewExperiment() {
+function ViewExperiment(props) {
     const [value, setValue] = React.useState(0);
+    const [exp, setExp] = React.useState([]);
+    const [loading, setLoading] = React.useState(false)
+    const [skelData, setSkelData] = React.useState([1, 2, 3]);
 
     function handleChange(event, newValue) {
         setValue(newValue);
@@ -62,40 +71,52 @@ function ViewExperiment() {
     }
 
     function genCards(index) {
+
         switch (index) {
             case 0:
-                return exData.Experiments.map((item) => {
+                return (loading ? skelData.map(item => <Skeleton width="100%" height={250} />) : exp.map((item) => {
                     return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>
-                });
+                }));
                 break;
             case 1:
-                return exData.Experiments.filter((item) => { return getStatus(item.startDate, item.endDate) === "Active" }).map((item) => {
-                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>
-                });
+                return (loading ? skelData.map(item => <Skeleton width="100%" height={250} />) : exp.filter((item) => { 
+                    return getStatus(item.startDate, item.endDate) === "Active"})
+                    .map(item=>{return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>}));
                 break;
             case 2:
-                return exData.Experiments.filter((item) => { return getStatus(item.startDate, item.endDate) === "Draft" }).map((item) => {
-                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard  {...item} /></Link>
-                });
-                break;
+                return (loading ? skelData.map(item => <Skeleton width="100%" height={250} />) : exp.filter((item) => { 
+                    return getStatus(item.startDate, item.endDate) === "Draft"})
+                    .map(item=>{return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>}));
             case 3:
-                return exData.Experiments.filter((item) => { return getStatus(item.startDate, item.endDate) === "Completed" }).map((item) => {
-                    return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard  {...item} /></Link>
-                });
-                break;
+                return (loading ? skelData.map(item => <Skeleton width="100%" height={250} />) : exp.filter((item) => { 
+                    return getStatus(item.startDate, item.endDate) === "Completed"})
+                    .map(item=>{return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>}));
 
             default:
                 return exData.Experiments.map((item) => {
                     return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>
                 });
-                break;
         }
     }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const result = await axios.get("https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/getAllExperiment");
+                setExp(result.data.experiments)
+                console.log(result.data.experiments)
+            } catch (error) {
+                console.log(error)
+            }
+            setLoading(false);
+        };
+
+        fetchData();
+    }, [])
+
     return (
         <div className="vexp-container m-4 ">
-            <Link to="/user-page"><Button variant="contained" className="vexp-btn">Back</Button></Link>
-            <Typography variant="h3" className="vexp-title">View Experiment</Typography>
             <Tabs
                 orientation="vertical"
                 variant="scrollable"

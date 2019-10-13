@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -17,34 +17,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import { CSVLink, CSVDownload } from "react-csv";
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Donut', 452, 25.0, 51, 4.9),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Honeycomb', 408, 3.2, 87, 6.5),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Jelly Bean', 375, 0.0, 94, 0.0),
-    createData('KitKat', 518, 26.0, 65, 7.0),
-    createData('Lollipop', 392, 0.2, 98, 0.0),
-    createData('Marshmallow', 318, 0, 81, 2.0),
-    createData('Nougat', 360, 19.0, 9, 37.0),
-    createData('Oreo', 437, 18.0, 63, 4.0),
-    createData('Honeycomb', 408, 3.2, 87, 6.5),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Jelly Bean', 375, 0.0, 94, 0.0),
-    createData('KitKat', 518, 26.0, 65, 7.0),
-    createData('Lollipop', 392, 0.2, 98, 0.0),
-    createData('Marshmallow', 318, 0, 81, 2.0),
-    createData('Nougat', 360, 19.0, 9, 37.0),
-    createData('Oreo', 437, 18.0, 63, 4.0),
-];
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -71,11 +45,17 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Participants' },
-    { id: 'calories', numeric: true, disablePadding: false, label: 'Completion Time (s)' },
-    { id: 'fat', numeric: true, disablePadding: false, label: 'Error Rate (%)' },
-    { id: 'carbs', numeric: true, disablePadding: false, label: 'Miss Rate (%)' },
-    { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+    { id: 'participantID', numeric: true, disablePadding: true, label: 'Participants' },
+    { id: 'totalTime', numeric: true, disablePadding: false, label: 'Completion Time (s)' },
+    { id: 'success', numeric: true, disablePadding: false, label: 'Success' },
+    { id: 'error', numeric: true, disablePadding: false, label: 'Error Rate (%)' },
+    { id: 'miss', numeric: true, disablePadding: false, label: 'Miss Rate (%)' },
+    { id: 'age', numeric: true, disablePadding: false, label: 'Age' },
+    { id: 'gender', numeric: true, disablePadding: false, label: 'Gender' },
+    { id: 'income', numeric: true, disablePadding: false, label: 'Income' },
+    { id: 'education', numeric: true, disablePadding: false, label: 'Education' },
+    { id: 'occupation', numeric: true, disablePadding: false, label: 'Occupation' },
+    { id: 'smoker', numeric: true, disablePadding: false, label: 'Smoker' },
 ];
 
 function EnhancedTableHead(props) {
@@ -160,6 +140,7 @@ const useToolbarStyles = makeStyles(theme => ({
 const EnhancedTableToolbar = props => {
     const classes = useToolbarStyles();
     const { numSelected } = props;
+    const [downloadable, setDownloadable] = React.useState(false)
 
     return (
         <Toolbar
@@ -182,9 +163,16 @@ const EnhancedTableToolbar = props => {
             <div className={classes.actions}>
                 {numSelected > 0 ? (
                     <Tooltip title="Export">
-                        <IconButton aria-label="export">
-                            <i className="fas fa-file-export"></i>
-                        </IconButton>
+                        <CSVLink
+                            data={props.data}
+                            filename={"my-file.csv"}
+                            className="btn btn-primary"
+                            onClick={()=>{
+                                console.log("CLICKED")
+                            }}
+                        >
+                        <i className="fas fa-file-export">Export</i>
+                        </CSVLink>
                     </Tooltip>
                 ) : (
                         <Tooltip title="Filter list">
@@ -231,14 +219,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function EnhancedTable() {
+export default function EnhancedTable(props) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [orderBy, setOrderBy] = React.useState('id');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rows, setRows] = React.useState([])
+
+    useEffect(() => {
+        const fetchData = () => {
+            setRows(props.data.templateExperiments[0].experimentResults.map(result => {
+                const { participantDetails, ...participantResult } = result
+                return { ...participantResult, ...participantDetails }
+            }))
+        }
+        fetchData();
+    }, [props.data])
+
+
 
     const handleRequestSort = (event, property) => {
         const isDesc = orderBy === property && order === 'desc';
@@ -248,7 +249,7 @@ export default function EnhancedTable() {
 
     const handleSelectAllClick = event => {
         if (event.target.checked) {
-            const newSelecteds = rows.map(n => n.name);
+            const newSelecteds = rows.map(n => n.participantID);
             setSelected(newSelecteds);
             return;
         }
@@ -291,7 +292,7 @@ export default function EnhancedTable() {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar data={rows} numSelected={selected.length} />
                 <div className={classes.tableWrapper}>
                     <Table
                         stickyHeader
@@ -312,17 +313,17 @@ export default function EnhancedTable() {
                             {stableSort(rows, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.participantID);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={event => handleClick(event, row.name)}
+                                            onClick={event => handleClick(event, row.participantID)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={row.participantID}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -332,12 +333,18 @@ export default function EnhancedTable() {
                                                 />
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.name}
+                                                {row.participantID}
                                             </TableCell>
-                                            <TableCell align="right">{row.calories}</TableCell>
-                                            <TableCell align="right">{row.fat}</TableCell>
-                                            <TableCell align="right">{row.carbs}</TableCell>
-                                            <TableCell align="right">{row.protein}</TableCell>
+                                            <TableCell align="right">{row.totalTime}</TableCell>
+                                            <TableCell align="right">{row.success}</TableCell>
+                                            <TableCell align="right">{row.error}</TableCell>
+                                            <TableCell align="right">{row.miss}</TableCell>
+                                            <TableCell align="right">{row.age}</TableCell>
+                                            <TableCell align="right">{row.gender}</TableCell>
+                                            <TableCell align="right">{row.income}</TableCell>
+                                            <TableCell align="right">{row.education}</TableCell>
+                                            <TableCell align="right">{row.occupation}</TableCell>
+                                            <TableCell align="right">{row.smoker}</TableCell>
                                         </TableRow>
                                     );
                                 })}
