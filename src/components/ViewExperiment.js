@@ -50,7 +50,7 @@ function ViewExperiment(props) {
     const [value, setValue] = React.useState(0);
     const [exp, setExp] = React.useState([]);
     const [loading, setLoading] = React.useState(false)
-    const [skelData, setSkelData] = React.useState([1, 2, 3, 4]);
+    const [skelData, setSkelData] = React.useState([1, 2, 3]);
 
     function handleChange(event, newValue) {
         setValue(newValue);
@@ -117,12 +117,6 @@ function ViewExperiment(props) {
 
     return (
         <div className="vexp-container m-4 ">
-            <div className="vexp-title d-inline-flex">
-                <Button variant="outlined" className="mx-2" size="large" onClick={()=>props.history.goBack()}>Back</Button>
-                <Typography variant="h4" >View Experiment</Typography>
-            </div>
-
-
             <Tabs
                 orientation="vertical"
                 variant="scrollable"

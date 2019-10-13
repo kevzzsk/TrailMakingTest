@@ -13,6 +13,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from "@material-ui/lab/Skeleton"
 
 import BlogData from '../template/blogData'
 
@@ -24,7 +25,15 @@ class BlogPage extends Component {
         "Get some understanding about dementia. Your doctor can put you in touch with people who can help.",
         "Rally for support. Caring for people with dementia is challenging and can be exhausting both physically and emotionally. Learn to talk about your problems. Make sure that you get enough rest. Take care of your own physical and mental well-being.",
         "Group support is important. Meet with others who are also caring for people with dementia. Sharing provides mutual support for caregivers.",
-        "Get expert advice especially with coping with challenging behaviour."]
+        "Get expert advice especially with coping with challenging behaviour."],
+        loading: false
+    }
+
+    componentDidMount(){
+        this.setState({loading:true})
+        setTimeout(function() { //Start the timer
+            this.setState({loading: false}) //After 1 second, set render to true
+        }.bind(this), 1500)
     }
 
     getIconLabel = (index)=>{
@@ -48,7 +57,6 @@ class BlogPage extends Component {
       
         return (
           <div
-
           >
             {this.getIconLabel(props.icon)}
           </div>
@@ -60,7 +68,7 @@ class BlogPage extends Component {
             <div className="blog-bg">
                 <div>
                     <Typography className="m-3" variant="h3">Blog</Typography>
-                    {BlogData.map((blog, i) => {
+                    {this.state.loading? [1,2,3].map((item,i)=><Skeleton key={i} width="97%" height={460} className="m-3" />) :BlogData.map((blog, i) => {
                         return <Card key={i} className="m-3" >
                             <CardActionArea onClick={() => window.open(blog.webUrl, "_blank")}>
                                 <img className="card-img-top" style={{ objectFit: "cover", height: "300px" }} src={blog.coverImage} alt="imagea" ></img>
@@ -82,7 +90,7 @@ class BlogPage extends Component {
                                     </Button>
                             </CardActions>
                         </Card>
-                    })}
+                    })})
                 </div>
                 <div className="m-2">
                     <Paper className="p-4">

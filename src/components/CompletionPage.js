@@ -34,6 +34,7 @@ function CompletionPage(props) {
                 <Steppers trails={trail} activeStep={activeStep} />
             </div>
             <Link to="/"><Button variant="contained" className="mb-3">Go Home</Button></Link>
+            <Link to="/blog"><Button color="primary" variant="contained" className="mb-3 ml-2">Read More About Dementia</Button></Link>
         </Paper>
     )
 }

@@ -30,6 +30,7 @@ color: inherit;
   grid-template-areas: 
   "experiment experiment side";
   height: calc(100% - 64px);
+  overflow-x:hidden
 }
 
 .item-exp{
@@ -102,11 +103,8 @@ button.experiment-btn{
 .vexp-container{
   display: grid;
   grid-template-columns: 1fr 4fr ;
-  grid-template-rows: 1fr 12fr;
   grid-template-areas: 
-  "title title"
   "tab tabpanel";
-  height: calc(100% - 64px);
 
 }
 
@@ -127,7 +125,7 @@ button.experiment-btn{
 }
 .vexp-tabspanel{
   grid-area: tabpanel;
-  overflow-y: scroll
+  overflow-y: auto
 }
 
 div.vexp-settings-trail {
@@ -196,6 +194,17 @@ div.sideParam-grid{
 .card-left{
   display: grid;
   grid-template-columns: 1fr 9fr;
+}
+
+.dashboard-bg{
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+  height: calc(100% - 64px);
+}
+.dashboard-left{
+  display: grid;
+  grid-template-rows: 2fr 8fr;
+  justify-items: center;
 }
  /*------------- APP BAR -------------------*/
 .appbar{
