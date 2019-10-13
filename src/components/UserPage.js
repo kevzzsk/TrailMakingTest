@@ -30,7 +30,7 @@ class UserPage extends Component {
                     </div>
                 </div>
                 <div className="w-100 h-100">
-                        <h4>Welcome Researcher01,</h4>
+                        <h4>Welcome Researcher,</h4>
                         <ViewExperiment />
                 </div>
             </div>

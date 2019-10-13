@@ -77,7 +77,6 @@ class App extends Component {
 					<Route path="/test" exact component={ExperimentTest} />
 					<Route path="/login" exact render={props => <LoginPage {...props} login={this.login} />} />
 					<Route path="/user-page" exact component={UserPage} />
-					<Route path="/user-page/view-experiments" exact component={ViewExperiment} />
 					<Route path="/user-page/view-experiments/:id" exact component={ExperimentStat} />
 					<Route path="/user-page/create-experiment" exact component={CreateExperimentForm} />
 					<Route path="/user-page/create-experiment/:id(\d+)" exact component={CreateExperiment} />
@@ -85,6 +84,7 @@ class App extends Component {
 					<Route path="/sign-up-page" exact component={SignUpPage} />
 					<Route path="/forget-password" exact component={ForgetPassPage} />
 					<Route path="/doctor-page" exact component={DoctorPage} />
+					<Route path="/doctor-page/view-experiments" exact component={ViewExperiment} />
 					<Route path="/user-page/create-template" exact component={CreateTemplate}/>
 					<Route path="/blog" exact component={BlogPage}/>
 				</Switch>

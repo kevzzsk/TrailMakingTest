@@ -64,7 +64,8 @@ class HomePage extends Component {
                     <div className="head">
                         <h1>"Every 3 seconds someone in the world develops dementia"</h1>
                         <div>
-                            <p>Vestibulum vel viverra tortor, ac volutpat metus. Curabitur nulla ligula, consectetur consequat lacus ullamcorper, accumsan viverra nisl. Aliquam erat volutpat. Etiam turpis leo, laoreet eget metus in, faucibus venenatis leo.</p>
+                            <p>There were an estimated 50 million people worldwide living with dementia in 2017. This number will almost double every 20 years, reaching 75 million in 2030 and 131.5 million in 2050.
+Much of the increase will be in low and middle income countries. Already 58% of people with dementia live in low and middle income countries, but by 2050 this will rise to 68%. </p>
                         </div>
                     </div>
 
@@ -89,7 +90,7 @@ class HomePage extends Component {
                             />
                         </FormControl>
                         {this.state.error.length > 0 && <small style={{ color: "#D8000C" }}>{this.state.error}</small>}
-                        <small className="form-text text-muted">By continuing you comply with tnc.</small>
+                        <small className="form-text text-muted">By continuing you comply with our terms and cconditions.</small>
                         <div className="position-relative">
                             <button disabled={this.state.loading} type="submit" className="btn experiment-btn" >Try Experiment</button>
                             {this.state.loading && <CircularProgress size={40} className="button-loading" />}
@@ -99,7 +100,9 @@ class HomePage extends Component {
                 <section className="intro" ref={this.props.aboutRef}>
                     <h2>About Us</h2>
                     <div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel gravida nisi. Vestibulum ac consequat lorem. In in mi massa. Donec ut tellus sit amet sem ornare fermentum at et nunc. Pellentesque ac elementum metus. Praesent non venenatis lacus. In sagittis urna in nulla sagittis mattis.</p>
+                        <p>We are a group of students from NTU who have developed an application based on Trail Making Tests for researchers and doctors alike to diagnose and treat patients with dementia.
+                            Researchers are able to use our application for research purposes by getting participants to use our application.
+                        </p>
                     </div>
                 </section>
 
@@ -110,18 +113,18 @@ class HomePage extends Component {
                         <div className="service-one">
                             <p className="service-icon"><i className="fas fa-users"></i></p>
                             <p className="service-title">Participants</p>
-                            <p>Mauris vitae turpis ut sem blandit consequat et at ligula. Suspendisse quam lectus, tristique dapibus sapien et, tempus suscipit nisl.</p>
+                            <p>Participants of research groups to aid in the research of dementia.</p>
                         </div>
                         <div className="service-two">
                             <p className="service-icon"><i className="fas fa-user-graduate"></i></p>
                             <p className="service-title">Researchers</p>
-                            <p>Nulla eu metus faucibus, vehicula tortor quis, venenatis odio. Nullam purus mauris, feugiat in odio vitae, posuere volutpat libero. Sed et convallis libero.</p>
+                            <p>Scientists and researchers currently making great strides in identifying potential new ways to help diagnose, treat, and even prevent Alzheimer's and related dementias.</p>
 
                         </div>
                         <div className="service-three">
                             <p className="service-icon"><i className="fas fa-user-md"></i></p>
                             <p className="service-title">Doctors</p>
-                            <p>Ut ornare vitae enim a rhoncus. Nullam aliquet tristique scelerisque. Sed volutpat dictum risus ac laoreet. Suspendisse id lorem in enim sollicitudin varius.</p>
+                            <p>Doctors trained in brain conditions (neurologist) or doctors trained to treat older adults (geriatrician).</p>
 
                         </div>
                     </div>
