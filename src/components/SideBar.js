@@ -53,7 +53,7 @@ class SideBar extends Component {
                     </Grid>
                     <Grid item className="w-100 mb-4">
                         <Grid container spacing={0} direction="row" justify="center" alignItems="center" className="nested-grid-bot">
-                        <Steppers activeStep={this.props.activeStep}/>
+                        <Steppers trails={trail} activeStep={this.props.activeStep}/>
                             <Grid item >
                                 <ButtonGroup>
                                     <Button variant="text" className="mr-1" size="large" onClick={()=> this.props.goBack()} >Cancel</Button>

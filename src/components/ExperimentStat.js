@@ -10,6 +10,7 @@ import axios from "axios"
 import CanvasJS from '../assets/canvasjs.react'
 import exData from '../template/exData'
 import DatasetView from './DatasetView'
+import ExperimentSettings from "./ExperimentSettings"
 
 var CanvasJSChart = CanvasJS.CanvasJSChart;
 
@@ -344,6 +345,8 @@ class ExperimentStat extends Component {
                 return this.getCharts()
             case 1:
                 return <DatasetView data={this.state.data} />
+            case 2:
+                return <ExperimentSettings data={this.state.data} history={this.props.history} />
             default:
                 break;
         }

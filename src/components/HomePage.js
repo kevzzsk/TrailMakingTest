@@ -69,7 +69,6 @@ class HomePage extends Component {
                     </div>
 
                 </header>
-                <h2 className="text-center m-0 text-uppercase">Try Our Experiment</h2>
                 <form onSubmit={this.submitFormHandler}>
                     <div className="form-group experiment">
                         <br />
@@ -92,7 +91,7 @@ class HomePage extends Component {
                         {this.state.error.length > 0 && <small style={{ color: "#D8000C" }}>{this.state.error}</small>}
                         <small className="form-text text-muted">By continuing you comply with tnc.</small>
                         <div className="position-relative">
-                            <button disabled={this.state.loading} type="submit" className="btn experiment-btn" >Continue</button>
+                            <button disabled={this.state.loading} type="submit" className="btn experiment-btn" >Try Experiment</button>
                             {this.state.loading && <CircularProgress size={40} className="button-loading" />}
                         </div>
                     </div>

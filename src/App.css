@@ -130,6 +130,11 @@ button.experiment-btn{
   overflow-y: scroll
 }
 
+div.vexp-settings-trail {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+}
+
 .button-loading{
     color: blue;
     position: absolute;

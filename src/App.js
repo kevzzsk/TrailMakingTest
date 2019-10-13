@@ -47,9 +47,9 @@ class App extends Component {
 		this.setState({
 			isAuthenticated: true
 		})
-		if (accType === 0) {
+		if (accType === 1) {
 			this.props.history.replace("/doctor-page")
-		} else if (accType === 1) {
+		} else if (accType === 0) {
 			this.props.history.replace("/user-page")
 		}
 	}

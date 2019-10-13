@@ -88,7 +88,7 @@ class Appbar extends Component {
 
                 <ul>
                     <li><a href="/">About</a></li>
-                    <li><a href="/">Mission</a></li>
+                    <li><a href="/">Blog</a></li>
                     <li><a href="/">Contact</a></li>
                     {this.props.isAuthenticated ? this.renderLogout() : this.renderLogin()}
 

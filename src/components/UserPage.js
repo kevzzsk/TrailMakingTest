@@ -6,7 +6,7 @@ import exData from '../template/exData';
 class UserPage extends Component {
     genCards = () => {
         return exData.Experiments.map((item, index) => {
-            return (<Link to={`/user-page/view-experiments/${item.experimentID}`}><UserPageCard key={index} title={item.title} experimentID={item.experimentID} status={item.status} daysOnline={item.daysOnline} respondents={item.respondents} createDate={item.createDate} startDate={item.startDate} endDate={item.endDate}/></Link>)
+            return (<Link key={index} to={`/user-page/view-experiments/${item.experimentID}`}><UserPageCard key={index} title={item.title} experimentID={item.experimentID} status={item.status} daysOnline={item.daysOnline} respondents={item.respondents} createDate={item.createDate} startDate={item.startDate} endDate={item.endDate}/></Link>)
         })
     }
 

@@ -235,7 +235,7 @@ class PersonalParticulars extends Component {
                         <Grid item className="w-100 mb-4 mt-2">
                             <Grid container spacing={0} direction="column" justify="center" alignItems="center" className="nested-grid-bot">
                                 <Grid item className="w-100">
-                                    <Steppers activeStep={this.props.activeStep} className="p-2" />
+                                    <Steppers trails={this.props.location.state.trails} activeStep={this.props.activeStep} className="p-2" />
                                 </Grid>
                                 <Grid item >
                                     <ButtonGroup>

@@ -7,7 +7,9 @@ import StepLabel from '@material-ui/core/StepLabel';
 
 export default function Steppers(props) {
 
-  const steps = ['Personal Particulars', 'Test Trail', 'Part A', 'Part B','Yay Completed!'];
+  let steps = ['Personal Particulars', 'Test Trail'];
+
+  steps=[...steps,...props.trails.map(trail=>trail.heading),"Yay Completed"]
 
   return (
       <Stepper activeStep={props.activeStep} alternativeLabel className={`${props.className}`}>
@@ -18,4 +20,9 @@ export default function Steppers(props) {
         ))}
       </Stepper>
   );
+}
+
+Steppers.defaultProps ={
+  trails: [],
+  activeStep:0
 }

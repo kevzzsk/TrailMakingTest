@@ -35,6 +35,7 @@ class BubbleScreen extends Component {
         completedText: "Completed!",
         progress: 0,
         retry: false,
+        test:false,
         retryText: "Would you like to retry?",
         onRetry: () => { },
         onSuccess: (date, token) => { },
@@ -150,9 +151,9 @@ class BubbleScreen extends Component {
 
             // if next in line to be selected handle with success
             // else handle with error
-            let handler = this.state.progress === i ?
+            let handler = this.props.test? ()=>{} :(this.state.progress === i ?
                 (e) => this.handleSuccess(e, i) :
-                (e) => this.handleError(e, i);
+                (e) => this.handleError(e, i))
 
             // if finished, don't listen anymore
             if (this.state.progress >= tokens.length) {
@@ -196,7 +197,7 @@ class BubbleScreen extends Component {
         return (
             <div ref={(divElement) => this.divElement = divElement} className="h-100">
                 <svg height={this.state.height}
-                    onClick={this.handleMiss}
+                    onClick={ this.props.test?()=>{} :this.handleMiss}
                     width={this.state.width}
                     xmlns="http://www.w3.org/2000/svg">
                     {this.renderBubbles()}
