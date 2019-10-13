@@ -50,7 +50,7 @@ class ExperimentSettings extends Component {
                         <div className="vexp-settings-trail">
                             {this.props.data.templateExperiments.map(trail => {
                                 return <div style={{border:"2px solid black"}}>
-                                    <Typography>{trail.heading}({trail.templateExperimentID})</Typography>
+                                    <Typography>{trail.heading}</Typography>
                                     <BubbleScreen trail={trail} test={true} />
                                 </div>
                             

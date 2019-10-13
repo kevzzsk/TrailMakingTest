@@ -45,8 +45,8 @@ class SideBar extends Component {
                                 <Paper className="p-4 mx-3">
                                     <Typography variant="h4">{test? heading : trail[expIndex].heading}</Typography>
                                     <br />
-                                    <Typography variant="h5">Instructions:</Typography>
-                                    <Typography variant="body2" style={{ whiteSpace: "pre-wrap" }}>{test? description: trail[expIndex].description}</Typography>
+                                    <Typography variant="h5" style={{fontWeight:"600"}}>Instructions:</Typography>
+                                    <Typography variant="body2" style={{ whiteSpace: "pre-wrap", fontSize:"20px" }}>{test? description: trail[expIndex].description}</Typography>
                                 </Paper>
                             </Grid>
                         </Grid>

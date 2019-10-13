@@ -78,7 +78,7 @@ class CreateExperiment extends Component {
                             <BubbleScreen trail={this.state.chosenTrail} />
                         </div>
                         <div className="item-side">
-                            <SideParameter payload={this.state.payload} metaData={this.state.metaData} trail={this.state.chosenTrail} onChangeTrail={this.onChangeTrail} />
+                            <SideParameter accountID={this.props.location.state.accountID} payload={this.state.payload} metaData={this.state.metaData} trail={this.state.chosenTrail} onChangeTrail={this.onChangeTrail} />
                         </div>
                     </>}
             </div>

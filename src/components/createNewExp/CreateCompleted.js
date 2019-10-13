@@ -6,6 +6,8 @@ import {toDate,format} from 'date-fns'
 function CreateCompleted(props) {
     const {ExperimentID,ExperimentName,description,endDate,startDate} = props.location.state.metaData
     const {payload} = props.location.state
+
+    
     return (
         <div>
             <Paper className="m-5 text-center">
@@ -30,7 +32,10 @@ function CreateCompleted(props) {
                     </Paper>
                 })}
                 <Button variant="text" className="mb-3" onClick={()=>props.history.goBack()}>Back</Button>
-                <Link to="/user-page"><Button variant="contained" className="mb-3">Create</Button></Link>
+                <Link to={{
+                    pathname:"/user-page/create-experiment/submit",
+                    state: props.location.state
+                }}><Button variant="contained" className="mb-3">Create</Button></Link>
             </Paper>
         </div>
     )

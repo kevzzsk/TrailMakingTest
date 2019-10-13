@@ -205,6 +205,7 @@ class SideParameter extends PureComponent {
                                     <Link to={{
                                         pathname: this.getPathName(this.props.metaData),
                                         state: {
+                                            accountID:this.props.accountID,
                                             metaData: this.props.metaData,
                                             payload: [...this.props.payload, {
                                                 trailName: this.state.trail.templateName,

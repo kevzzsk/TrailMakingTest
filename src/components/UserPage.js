@@ -44,7 +44,12 @@ class UserPage extends Component {
                 <div className="dashboard-left">
                     <img className="rounded-circle" width="200px" height="200px" src={this.state.dataLoaded? this.state.account.avatarURL :require('./profile.png')} />
                     <div className="w-100 align-content-stretch">
-                        <Link to={"/user-page/create-experiment"}><Button size="large" color="primary" variant="contained" className="w-100">Create Experiments</Button></Link>
+                        <Link to={{
+                            pathname:"/user-page/create-experiment",
+                            state:{
+                                accountID:this.state.account.accountID
+                            }
+                        }}><Button size="large" color="primary" variant="contained" className="w-100">Create Experiments</Button></Link>
                         <Link to={"/user-page/create-template"}><Button size="large" color="primary" variant="contained" className="w-100 mt-2">Create Template</Button></Link>
                     </div>
                 </div>
