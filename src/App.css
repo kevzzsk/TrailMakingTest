@@ -187,6 +187,16 @@ div.vexp-settings-trail {
 div.sideParam-grid{
   display: grid;
 }
+
+.blog-bg{
+  height: calc(100% - 60px);
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+}
+.card-left{
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+}
  /*------------- APP BAR -------------------*/
 .appbar{
   position:sticky ;

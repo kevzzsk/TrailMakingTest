@@ -20,6 +20,7 @@ import CreateCompleted from "./components/createNewExp/CreateCompleted"
 import PersonalParticulars from "./components/PersonalParticulars"
 import DoctorPage from './components/DoctorPage';
 import CreateTemplate from './components/CreateTemplate'
+import BlogPage from './components/BlogPage'
 
 class App extends Component {
 	constructor(props) {
@@ -85,6 +86,7 @@ class App extends Component {
 					<Route path="/forget-password" exact component={ForgetPassPage} />
 					<Route path="/doctor-page" exact component={DoctorPage} />
 					<Route path="/user-page/create-template" exact component={CreateTemplate}/>
+					<Route path="/blog" exact component={BlogPage}/>
 				</Switch>
 			</div>
 		);
