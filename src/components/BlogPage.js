@@ -33,7 +33,7 @@ class BlogPage extends Component {
         this.setState({loading:true})
         setTimeout(function() { //Start the timer
             this.setState({loading: false}) //After 1 second, set render to true
-        }.bind(this), 1500)
+        }.bind(this), 1000)
     }
 
     getIconLabel = (index)=>{

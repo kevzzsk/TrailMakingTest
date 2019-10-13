@@ -50,7 +50,7 @@ class PersonalParticulars extends Component {
         this.incomeLabel = React.createRef(null)
         this.educationLabel = React.createRef(null)
         this.exerciseLabel = React.createRef(null)
-        this.required = false // for debugging purposes
+        this.required = true // for debugging purposes
     }
 
     componentDidMount() {

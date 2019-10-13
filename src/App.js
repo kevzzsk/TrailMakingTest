@@ -96,6 +96,7 @@ class App extends Component {
 					<Route path="/doctor-page/view-experiments" exact component={ViewExperiment} />
 					<Route path="/user-page/create-template" exact component={CreateTemplate}/>
 					<Route path="/blog" exact component={BlogPage}/>
+					<Route render={(props) => <HomePage {...props} aboutRef={this.state.aboutRef}/>} />
 				</Switch>
 			</div>
 		);

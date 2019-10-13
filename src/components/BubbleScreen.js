@@ -185,7 +185,7 @@ class BubbleScreen extends Component {
                 <p>{this.props.retryText}</p>
                 <button
                     onClick={this.props.onRetry} // TODO: remove retry
-                    style={{ color: 'white', background: '#333', border: 'none', fontSize: '2rem', marginTop: '10px' }}
+                    style={{ color: 'white', background: '#333', border: 'none', fontSize: '4rem', marginTop: '10px' }}
                 >
                     Retry
 				</button>
