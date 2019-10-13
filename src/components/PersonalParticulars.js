@@ -1,22 +1,21 @@
 import React, { Component } from 'react'
 
-import {
-    TextField,
-    Grid,
-    Paper,
-    Button,
-    Typography,
-    FormControl,
-    FormLabel,
-    RadioGroup,
-    Radio,
-    InputAdornment,
-    ButtonGroup,
-    FormControlLabel,
-    InputLabel,
-    Select
-} from "@material-ui/core"
-
+import Switch from "@material-ui/core/Switch"
+import TextField from "@material-ui/core/TextField"
+import Paper from "@material-ui/core/Paper"
+import Button from "@material-ui/core/Button"
+import Typography from "@material-ui/core/Typography"
+import FormControl from "@material-ui/core/FormControl"
+import FormLabel from "@material-ui/core/FormLabel"
+import RadioGroup from "@material-ui/core/RadioGroup"
+import InputAdornment from "@material-ui/core/InputAdornment"
+import ButtonGroup from "@material-ui/core/ButtonGroup"
+import FormControlLabel from "@material-ui/core/FormControlLabel"
+import InputLabel from "@material-ui/core/InputLabel"
+import Select from "@material-ui/core/Select"
+import Grid from "@material-ui/core/Grid"
+import Radio from "@material-ui/core/Radio"
+import Divider from "@material-ui/core/Divider"
 import { Link } from "react-router-dom"
 import Steppers from './Steppers'
 
@@ -36,14 +35,17 @@ class PersonalParticulars extends Component {
             ExperimentID: 0,
             ExperimentName: "",
             trail: [],
-            age: null,
+            age: "",
             pastIllnesses: "",
             gender: "male",
             income: null,
             incomelabelWidth: 0,
             occupation: "",
             smoker: "no",
-            exercise: ""
+            exercise: "",
+            doctorID: "",
+            name: "",
+            haveDoctor: false
         }
         this.incomeLabel = React.createRef(null)
         this.educationLabel = React.createRef(null)
@@ -60,6 +62,14 @@ class PersonalParticulars extends Component {
         })
     }
 
+    handleSwitchChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.checked,
+            name: "",
+            doctorID: ""
+        })
+    }
+
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value
@@ -73,6 +83,7 @@ class PersonalParticulars extends Component {
             pathname: '/test',
             state: {
                 experimentID: this.state.ExperimentID,
+                doctorID: this.state.doctorID,
                 expIndex: this.props.location.state.expIndex,
                 payload: this.props.data,
                 activeStep: this.props.location.state.activeStep + 1,
@@ -85,8 +96,9 @@ class PersonalParticulars extends Component {
                     "smoker": this.state.smoker,
                     "pastIllnesses": this.state.pastIllnesses,
                     "exercise": this.state.exercise,
+                    "name":this.state.name
                 },
-                trail:this.props.location.state.trails
+                trail: this.props.location.state.trails
             }
         })
     }
@@ -110,7 +122,7 @@ class PersonalParticulars extends Component {
                                     <Paper className="p-4 mx-3 mb-2">
                                         <FormControl variant="outlined" className="w-100">
                                             <TextField
-                                                required= {this.required}
+                                                required={this.required}
                                                 id="outlined-duration"
                                                 label="Age"
                                                 name="age"
@@ -134,7 +146,7 @@ class PersonalParticulars extends Component {
                                                 Income In Previous Year
                                             </InputLabel>
                                             <Select
-                                                required= {this.required}
+                                                required={this.required}
                                                 native
                                                 value={this.state.income}
                                                 onChange={this.handleChange}
@@ -158,7 +170,7 @@ class PersonalParticulars extends Component {
                                                 Education
                                             </InputLabel>
                                             <Select
-                                                required= {this.required}
+                                                required={this.required}
                                                 native
                                                 value={this.state.education}
                                                 onChange={this.handleChange}
@@ -179,7 +191,7 @@ class PersonalParticulars extends Component {
                                         </FormControl>
                                         <FormControl variant="outlined" className="w-100">
                                             <TextField
-                                                required= {this.required}
+                                                required={this.required}
                                                 label="Occupation"
                                                 name="occupation"
                                                 value={this.state.occupation}
@@ -197,7 +209,7 @@ class PersonalParticulars extends Component {
                                         </FormControl>
                                         <FormControl variant="outlined" className="w-100 mt-n2 pt-n1">
                                             <TextField
-                                                required= {this.required}
+                                                required={this.required}
                                                 label="Past Illnesses"
                                                 name="pastIllnesses"
                                                 value={this.state.pastIllnesses}
@@ -211,7 +223,7 @@ class PersonalParticulars extends Component {
                                                 How Often Do You Exercise?
                                             </InputLabel>
                                             <Select
-                                                required= {this.required}
+                                                required={this.required}
                                                 native
                                                 value={this.state.exercise}
                                                 onChange={this.handleChange}
@@ -227,7 +239,47 @@ class PersonalParticulars extends Component {
                                                 <option value={5}>Never at all</option>
                                             </Select>
                                         </FormControl>
-
+                                        <Divider className="mt-4" variant="middle" />
+                                        <FormControlLabel
+                                            className="pt-2"
+                                            control={<Switch
+                                                checked={this.state.haveDoctor}
+                                                name="haveDoctor"
+                                                onChange={this.handleSwitchChange}
+                                                value="haveDoctor"
+                                                color="primary"
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                            />}
+                                            label="Doctor Supervision"
+                                        />
+                                        <FormControl variant="outlined" className="w-100 mt-n2">
+                                            <TextField
+                                                disabled={!this.state.haveDoctor}
+                                                required={this.state.haveDoctor}
+                                                id="outlined-doctorID"
+                                                label="Doctor ID"
+                                                name="doctorID"
+                                                onChange={this.handleChange}
+                                                value={this.state.doctorID}
+                                                margin="normal"
+                                                variant="outlined"
+                                                type="number"
+                                            />
+                                        </FormControl>
+                                        <FormControl variant="outlined" className="w-100">
+                                            <TextField
+                                                disabled={!this.state.haveDoctor}
+                                                required={this.state.haveDoctor}
+                                                id="outlined-name"
+                                                label="Name"
+                                                name="name"
+                                                onChange={this.handleChange}
+                                                value={this.state.name}
+                                                margin="normal"
+                                                variant="outlined"
+                                                type="text"
+                                            />
+                                        </FormControl>
                                     </Paper>
                                 </Grid>
                             </Grid>
@@ -239,7 +291,7 @@ class PersonalParticulars extends Component {
                                 </Grid>
                                 <Grid item >
                                     <ButtonGroup>
-                                        <Button variant="text" className="mr-1" size="large" onClick={()=> this.props.history.goBack()} >Back</Button>
+                                        <Button variant="text" className="mr-1" size="large" onClick={() => this.props.history.goBack()} >Back</Button>
                                         <Button variant="contained" type="submit">Continue</Button>
                                     </ButtonGroup>
                                 </Grid>

@@ -21,6 +21,7 @@ import PersonalParticulars from "./components/PersonalParticulars"
 import DoctorPage from './components/DoctorPage';
 import CreateTemplate from './components/CreateTemplate'
 import BlogPage from './components/BlogPage'
+import SubmissionPage from './components/SubmissionPage'
 
 class App extends Component {
 	constructor(props) {
@@ -43,15 +44,21 @@ class App extends Component {
 		})
 	}
 
-	login = (accType) => {
+	login = (acc) => {
 		localStorage.setItem("isAuthenticated", "true")
 		this.setState({
 			isAuthenticated: true
 		})
-		if (accType === 1) {
+		if (acc.accountType === 1) {
 			this.props.history.replace("/doctor-page")
-		} else if (accType === 0) {
-			this.props.history.replace("/user-page")
+		} else if (acc.accountType === 0) {
+			console.log("REPLACE")
+			this.props.history.replace(
+				"/user-page",
+				{
+					account: acc
+				}
+			)
 		}
 	}
 
@@ -75,6 +82,7 @@ class App extends Component {
 					<Route path="/completion" exact component={CompletionPage} />
 					<Route path="/form" exact component={PersonalParticulars} />
 					<Route path="/test" exact component={ExperimentTest} />
+					<Route path="/submission" exact component={SubmissionPage} />
 					<Route path="/login" exact render={props => <LoginPage {...props} login={this.login} />} />
 					<Route path="/user-page" exact component={UserPage} />
 					<Route path="/user-page/view-experiments/:id" exact component={ExperimentStat} />

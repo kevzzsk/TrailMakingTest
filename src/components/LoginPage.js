@@ -18,8 +18,8 @@ class LoginPage extends Component {
     souce = this.cancelToken.source();
 
     state = {
-        username: null,
-        password: null,
+        username: "",
+        password: "",
         success: null,
         error: "",
         loading: false,
@@ -59,7 +59,7 @@ class LoginPage extends Component {
                 .then(res => {
                     console.log(res)
                     this.hideLoader()
-                    this.props.login(res.data.accountType)
+                    this.props.login(res.data)
                 })
                 .catch(e => {
                     //console.log(e)
