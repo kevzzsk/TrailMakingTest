@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/TrailMakingTest/precache-manifest.74f958c557ee7125e11156b78dba6fe9.js"
+  "/TrailMakingTest/precache-manifest.1c724b6cacd2f0c0faf4efb598e314a2.js"
 );
 
 self.addEventListener('message', (event) => {
