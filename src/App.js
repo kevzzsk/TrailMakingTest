@@ -50,7 +50,10 @@ class App extends Component {
 			isAuthenticated: true
 		})
 		if (acc.accountType === 1) {
-			this.props.history.replace("/doctor-page")
+			this.props.history.replace("/doctor-page",
+				{
+					account: acc
+				})
 		} else if (acc.accountType === 0) {
 			console.log("REPLACE")
 			this.props.history.replace(
@@ -64,6 +67,7 @@ class App extends Component {
 
 	logout = () => {
 		localStorage.setItem("isAuthenticated", "false")
+		localStorage.removeItem("account")
 		this.setState({
 			isAuthenticated: false
 		})
@@ -94,9 +98,9 @@ class App extends Component {
 					<Route path="/forget-password" exact component={ForgetPassPage} />
 					<Route path="/doctor-page" exact component={DoctorPage} />
 					<Route path="/doctor-page/view-experiments" exact component={ViewExperiment} />
-					<Route path="/user-page/create-template" exact component={CreateTemplate}/>
-					<Route path="/blog" exact component={BlogPage}/>
-					<Route render={(props) => <HomePage {...props} aboutRef={this.state.aboutRef}/>} />
+					<Route path="/user-page/create-template" exact component={CreateTemplate} />
+					<Route path="/blog" exact component={BlogPage} />
+					<Route render={(props) => <HomePage {...props} aboutRef={this.state.aboutRef} />} />
 				</Switch>
 			</div>
 		);

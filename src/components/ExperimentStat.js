@@ -9,7 +9,7 @@ import axios from "axios"
 
 import CanvasJS from '../assets/canvasjs.react'
 import exData from '../template/exData'
-import DatasetView from './DatasetView'
+import DatasetViews from './DatasetViews'
 import ExperimentSettings from "./ExperimentSettings"
 
 var CanvasJSChart = CanvasJS.CanvasJSChart;
@@ -23,7 +23,7 @@ class ExperimentStat extends Component {
             processedData: [],
             timeBins: [],
             selectedTab: 0,
-            loading:false
+            loading: false
         }
     }
 
@@ -38,22 +38,22 @@ class ExperimentStat extends Component {
     componentWillMount() {
         // GET DATA based on Match ID
         this.showLoader()
-        axios.get("https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/viewExperiment",{
-            params:{
-                experimentID:this.props.match.params.id
+        axios.get("https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/viewExperiment", {
+            params: {
+                experimentID: this.props.match.params.id
             }
         })
-            .then(res=>{
+            .then(res => {
                 console.log(res.data)
                 this.setState({
-                    data:res.data
-                },() => {
+                    data: res.data
+                }, () => {
                     this.getAllMetrics(this.state.data);
                     this.discretizeTime();
                 });
                 this.hideLoader()
             })
-            .catch(err=>{
+            .catch(err => {
                 console.log(err)
                 this.hideLoader()
             })
@@ -214,7 +214,7 @@ class ExperimentStat extends Component {
         }
 
         for (let index = 0; index < data.length; index++) {
-            if(data[index].length === 0){
+            if (data[index].length === 0) {
                 break
             }
             let min = Math.floor(Math.min(...data[index]))
@@ -231,9 +231,9 @@ class ExperimentStat extends Component {
                 }
             }
             timeBins.data.push({
-                min:min,
-                max:max,
-                data_bins:data_bins.map(bin => {
+                min: min,
+                max: max,
+                data_bins: data_bins.map(bin => {
                     if (bin === 0) {
                         return []
                     }
@@ -248,21 +248,21 @@ class ExperimentStat extends Component {
     }
 
     scatter_chart = (timeBins) => {
-        if(timeBins.data.length === 0){
+        if (timeBins.data.length === 0) {
             return {
                 title: {
                     text: "Completion Time"
                 },
-                axisY:{
-                    includeZero:true,
-                    title:"Number of Participants"
+                axisY: {
+                    includeZero: true,
+                    title: "Number of Participants"
                 },
-                axisX:{
-                    title:"Completion Time"
+                axisX: {
+                    title: "Completion Time"
                 },
                 data: [{
-                    type:"column",
-                    dataPoints:[]
+                    type: "column",
+                    dataPoints: []
                 }
                 ]
             }
@@ -273,46 +273,26 @@ class ExperimentStat extends Component {
             title: {
                 text: "Completion Time"
             },
-            axisY:{
-                includeZero:true,
-                title:"Number of Participants"
+            axisY: {
+                includeZero: true,
+                title: "Number of Participants",
             },
-            axisX:{
-                minimum:timeBins.data[0].min,
-                maximum:timeBins.data[0].max,
-                interval:timeBins.range,
-                title:"Completion Time in seconds"
+            axisX: {
+                minimum: Math.min(...timeBins.data.map(data => data.min)),
+                maximum: Math.max(...timeBins.data.map(data => data.max)),
+                interval: timeBins.range,
+                title: "Completion Time in seconds"
             },
-            data: [
-                {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: "column",
-                    dataPoints: timeBins.data[0].data_bins.map((bin,i) => {
-                        return {y:bin.length,x:timeBins.data[0].min+(i*timeBins.range)+(timeBins.range/2)}
-                    })
-                },
-                {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: "column",
-                    dataPoints: timeBins.data[1].data_bins.map((bin,i) => {
-                        return {y:bin.length,x:timeBins.data[1].min+(i*timeBins.range)+(timeBins.range/2)}
-                    })
-                },
-                {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: "line",
-                    dataPoints: timeBins.data[0].data_bins.map((bin,i) => {
-                        return {y:bin.reduce((a,b) => a + b, 0) / bin.length,x:timeBins.data[0].min+(i*timeBins.range)}
-                    })
-                },
-                {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: "line",
-                    dataPoints: timeBins.data[1].data_bins.map((bin,i) => {
-                        return {y:bin.reduce((a,b) => a + b, 0) / bin.length,x:timeBins.data[1].min+(i*timeBins.range)}
+            data: timeBins.data.map(((data, i) => {
+                return {
+                    type:"column",
+                    xValueFormatString:`${this.state.data.templateExperiments[i].heading} (##.#s)`,
+                    yValueFormatString: "# participants",
+                    dataPoints:data.data_bins.map((bin, j) => {
+                        return { y: bin.length, x: timeBins.data[i].min + (j * timeBins.range) + (timeBins.range / 2) }
                     })
                 }
-            ]
+            }))
         }
     }
 
@@ -330,12 +310,12 @@ class ExperimentStat extends Component {
         </div>
     }
 
-    genSkeleton=()=>{
+    genSkeleton = () => {
         return <div className="skeleton-graph">
-            <Skeleton width="100%" height={400}/>
-            <Skeleton width="100%" height={400}/>
-            <Skeleton width="100%" height={400}/>
-            <Skeleton width="100%" height={400}/>
+            <Skeleton width="100%" height={400} />
+            <Skeleton width="100%" height={400} />
+            <Skeleton width="100%" height={400} />
+            <Skeleton width="100%" height={400} />
         </div>
     }
 
@@ -344,7 +324,7 @@ class ExperimentStat extends Component {
             case 0:
                 return this.getCharts()
             case 1:
-                return <DatasetView data={this.state.data} />
+                return <DatasetViews data={this.state.data} />
             case 2:
                 return <ExperimentSettings data={this.state.data} history={this.props.history} />
             default:
@@ -356,16 +336,16 @@ class ExperimentStat extends Component {
         return (
             <div >
                 <div className="d-inline-flex pb-1 pt-2 pl-3 align-items-center">
-                    <Button size="large" variant="outlined" className="mr-2" onClick={()=>this.props.history.goBack()}>Back</Button>
-                    {this.state.loading? <Skeleton width={300} height={40}/>:<Typography  variant="h4" style={{ fontWeight: "600" }} display="inline">{this.state.data.experimentName}({this.state.data.experimentID})</Typography>}
-                    
+                    <Button size="large" variant="outlined" className="mr-2" onClick={() => this.props.history.goBack()}>Back</Button>
+                    {this.state.loading ? <Skeleton width={300} height={40} /> : <Typography variant="h4" style={{ fontWeight: "600" }} display="inline">{this.state.data.experimentName}({this.state.data.experimentID})</Typography>}
+
                 </div>
                 <this.StyledTabs value={this.state.selectedTab} onChange={this.onTabChange} aria-label="styled tabs example">
                     <this.StyledTab label="Charts" />
                     <this.StyledTab label="Datasets" />
                     <this.StyledTab label="Settings" />
                 </this.StyledTabs>
-                {this.state.loading?this.genSkeleton() :this.genBody(this.state.selectedTab)}
+                {this.state.loading ? this.genSkeleton() : this.genBody(this.state.selectedTab)}
             </div>
         )
     }

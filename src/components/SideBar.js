@@ -21,7 +21,7 @@ class SideBar extends Component {
     getPath = (props) => {
         if (props.test === true) {
             return "/experiment"
-        } else if (props.expIndex >= 1) {
+        } else if (props.expIndex >= props.trail.length-1) {
             return "/submission"
         } else {
             return "/experiment"

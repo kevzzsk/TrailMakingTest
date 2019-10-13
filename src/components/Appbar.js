@@ -30,8 +30,17 @@ class Appbar extends Component {
     }
 
     handleProfile = () => {
-        this.props.history.push("/user-page")
+        let cache_data = localStorage.getItem("account")
+        console.log(cache_data)
+        if (cache_data !== undefined && cache_data !== null ) {
+            if (JSON.parse(cache_data).accountType === 0) {
+                this.props.history.push("/user-page")
+            }else if (JSON.parse(cache_data).accountType === 1){
+                this.props.history.push("/doctor-page")
+            }
+        }
         this.handleClose()
+
     }
 
 

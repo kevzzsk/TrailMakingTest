@@ -78,7 +78,7 @@ Much of the increase will be in low and middle income countries. Already 58% of 
                                 required
                                 id="outlined-id"
                                 label="Experiment ID"
-                                placeholder="U001"
+                                placeholder="A0001"
                                 name="id"
                                 error={this.state.error.length > 0}
                                 onChange={this.handleOnChange}

@@ -8,11 +8,6 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import SideParameter from './SideParameter'
 import BubbleScreen from '../BubbleScreen'
 
-import axios from 'axios'
-
-import templateA1 from '../../template/templateA1'
-import templateB1 from '../../template/templateB1'
-
 class CreateExperiment extends Component {
 
     constructor(props) {
@@ -21,7 +16,7 @@ class CreateExperiment extends Component {
             metaData: null,
             trails: [],
             chosenTrail: null,
-            payload:[],
+            payload: [],
             loading: false
         }
     }
@@ -33,22 +28,27 @@ class CreateExperiment extends Component {
     componentDidMount() {
         // get templates
         console.log(this.props)
-
         this.setState({
             trails: this.props.location.state.metaData.trails,
-            chosenTrail:this.props.location.state.metaData.trails[0],
+            chosenTrail: this.props.location.state.metaData.trails[0],
             metaData: this.props.location.state.metaData,
-            payload: this.props.location.state.payload?this.props.location.state.payload: []
+            payload: this.props.location.state.payload ? this.props.location.state.payload : []
         })
+
         this.hideLoader()
     }
 
     componentDidUpdate(prevProps) {
-        console.log("DidUpdate")
         if (prevProps.location.key !== this.props.location.key) {
-            window.location.reload()
+            this.setState({
+                trails: this.props.location.state.metaData.trails,
+                chosenTrail: this.props.location.state.metaData.trails[0],
+                metaData: this.props.location.state.metaData,
+                payload: this.props.location.state.payload ? this.props.location.state.payload : []
+            })
         }
     }
+
 
     onChangeTrail = (newTrailID) => {
         this.setState({
@@ -75,10 +75,10 @@ class CreateExperiment extends Component {
                             <Typography variant="h4" className="font-weight-bold">Create New Experiment</Typography>
                         </div>
                         <div className="item-exp">
-                            <BubbleScreen trail={this.state.chosenTrail} />
+                            <BubbleScreen key={this.props.location.key} trail={this.state.chosenTrail} />
                         </div>
                         <div className="item-side">
-                            <SideParameter accountID={this.props.location.state.accountID} payload={this.state.payload} metaData={this.state.metaData} trail={this.state.chosenTrail} onChangeTrail={this.onChangeTrail} />
+                            <SideParameter key={this.props.location.key} accountID={this.props.location.state.accountID} payload={this.state.payload} metaData={this.state.metaData} trail={this.state.chosenTrail} onChangeTrail={this.onChangeTrail} />
                         </div>
                     </>}
             </div>

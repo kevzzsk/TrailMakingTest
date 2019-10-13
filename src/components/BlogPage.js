@@ -94,7 +94,7 @@ class BlogPage extends Component {
                 </div>
                 <div className="m-2">
                     <Paper className="p-4">
-                    <Typography variant="h4">What can i do if someone i know is showing signs of dementia?</Typography>
+                    <Typography variant="h4" style={{fontWeight:"bold",letterSpacing:"2px"}}>What can I do if someone I know is showing signs of dementia?</Typography>
                     <Stepper activeStep={this.state.activeStep} orientation="vertical">
                         {this.state.steps.map((label, index) => (
                             <Step key={label}>

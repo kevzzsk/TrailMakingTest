@@ -47,15 +47,16 @@ function getSorting(order, orderBy) {
 const headCells = [
     { id: 'participantID', numeric: true, disablePadding: true, label: 'Participants' },
     { id: 'totalTime', numeric: true, disablePadding: false, label: 'Completion Time (s)' },
-    { id: 'success', numeric: true, disablePadding: false, label: 'Success' },
-    { id: 'error', numeric: true, disablePadding: false, label: 'Error Rate (%)' },
-    { id: 'miss', numeric: true, disablePadding: false, label: 'Miss Rate (%)' },
+    { id: 'success', numeric: true, disablePadding: false, label: 'Successes' },
+    { id: 'error', numeric: true, disablePadding: false, label: 'Errors' },
+    { id: 'miss', numeric: true, disablePadding: false, label: 'Misses' },
     { id: 'age', numeric: true, disablePadding: false, label: 'Age' },
     { id: 'gender', numeric: true, disablePadding: false, label: 'Gender' },
-    { id: 'income', numeric: true, disablePadding: false, label: 'Income' },
+    { id: 'income', numeric: true, disablePadding: false, label: 'Last Year Income' },
     { id: 'education', numeric: true, disablePadding: false, label: 'Education' },
     { id: 'occupation', numeric: true, disablePadding: false, label: 'Occupation' },
     { id: 'smoker', numeric: true, disablePadding: false, label: 'Smoker' },
+    { id: 'exercise', numeric: true, disablePadding: false, label: 'Exercise' },
 ];
 
 function EnhancedTableHead(props) {
@@ -167,11 +168,11 @@ const EnhancedTableToolbar = props => {
                             data={props.data}
                             filename={"my-file.csv"}
                             className="btn btn-primary"
-                            onClick={()=>{
+                            onClick={() => {
                                 console.log("CLICKED")
                             }}
                         >
-                        <i className="fas fa-file-export">Export</i>
+                            <i className="fas fa-file-export">Export</i>
                         </CSVLink>
                     </Tooltip>
                 ) : (
@@ -231,13 +232,13 @@ export default function EnhancedTable(props) {
 
     useEffect(() => {
         const fetchData = () => {
-            setRows(props.data.templateExperiments[0].experimentResults.map(result => {
+            setRows(props.data.templateExperiments[props.index].experimentResults.map(result => {
                 const { participantDetails, ...participantResult } = result
                 return { ...participantResult, ...participantDetails }
             }))
         }
         fetchData();
-    }, [props.data])
+    }, [props.data,props.index])
 
 
 
@@ -284,6 +285,74 @@ export default function EnhancedTable(props) {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    const mapIntToIncome = int => {
+        switch (int) {
+            case 0:
+                return "$0"
+            case 1:
+                return "$1 to $9,999"
+            case 2:
+                return "$10,000 to $24,999"
+            case 3:
+                return "$25,000 to $49,999"
+            case 4:
+                return "$50,000 to $74,999"
+            case 5:
+                return "$75,000 to $99,999"
+            case 6:
+                return "$100,000 to $ 149,999"
+            case 7:
+                return "$150,000 and greater"
+            case 8:
+                return "Prefer not to answer"
+            default:
+                return ""
+        }
+    }
+    const mapIntToEducation = int => {
+        switch (int) {
+            case 0:
+                return "No Schooling Completed"
+            case 1:
+                return "Primary Education"
+            case 2:
+                return "Secondary Education"
+            case 3:
+                return "Diploma"
+            case 4:
+                return "Tertiary Education"
+            case 5:
+                return "Bachelor's degree"
+            case 6:
+                return "Master's degree"
+            case 7:
+                return "Professional degree"
+            case 8:
+                return "Doctorate degree"
+            default:
+                return ""
+        }
+    }
+    const mapIntToExercise = int => {
+        switch (int) {
+            case 0:
+                return "Every day"
+            case 1:
+                return "More than twice a week"
+            case 2:
+                return "Once a week"
+            case 3:
+                return "More than twice a month"
+            case 4:
+                return "Once a month"
+            case 5:
+                return "Never at all"
+            default:
+                return ""
+        }
+    }
+
 
     const isSelected = name => selected.indexOf(name) !== -1;
 
@@ -335,16 +404,17 @@ export default function EnhancedTable(props) {
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
                                                 {row.participantID}
                                             </TableCell>
-                                            <TableCell align="right">{row.totalTime}</TableCell>
+                                            <TableCell align="right">{row.totalTime.toFixed(3)}</TableCell>
                                             <TableCell align="right">{row.success}</TableCell>
                                             <TableCell align="right">{row.error}</TableCell>
                                             <TableCell align="right">{row.miss}</TableCell>
                                             <TableCell align="right">{row.age}</TableCell>
                                             <TableCell align="right">{row.gender}</TableCell>
-                                            <TableCell align="right">{row.income}</TableCell>
-                                            <TableCell align="right">{row.education}</TableCell>
+                                            <TableCell align="right">{mapIntToIncome(row.income)}</TableCell>
+                                            <TableCell align="right">{mapIntToEducation(row.education)}</TableCell>
                                             <TableCell align="right">{row.occupation}</TableCell>
                                             <TableCell align="right">{row.smoker}</TableCell>
+                                            <TableCell align="right">{mapIntToExercise(row.exercise)}</TableCell>
                                         </TableRow>
                                     );
                                 })}

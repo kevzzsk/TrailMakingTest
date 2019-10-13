@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 
 import { Grid, Paper, Typography, Button, MenuItem, FormControl, InputLabel, Select, TextField, InputAdornment, MobileStepper, ButtonGroup, } from '@material-ui/core'
 import DateFnsUtils from '@date-io/date-fns';
@@ -11,7 +11,7 @@ import { differenceInCalendarDays, toDate } from 'date-fns'
 
 import { Link, withRouter } from 'react-router-dom'
 
-class SideParameter extends PureComponent {
+class SideParameter extends Component {
 
     static defaultProps = {
         onChangeTrail: () => { },
@@ -21,7 +21,7 @@ class SideParameter extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            trail: props.trail,
+            trail: [],
             labelWidth: 0,
             startDate: toDate(new Date()),
             endDate: toDate(new Date()),
@@ -47,6 +47,24 @@ class SideParameter extends PureComponent {
             instructions:this.props.trail.description
         })
     }
+
+    componentDidUpdate(prevProps){
+        if(prevProps.trail !== this.props.trail){
+            this.setState({
+                labelWidth: this.inputLabel.current.offsetWidth,
+                ExperimentID: this.props.metaData.ExperimentID,
+                ExperimentName: this.props.metaData.ExperimentName,
+                startDate: this.props.metaData.startDate,
+                endDate: this.props.metaData.endDate,
+                duration: this.props.metaData.duration,
+                trail:this.props.trail,
+                heading:this.props.trail.heading,
+                instructions:this.props.trail.description
+            })
+        }
+    }
+
+
     handleTrailChange = (event) => {
         this.setState({
             trail: this.props.metaData.trails.find((item)=> String(item.templateExperimentID)=== event.target.value),
