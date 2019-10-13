@@ -122,7 +122,8 @@ class CreateExperimentForm extends Component {
         this.props.history.push({
             pathname: "/user-page/create-experiment/1",
             state: {
-                metaData: this.state
+                metaData: this.state,
+                accountID:this.props.location.state.accountID
             },
         });
 

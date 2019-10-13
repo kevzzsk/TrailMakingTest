@@ -22,7 +22,7 @@ import DoctorPage from './components/DoctorPage';
 import CreateTemplate from './components/CreateTemplate'
 import BlogPage from './components/BlogPage'
 import SubmissionPage from './components/SubmissionPage'
-
+import CreateSubmission from "./components/createNewExp/CreateSubmission"
 class App extends Component {
 	constructor(props) {
 		super(props)
@@ -89,6 +89,7 @@ class App extends Component {
 					<Route path="/user-page/create-experiment" exact component={CreateExperimentForm} />
 					<Route path="/user-page/create-experiment/:id(\d+)" exact component={CreateExperiment} />
 					<Route path="/user-page/create-experiment/completed" exact component={CreateCompleted} />
+					<Route path="/user-page/create-experiment/submit" exact component={CreateSubmission} />
 					<Route path="/sign-up-page" exact component={SignUpPage} />
 					<Route path="/forget-password" exact component={ForgetPassPage} />
 					<Route path="/doctor-page" exact component={DoctorPage} />
