@@ -27,14 +27,14 @@ class ExperimentTest extends Component {
         }
     }
     render() {
-        const {participantDetails, experimentID,activeStep,trail} = this.props.location.state
+        const {participantDetails, experimentID,activeStep,trail,doctorID} = this.props.location.state
         return (
             <div className="experiment-bg">
                 <div className="item-exp">
                         <BubbleScreen trail={this.state.trail} />
                 </div>
                 <div className="item-side">
-                    <SideBar goBack={this.props.history.goBack} trail={trail}  participantDetails={participantDetails}  activeStep={activeStep} id={experimentID} expIndex={this.state.expIndex} ready={this.state.ready} test={true}/>
+                    <SideBar goBack={this.props.history.goBack} doctorID={doctorID} trail={trail}  participantDetails={participantDetails}  activeStep={activeStep} id={experimentID} expIndex={this.state.expIndex} ready={this.state.ready} test={true}/>
                 </div>
             </div>
         )

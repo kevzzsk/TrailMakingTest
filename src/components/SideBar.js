@@ -22,7 +22,7 @@ class SideBar extends Component {
         if (props.test === true) {
             return "/experiment"
         } else if (props.expIndex >= 1) {
-            return "/completion"
+            return "/submission"
         } else {
             return "/experiment"
         }
@@ -61,6 +61,7 @@ class SideBar extends Component {
                                         pathname: this.getPath(this.props),
                                         state: {
                                             experimentID: this.props.id,
+                                            doctorID:this.props.doctorID,
                                             expIndex: test ? expIndex : expIndex + 1,
                                             payload: this.props.data,
                                             activeStep:this.props.activeStep+1,

@@ -70,7 +70,7 @@ class ExperimentPage extends PureComponent {
     }
 
     render() {
-        const {participantDetails,activeStep,trail} = this.props.location.state
+        const {participantDetails,activeStep,trail,doctorID} = this.props.location.state
         return (
             <div className="experiment-bg">
                 <Prompt when={this.state.shouldBlock} message={location => `Are you sure you want to leave this page?`} />
@@ -83,7 +83,7 @@ class ExperimentPage extends PureComponent {
                     }
                 </div>
                 <div className="item-side">
-                    <SideBar goBack={this.props.history.goBack} trail={trail} participantDetails={participantDetails} activeStep={activeStep} setShouldBlock={this.setShouldBlock} data={this.state.data} id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={false} />
+                    <SideBar goBack={this.props.history.goBack} doctorID={doctorID} trail={trail} participantDetails={participantDetails} activeStep={activeStep} setShouldBlock={this.setShouldBlock} data={this.state.data} id={this.state.id} expIndex={this.state.expIndex} ready={this.state.ready} test={false} />
                 </div>
             </div>
         )

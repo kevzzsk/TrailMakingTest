@@ -8,7 +8,7 @@ import axios from "axios"
 class HomePage extends Component {
 
     state = {
-        id: null,
+        id: "",
         error: "",
         loading: false
     }

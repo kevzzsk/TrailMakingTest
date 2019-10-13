@@ -74,21 +74,21 @@ function ViewExperiment(props) {
 
         switch (index) {
             case 0:
-                return (loading ? skelData.map(item => <Skeleton width="100%" height={250} />) : exp.map((item) => {
+                return (loading ? skelData.map((item,i) => <Skeleton key={i} width="100%" height={250} />) : exp.map((item) => {
                     return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>
                 }));
                 break;
             case 1:
-                return (loading ? skelData.map(item => <Skeleton width="100%" height={250} />) : exp.filter((item) => { 
+                return (loading ? skelData.map((item,i) => <Skeleton key={i} width="100%" height={250} />) : exp.filter((item) => { 
                     return getStatus(item.startDate, item.endDate) === "Active"})
                     .map(item=>{return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>}));
                 break;
             case 2:
-                return (loading ? skelData.map(item => <Skeleton width="100%" height={250} />) : exp.filter((item) => { 
+                return (loading ? skelData.map((item,i) => <Skeleton key={i} width="100%" height={250} />) : exp.filter((item) => { 
                     return getStatus(item.startDate, item.endDate) === "Draft"})
                     .map(item=>{return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>}));
             case 3:
-                return (loading ? skelData.map(item => <Skeleton width="100%" height={250} />) : exp.filter((item) => { 
+                return (loading ? skelData.map((item,i) => <Skeleton key={i} width="100%" height={250} />) : exp.filter((item) => { 
                     return getStatus(item.startDate, item.endDate) === "Completed"})
                     .map(item=>{return <Link to={`/user-page/view-experiments/${item.experimentID}`} className="text-decoration-none"><ExperimentCard {...item} /></Link>}));
 
