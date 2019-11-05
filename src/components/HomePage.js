@@ -70,7 +70,7 @@ Much of the increase will be in low and middle income countries. Already 58% of 
                     </div>
 
                 </header>
-                <form onSubmit={this.submitFormHandler}>
+                <form id = "experiment_form" onSubmit={this.submitFormHandler}>
                     <div className="form-group experiment">
                         <br />
                         <FormControl variant="outlined" className="w-100">
@@ -92,7 +92,7 @@ Much of the increase will be in low and middle income countries. Already 58% of 
                         {this.state.error.length > 0 && <small style={{ color: "#D8000C" }}>{this.state.error}</small>}
                         <small className="form-text text-muted">By continuing you comply with our terms and cconditions.</small>
                         <div className="position-relative">
-                            <button disabled={this.state.loading} type="submit" className="btn experiment-btn" >Try Experiment</button>
+                            <button disabled={this.state.loading} type="submit" className="btn experiment-btn" id="submitButton" >Try Experiment</button>
                             {this.state.loading && <CircularProgress size={40} className="button-loading" />}
                         </div>
                     </div>
