@@ -15,14 +15,13 @@ class HomePage extends Component {
 
     submitFormHandler = (event) => {
         event.preventDefault();
-        console.log("SUBMIT")
+        console.log("SUBMIT");
         this.showLoader()
-        axios.get(`https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/viewExperiment?experimentID=${this.state.id}`)
+        axios.get(`https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/viewExperiment?experimentID=${this.state.id}`,{headers:{"X-Requested-With":"XMLHttpRequest"}})
             .then(res => {
                 this.setState({
                     error: ""
                 })
-                console.log(res)
                 this.hideLoader()
                 this.props.history.push({
                     pathname: '/form', state: {
@@ -90,10 +89,10 @@ Much of the increase will be in low and middle income countries. Already 58% of 
                             />
                         </FormControl>
                         {this.state.error.length > 0 && <small style={{ color: "#D8000C" }}>{this.state.error}</small>}
-                        <small className="form-text text-muted">By continuing you comply with our terms and cconditions.</small>
+                        <small className="form-text text-muted">By continuing you comply with our terms and conditions.</small>
                         <div className="position-relative">
                             <button disabled={this.state.loading} type="submit" className="btn experiment-btn" id="submitButton" >Try Experiment</button>
-                            {this.state.loading && <CircularProgress size={40} className="button-loading" />}
+                            {this.state.loading && <CircularProgress size={40} className="button-loading" id="loading"/>}
                         </div>
                     </div>
                 </form>

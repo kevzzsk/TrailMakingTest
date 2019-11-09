@@ -67,7 +67,7 @@ exports[`Home Page Home Page Snapshot 1`] = `
             />
             <fieldset
               aria-hidden={true}
-              className="PrivateNotchedOutline-root-60 MuiOutlinedInput-notchedOutline"
+              className="PrivateNotchedOutline-root-338 MuiOutlinedInput-notchedOutline"
               style={
                 Object {
                   "paddingLeft": 8,
@@ -75,7 +75,7 @@ exports[`Home Page Home Page Snapshot 1`] = `
               }
             >
               <legend
-                className="PrivateNotchedOutline-legend-61"
+                className="PrivateNotchedOutline-legend-339"
                 style={
                   Object {
                     "width": 0.01,
@@ -97,7 +97,7 @@ exports[`Home Page Home Page Snapshot 1`] = `
       <small
         className="form-text text-muted"
       >
-        By continuing you comply with our terms and cconditions.
+        By continuing you comply with our terms and conditions.
       </small>
       <div
         className="position-relative"
