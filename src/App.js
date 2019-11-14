@@ -96,6 +96,7 @@ class App extends Component {
 					<Route path="/doctor-page/view-experiments" exact component={ViewExperiment} />
 					<Route path="/user-page/create-template" exact component={CreateTemplate}/>
 					<Route path="/blog" exact component={BlogPage}/>
+					<Route path="*"><h3>404 File not found </h3></Route>
 				</Switch>
 			</div>
 		);
