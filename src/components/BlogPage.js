@@ -81,7 +81,7 @@ class BlogPage extends Component {
                 <div>
                     <Typography className="m-3" variant="h3">Blog</Typography>
                     {this.state.loading? [1,2,3].map((item,i)=><Skeleton key={i} width="97%" height={460} className="m-3" />) :BlogData.map((blog, i) => {
-                        return <Card key={i} className="m-3" >
+                        return <Card key={i} className="m-3 blogpost" >
                             <CardActionArea onClick={() => window.open(blog.webUrl, "_blank")}>
                                 <img className="card-img-top" style={{ objectFit: "cover", height: "300px" }} src={blog.coverImage} alt="imagea" ></img>
                                 <CardContent>

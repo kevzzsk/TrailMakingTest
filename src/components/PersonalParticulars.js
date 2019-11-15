@@ -161,9 +161,9 @@ class PersonalParticulars extends Component {
                                         <FormControl component="fieldset" className="ml-1 mt-2" >
                                             <FormLabel component="legend">Gender</FormLabel>
                                             <RadioGroup row aria-label="gender" name="gender" value={this.state.gender} onChange={this.handleChange} className="ml-2">
-                                                <FormControlLabel value="male" control={<Radio color="primary" />} label="Male" />
-                                                <FormControlLabel value="female" control={<Radio color="primary" />} label="Female" />
-                                                <FormControlLabel value="other" control={<Radio color="primary" />} label="Other" />
+                                                <FormControlLabel value="male" class = "Male" control={<Radio color="primary" />} label="Male" />
+                                                <FormControlLabel value="female" class = "Female" control={<Radio color="primary" />} label="Female" />
+                                                <FormControlLabel value="other" class = "Other" control={<Radio color="primary" />} label="Other" />
                                             </RadioGroup>
                                         </FormControl>
                                         <FormControl variant="outlined" className="w-100 mb-2 pb-2">
