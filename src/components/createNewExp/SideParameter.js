@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 
 import { Grid, Paper, Typography, Button, MenuItem, FormControl, InputLabel, Select, TextField, InputAdornment, MobileStepper, ButtonGroup, } from '@material-ui/core'
 import DateFnsUtils from '@date-io/date-fns';
@@ -11,17 +11,22 @@ import { differenceInCalendarDays, toDate } from 'date-fns'
 
 import { Link, withRouter } from 'react-router-dom'
 
-class SideParameter extends PureComponent {
+
+/**
+ * Side bar of Create new Experiment which displays relevant information
+ */
+class SideParameter extends Component {
 
     static defaultProps = {
         onChangeTrail: () => { },
         trails: []
     }
 
+    /** @constructor */
     constructor(props) {
         super(props);
         this.state = {
-            trail: props.trail,
+            trail: [],
             labelWidth: 0,
             startDate: toDate(new Date()),
             endDate: toDate(new Date()),
@@ -34,6 +39,7 @@ class SideParameter extends PureComponent {
         this.inputLabel = React.createRef(null)
     }
 
+    /** Set initial data */
     componentDidMount() {
         this.setState({
             labelWidth: this.inputLabel.current.offsetWidth,
@@ -47,6 +53,29 @@ class SideParameter extends PureComponent {
             instructions:this.props.trail.description
         })
     }
+
+    /** Update page when refresh or next page */
+    componentDidUpdate(prevProps){
+        if(prevProps.trail !== this.props.trail){
+            this.setState({
+                labelWidth: this.inputLabel.current.offsetWidth,
+                ExperimentID: this.props.metaData.ExperimentID,
+                ExperimentName: this.props.metaData.ExperimentName,
+                startDate: this.props.metaData.startDate,
+                endDate: this.props.metaData.endDate,
+                duration: this.props.metaData.duration,
+                trail:this.props.trail,
+                heading:this.props.trail.heading,
+                instructions:this.props.trail.description
+            })
+        }
+    }
+
+    /**
+     * @method
+     * @param {Object} event Event DOM
+     * @description Update Trail based on user selected trail
+     */
     handleTrailChange = (event) => {
         this.setState({
             trail: this.props.metaData.trails.find((item)=> String(item.templateExperimentID)=== event.target.value),
@@ -55,21 +84,41 @@ class SideParameter extends PureComponent {
         })
         this.props.onChangeTrail(event.target.value)
     }
-
+    /**
+     * @method
+     * @param {Object} templates templates data
+     * @description generate options for dropdown template selection
+     * @returns {Object} List of options
+     */
     genTemplateOptions = (templates) => {
         return templates.map(item => <option key={item.templateExperimentID} value={item.templateExperimentID}>{item.templateName}</option>)
     }
 
+    /**
+     * @method
+     * @description Handle generic event
+     * @param {Object} event Event DOM
+     */
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
         })
     }
 
+    /**
+     * @method
+     * @description handle return/back button
+     */
     goBack = () => {
         this.props.history.goBack()
-    }
+    }  
 
+    /**
+     * @method
+     * @param {Object} metadata data
+     * @description Get next routing route
+     * @returns {string} Return pathname String
+     */
     getPathName = (metadata) => {
         if (metadata.numTemplates > parseInt(this.props.match.params.id)) {
             return "/user-page/create-experiment/" + (parseInt(this.props.match.params.id) + 1)

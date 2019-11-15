@@ -3,6 +3,11 @@ import {Paper,Button, Typography} from '@material-ui/core';
 import {Link} from 'react-router-dom'
 import {toDate,format} from 'date-fns'
 
+/**
+ * @class
+ * @param {*} props 
+ * @description Display the completed experiment and proceed to create after user confirmation
+ */
 function CreateCompleted(props) {
     const {ExperimentID,ExperimentName,description,endDate,startDate} = props.location.state.metaData
     const {payload} = props.location.state

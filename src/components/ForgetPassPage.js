@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
+/** ForgetPass page for user who need to reset their password */
 class ForgetPassPage extends Component{
 
     render(){

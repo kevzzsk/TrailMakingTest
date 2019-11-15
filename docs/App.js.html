@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: App.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: App.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import './App.css';
+
+import { Route, Switch, withRouter } from "react-router-dom";
+
+import ExperimentPage from './components/ExperimentPage';
+import Appbar from './components/Appbar';
+import HomePage from './components/HomePage';
+import CompletionPage from './components/CompletionPage'
+import LoginPage from './components/LoginPage';
+import UserPage from './components/UserPage';
+import CreateExperiment from './components/createNewExp/CreateExperiment';
+import SignUpPage from './components/SignUpPage';
+import ForgetPassPage from './components/ForgetPassPage';
+import ExperimentTest from './components/ExperimentTest';
+import ExperimentStat from './components/ExperimentStat';
+import CreateExperimentForm from "./components/createNewExp/CreateExperimentForm"
+import CreateCompleted from "./components/createNewExp/CreateCompleted"
+import PersonalParticulars from "./components/PersonalParticulars"
+import DoctorPage from './components/DoctorPage';
+import CreateTemplate from './components/CreateTemplate'
+import BlogPage from './components/BlogPage'
+import SubmissionPage from './components/SubmissionPage'
+import CreateSubmission from "./components/createNewExp/CreateSubmission"
+import MyPatients from './components/MyPatients'
+class App extends Component {
+	/**
+	 * 
+	 * @param {*} props 
+	 */
+
+	/** @constructor */
+	constructor(props) {
+		super(props)
+		window.onclick = () => {
+			this.setState({
+				pathname: window.location.pathname,
+			})
+		}
+		this.state = {
+			pathname: window.location.pathname,
+			aboutRef: React.createRef(null),
+			isAuthenticated: false
+		}
+	}
+
+	/**
+	 * @method
+	 */
+	componentDidMount() {
+		this.setState({
+			isAuthenticated: localStorage.getItem("isAuthenticated") === null ? false : localStorage.getItem("isAuthenticated") === "true"
+		})
+	}
+
+	/**
+	 * @method
+	 * @description Handle Login function which set isAuthenticated to True and route to the correct account page. Doctor (accountType 1) Researcher (accountType 2) 
+	 * @param {Object} acc Account object
+	 * @returns {void}
+	 */
+	login = (acc) => {
+		localStorage.setItem("isAuthenticated", "true")
+		this.setState({
+			isAuthenticated: true
+		})
+		if (acc.accountType === 1) {
+			this.props.history.replace("/doctor-page",
+				{
+					account: acc
+				})
+		} else if (acc.accountType === 0) {
+			console.log("REPLACE")
+			this.props.history.replace(
+				"/user-page",
+				{
+					account: acc
+				}
+			)
+		}
+	}
+
+	/** 
+	 * @method
+	 * @description Handle logout button which set isAuthenticated to False and remove account data. Route back to /login
+	 */
+	logout = () => {
+		localStorage.setItem("isAuthenticated", "false")
+		localStorage.removeItem("account")
+		this.setState({
+			isAuthenticated: false
+		})
+		this.props.history.push("/login")
+	}
+
+
+
+	render() {
+		return (
+			&lt;div id="bg">
+				&lt;Appbar pathname={this.state.pathname} aboutRef={this.state.aboutRef} isAuthenticated={this.state.isAuthenticated} logout={this.logout} history={this.props.history} >&lt;/Appbar>
+				&lt;Switch>
+					&lt;Route exact path="/" render={(props) => &lt;HomePage {...props} aboutRef={this.state.aboutRef} />} />
+					&lt;Route path="/experiment" exact component={ExperimentPage} />
+					&lt;Route path="/completion" exact component={CompletionPage} />
+					&lt;Route path="/form" exact component={PersonalParticulars} />
+					&lt;Route path="/test" exact component={ExperimentTest} />
+					&lt;Route path="/submission" exact component={SubmissionPage} />
+					&lt;Route path="/login" exact render={props => &lt;LoginPage {...props} login={this.login} />} />
+					&lt;Route path="/user-page" exact component={UserPage} />
+					&lt;Route path="/user-page/view-experiments/:id" exact component={ExperimentStat} />
+					&lt;Route path="/user-page/create-experiment" exact component={CreateExperimentForm} />
+					&lt;Route path="/user-page/create-experiment/:id(\d+)" exact component={CreateExperiment} />
+					&lt;Route path="/user-page/create-experiment/completed" exact component={CreateCompleted} />
+					&lt;Route path="/user-page/create-experiment/submit" exact component={CreateSubmission} />
+					&lt;Route path="/sign-up-page" exact component={SignUpPage} />
+					&lt;Route path="/forget-password" exact component={ForgetPassPage} />
+					&lt;Route path="/doctor-page" exact component={DoctorPage} />
+					&lt;Route path="/doctor-page/my-patients" exact component={MyPatients} />
+					&lt;Route path="/user-page/create-template" exact component={CreateTemplate} />
+					&lt;Route path="/blog" exact component={BlogPage} />
+					&lt;Route render={(props) => &lt;HomePage {...props} aboutRef={this.state.aboutRef} />} />
+				&lt;/Switch>
+			&lt;/div>
+		);
+	}
+}
+
+export default withRouter(App);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="Appbar.html">Appbar</a></li><li><a href="BlogPage.html">BlogPage</a></li><li><a href="Bubble.html">Bubble</a></li><li><a href="BubbleCreator.html">BubbleCreator</a></li><li><a href="BubbleScreen.html">BubbleScreen</a></li><li><a href="CompletionPage.html">CompletionPage</a></li><li><a href="CreateCompleted.html">CreateCompleted</a></li><li><a href="CreateExperiment.html">CreateExperiment</a></li><li><a href="CreateExperimentForm.html">CreateExperimentForm</a></li><li><a href="CreateSubmission.html">CreateSubmission</a></li><li><a href="CreateTemplate.html">CreateTemplate</a></li><li><a href="DoctorPage.html">DoctorPage</a></li><li><a href="ExperimentCard.html">ExperimentCard</a></li><li><a href="ExperimentPage.html">ExperimentPage</a></li><li><a href="ExperimentSettings.html">ExperimentSettings</a></li><li><a href="ExperimentStat.html">ExperimentStat</a></li><li><a href="ExperimentTest.html">ExperimentTest</a></li><li><a href="Footer.html">Footer</a></li><li><a href="ForgetPassPage.html">ForgetPassPage</a></li><li><a href="HomePage.html">HomePage</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="PersonalParticulars.html">PersonalParticulars</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="SideParameter.html">SideParameter</a></li><li><a href="SignInLink.html">SignInLink</a></li><li><a href="SignUpPage.html">SignUpPage</a></li><li><a href="SubmissionPage.html">SubmissionPage</a></li><li><a href="UserPage.html">UserPage</a></li><li><a href="UserPageCard.html">UserPageCard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 15 2019 11:09:09 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

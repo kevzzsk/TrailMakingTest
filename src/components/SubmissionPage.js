@@ -2,12 +2,21 @@ import React, { Component } from 'react'
 import Skeleton from "@material-ui/lab/Skeleton"
 import { Redirect } from "react-router-dom"
 import axios from "axios"
+
+
+/**
+ * A transition page where data is Posted and routes will be redirected as to prevent back button to be abused.
+ */
 class SubmissionPage extends Component {
 
     state = {
         loading: true
     }
 
+    /**
+     * @method
+     * @description Load all data and POST to backend
+     */
     componentDidMount() {
         let data = {}
         const { experimentID, payload, activeStep, trail, participantDetails, doctorID } = this.props.location.state

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {NavLink} from 'react-router-dom'
 
+/** Sign in page */
 class SignInLink extends Component {
     render() {
         return (

@@ -3,38 +3,66 @@ import { AppBar, Typography, Button, Toolbar, IconButton, Menu, MenuItem, Avatar
 import { Link, Redirect } from "react-router-dom";
 
 
+/** Appbar of website */
 class Appbar extends Component {
 
-
+    /** @member */
     state = {
         anchorEl: null,
         accName: "R"
     }
 
-
+    /**
+     * @method
+     * @param {Object} e Event DOM
+     * @description set menu based on user click
+     */
     handleMenu = (e) => {
         this.setState({
             anchorEl: e.currentTarget
         })
     }
-
+    /**
+     * @method
+     * @description close menu on unfocus
+     */
     handleClose = () => {
         this.setState({
             anchorEl: null
         })
     }
 
+    /**
+     * @method
+     * @description Call parent handleClose for logout
+     */
     handleLogout = () => {
         this.props.logout()
         this.handleClose()
     }
 
+    /**
+     * @method
+     * @description Route to the correct page when user click on "profile"
+     */
     handleProfile = () => {
-        this.props.history.push("/user-page")
+        let cache_data = localStorage.getItem("account")
+        console.log(cache_data)
+        if (cache_data !== undefined && cache_data !== null ) {
+            if (JSON.parse(cache_data).accountType === 0) {
+                this.props.history.push("/user-page")
+            }else if (JSON.parse(cache_data).accountType === 1){
+                this.props.history.push("/doctor-page")
+            }
+        }
         this.handleClose()
+
     }
 
-
+    /**
+     * @method
+     * @description Display logout information when user is logged in successfully
+     */
     renderLogout = () => {
         return <li>
             <IconButton
@@ -68,6 +96,10 @@ class Appbar extends Component {
         </li>
     }
 
+    /**
+     * @method
+     * @description Display login information when user is logged out successfully
+     */
     renderLogin = () => {
         return <li><Link to={'/login'}>
             Login
@@ -90,6 +122,7 @@ class Appbar extends Component {
                     <li><a href="/">About</a></li>
                     <li><Link id="blog" to={'/blog'}>Blog</Link></li>
                     <li><a href="/">Contact</a></li>
+
                     {this.props.isAuthenticated ? this.renderLogout() : this.renderLogin()}
 
                 </ul>

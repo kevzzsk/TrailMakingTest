@@ -1,16 +1,23 @@
 
-import React, { Component,PureComponent } from 'react';
-import { Grid, Button } from '@material-ui/core';
+import React, { PureComponent } from 'react';
+import {  Button } from '@material-ui/core';
 import BubbleScreen from './BubbleScreen';
 import SideBar from './SideBar';
 import {Prompt } from 'react-router-dom'
 
+/**
+ * ExperimentPage handles the interactive part of the experiment
+ * It renders the actual experiment page
+ * @param {*} props
+ * 
+ */
 class ExperimentPage extends PureComponent {
 
     static defaultProps ={
         activeStep:0
     }
 
+    /** @constructor */
     constructor(props) {
         super(props);
         this.state = {
@@ -21,11 +28,16 @@ class ExperimentPage extends PureComponent {
         };
     }
 
+    /** @method */
     componentWillMount() {
         console.log("WillMount")
         this.init()
     }
 
+    /** 
+     * @method
+     * @description make sure page is updated when continue or refresh is clicked 
+     * @param {Object} prevProps prevPros state*/
     componentDidUpdate(prevProps) {
         console.log("DidUpdate")
         if (prevProps.location.key !== this.props.location.key) {
@@ -34,6 +46,10 @@ class ExperimentPage extends PureComponent {
         }
     }
 
+    /**
+     * @method
+     * @description  Initialize data when change occurs. It is called in componentWillMount and componentDidUpdate
+     */
     init = () => {
         const { experimentID, expIndex } = this.props.location.state
         this.setState({
@@ -52,6 +68,9 @@ class ExperimentPage extends PureComponent {
         }
     }
 
+    /** 
+     * @method
+     * @description Start the timer and render the experiment bubbles */
     handleBegin = () => {
         this.setState(prevState => {
             return {
@@ -60,6 +79,11 @@ class ExperimentPage extends PureComponent {
         })
     }
 
+    /** 
+     * @method
+     * @description when trail is completed, append participant results and pass to next page
+     * @param {Object} data Participant results on a trail 
+    */
     onCompleted = (data) =>{
         this.setState(prevState => {
             return {

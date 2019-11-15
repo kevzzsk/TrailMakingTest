@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
-import UserPageCard from './UserPageCard';
-import exData from '../template/exData';
 
 import ViewExperiment from "./ViewExperiment"
 
+/**
+ * Researcher Account Page. Shows the dashboard for researcher
+ */
 class UserPage extends Component {
 
     state={
@@ -14,7 +15,12 @@ class UserPage extends Component {
         dataLoaded:false
     }
 
+    /**
+     * @method
+     * @description Ensure page is loaded with appropriate account data. Get cache data from localstorage
+     */
     componentWillMount(){
+        
         if (this.props.location.state !== undefined){
             localStorage.setItem("account",JSON.stringify(this.props.location.state.account))
             this.setState({
@@ -22,8 +28,10 @@ class UserPage extends Component {
                 dataLoaded:true
             })
         } else{
+            
             let cache_data = localStorage.getItem("account")
-            if(cache_data !== undefined){
+            console.log(cache_data)
+            if(cache_data !== undefined && cache_data !== null){
                 this.setState({
                     account:JSON.parse(cache_data),
                     dataLoaded:true
@@ -49,7 +57,7 @@ class UserPage extends Component {
                             state:{
                                 accountID:this.state.account.accountID
                             }
-                        }}><Button size="large" color="primary" variant="contained" className="w-100">Create Experiments</Button></Link>
+                        }}><Button size="large" color="primary" variant="contained" className="w-100 mt-3">Create Experiments</Button></Link>
                         <Link to={"/user-page/create-template"}><Button size="large" color="primary" variant="contained" className="w-100 mt-2">Create Template</Button></Link>
                     </div>
                 </div>

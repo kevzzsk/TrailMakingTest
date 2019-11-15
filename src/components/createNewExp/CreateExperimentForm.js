@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import Slider from '@material-ui/core/Slider';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -24,12 +23,16 @@ import { differenceInCalendarDays, toDate } from 'date-fns'
 import axios from "axios"
 import { Link } from 'react-router-dom'
 
+
+/**
+ * Forms for researcher to create a new experiment
+ */
 class CreateExperimentForm extends Component {
     static defaultProps = {
         onChangeTemplate: () => { },
         templates: []
     }
-
+    /** @constructor */
     constructor(props) {
         super(props);
         this.state = {
@@ -63,6 +66,7 @@ class CreateExperimentForm extends Component {
         },
     ]
 
+    /** Handle Initial loading of page */
     componentDidMount() {
         this.reGenerateID();
         axios.get("https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/getAllTemplate")
@@ -78,29 +82,55 @@ class CreateExperimentForm extends Component {
             })
     }
 
+    /**
+     * @method
+     * @description Handle generic event
+     * @param {Object} event Event DOM
+     */
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
     }
 
+    /**
+     * @method
+     * @param {Object} e Event DOM
+     * @param {int} val Value of slider
+     * @description Handle Slider value change
+     */
     handleSliderChange = (e, val) => {
         this.setState({
             numTemplates: val
         })
     }
+
+    /**
+     * @method
+     * @param {Object} date StartDate choosen
+     * @description Update StartDate state
+     */
     handleStartDateChange = (date) => {
         this.setState({
             startDate: date
         }, () => this.calcDuration())
     }
 
+    /**
+     * @method
+     * @param {Object} date EndDate choosen
+     * @description Update EndDate state
+     */
     handleEndDateChange = (date) => {
         this.setState({
             endDate: date
         }, () => this.calcDuration())
     }
 
+    /**
+     * @method
+     * @description calculate duration when End/Start date changes
+     */
     calcDuration = () => {
         if (this.state.startDate !== null && this.state.endDate !== null) {
             this.setState({
@@ -109,14 +139,24 @@ class CreateExperimentForm extends Component {
         }
     }
 
+    /**
+     * @method
+     * @description Recompute experiment ID (randomize)
+     */
     reGenerateID = () => {
         let first = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 1).toUpperCase();
         let ranID = String((Math.random() * 10000).toFixed(0)).padStart(4, "0");
         this.setState({
             ExperimentID: first + ranID
         })
-    }
+    }  
 
+
+    /**
+     * @method
+     * @param {Object} event Event DOM
+     * @description Handle Form submission, route to next page /user-page/create-experiment/1
+     */
     handleSubmit = (event) => {
         event.preventDefault()
         this.props.history.push({

@@ -1,8 +1,12 @@
 import React from 'react'
-import { Card, CardHeader, CardContent, Typography } from '@material-ui/core'
+import { Card, CardContent, Typography } from '@material-ui/core'
 
-import { toDate, isBefore, format } from "date-fns"
+import { isBefore, format } from "date-fns"
 
+/** 
+ * @class
+ * @description Reuseable component for experiment card.
+ */
 function ExperimentCard(props) {
 
     let status_color = "radial-gradient(circle at 4px 4px, grey,grey)"

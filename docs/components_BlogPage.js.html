@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/BlogPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/BlogPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+import React, { Component } from 'react'
+
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Stepper from '@material-ui/core/Stepper';
+import Paper from '@material-ui/core/Paper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import Typography from '@material-ui/core/Typography';
+import Skeleton from "@material-ui/lab/Skeleton"
+
+import BlogData from '../template/blogData'
+
+
+/** Blog page for participants to learn more about dementia patient and help lines */
+class BlogPage extends Component {
+
+    /** @member */
+    state = {
+        activeStep: 10,
+        steps: ["He/she should see a doctor for an assessment and diagnosis.",
+        "Get some understanding about dementia. Your doctor can put you in touch with people who can help.",
+        "Rally for support. Caring for people with dementia is challenging and can be exhausting both physically and emotionally. Learn to talk about your problems. Make sure that you get enough rest. Take care of your own physical and mental well-being.",
+        "Group support is important. Meet with others who are also caring for people with dementia. Sharing provides mutual support for caregivers.",
+        "Get expert advice especially with coping with challenging behaviour."],
+        loading: false
+    }
+
+    /** Init Data */
+    componentDidMount(){
+        this.setState({loading:true})
+        setTimeout(function() { //Start the timer
+            this.setState({loading: false}) //After 1 second, set render to true
+        }.bind(this), 1000)
+    }
+
+    /**
+     * @method
+     * @param {int} index index of ICON
+     * @description return respective icon based on index
+     */
+    getIconLabel = (index)=>{
+        switch (index) {
+            case 1:
+                return &lt;i className="far fa-edit"/>
+            case 2:
+                return &lt;i className="fas fa-info-circle"/>
+            case 3:
+                return &lt;i className="fas fa-life-ring"/>
+            case 4:
+                return &lt;i className="fas fa-users"/>
+            case 5:
+                return &lt;i className="fas fa-user-md"/>
+            default:
+                break;
+        }
+    }
+
+    /**
+     * @method
+     * @param {*} props 
+     * @description return Icon
+     * @returns {Object} Display ICON
+     */
+    ColorlibStepIcon =(props)=> {
+      
+        return (
+          &lt;div>
+            {this.getIconLabel(props.icon)}
+          &lt;/div>
+        );
+      }
+
+    render() {
+        return (
+            &lt;div className="blog-bg">
+                &lt;div>
+                    &lt;Typography className="m-3" variant="h3">Blog&lt;/Typography>
+                    {this.state.loading? [1,2,3].map((item,i)=>&lt;Skeleton key={i} width="97%" height={460} className="m-3" />) :BlogData.map((blog, i) => {
+                        return &lt;Card key={i} className="m-3" >
+                            &lt;CardActionArea onClick={() => window.open(blog.webUrl, "_blank")}>
+                                &lt;img className="card-img-top" style={{ objectFit: "cover", height: "300px" }} src={blog.coverImage} alt="imagea" >&lt;/img>
+                                &lt;CardContent>
+                                    &lt;Typography gutterBottom variant="h5" component="h2">
+                                        {blog.title}
+                                    &lt;/Typography>
+                                    &lt;Typography variant="body2" color="textSecondary" component="p">
+                                        {blog.description}
+                                    &lt;/Typography>
+                                &lt;/CardContent>
+                            &lt;/CardActionArea>
+                            &lt;CardActions>
+                                &lt;Button size="small" color="primary">
+                                    Share
+                                    &lt;/Button>
+                                &lt;Button size="small" color="primary" onClick={() => window.open(blog.webUrl, "_blank")}>
+                                    Learn More
+                                    &lt;/Button>
+                            &lt;/CardActions>
+                        &lt;/Card>
+                    })})
+                &lt;/div>
+                &lt;div className="m-2">
+                    &lt;Paper className="p-4">
+                    &lt;Typography variant="h4" style={{fontWeight:"bold",letterSpacing:"2px"}}>What can I do if someone I know is showing signs of dementia?&lt;/Typography>
+                    &lt;Stepper activeStep={this.state.activeStep} orientation="vertical">
+                        {this.state.steps.map((label, index) => (
+                            &lt;Step key={label}>
+                                &lt;StepLabel StepIconComponent={this.ColorlibStepIcon} >{label}&lt;/StepLabel>
+                            &lt;/Step>
+                        ))}
+                    &lt;/Stepper>
+                    &lt;/Paper>
+                    &lt;Paper className="p-4 mt-3 card-left">
+                        &lt;i style={{fontSize:"40px",color:"rgb(248,107,70)"}} className="fas fa-phone-alt align-self-center"/>
+                        &lt;div className="ml-2">
+                        &lt;Typography variant="h5">HPB Dementia Infoline&lt;/Typography>
+                        &lt;Typography variant="h3" style={{color:"rgb(248,107,70)",fontWeight:"600"}}>1800 223 1123&lt;/Typography>
+                        &lt;/div>
+                    &lt;/Paper>
+                    &lt;Paper className="p-4 mt-3 card-left">
+                        &lt;i style={{fontSize:"40px",color:"rgb(248,107,70)"}} className="fas fa-phone-alt align-self-center"/>
+                        &lt;div className="ml-2">
+                        &lt;Typography variant="h5">Alzheimer's Disease Association Dementia Helpline&lt;/Typography>
+                        &lt;Typography variant="h3" style={{color:"rgb(248,107,70)",fontWeight:"600"}}>6377 0700&lt;/Typography>
+                        &lt;/div>
+                    &lt;/Paper>
+                &lt;/div>
+            &lt;/div>
+        )
+    }
+}
+
+
+export default BlogPage</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="Appbar.html">Appbar</a></li><li><a href="BlogPage.html">BlogPage</a></li><li><a href="Bubble.html">Bubble</a></li><li><a href="BubbleCreator.html">BubbleCreator</a></li><li><a href="BubbleScreen.html">BubbleScreen</a></li><li><a href="CompletionPage.html">CompletionPage</a></li><li><a href="CreateCompleted.html">CreateCompleted</a></li><li><a href="CreateExperiment.html">CreateExperiment</a></li><li><a href="CreateExperimentForm.html">CreateExperimentForm</a></li><li><a href="CreateSubmission.html">CreateSubmission</a></li><li><a href="CreateTemplate.html">CreateTemplate</a></li><li><a href="DoctorPage.html">DoctorPage</a></li><li><a href="ExperimentCard.html">ExperimentCard</a></li><li><a href="ExperimentPage.html">ExperimentPage</a></li><li><a href="ExperimentSettings.html">ExperimentSettings</a></li><li><a href="ExperimentStat.html">ExperimentStat</a></li><li><a href="ExperimentTest.html">ExperimentTest</a></li><li><a href="Footer.html">Footer</a></li><li><a href="ForgetPassPage.html">ForgetPassPage</a></li><li><a href="HomePage.html">HomePage</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="PersonalParticulars.html">PersonalParticulars</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="SideParameter.html">SideParameter</a></li><li><a href="SignInLink.html">SignInLink</a></li><li><a href="SignUpPage.html">SignUpPage</a></li><li><a href="SubmissionPage.html">SubmissionPage</a></li><li><a href="UserPage.html">UserPage</a></li><li><a href="UserPageCard.html">UserPageCard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 15 2019 11:09:09 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

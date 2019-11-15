@@ -15,8 +15,10 @@ import {
 
 import axios from 'axios'
 
-class CreateTemplate extends Component {
 
+/** Create new Template page for Researcher */
+class CreateTemplate extends Component {
+    /** @constructor */
     constructor(props) {
         super(props);
         this.state = {
@@ -36,7 +38,7 @@ class CreateTemplate extends Component {
         }
     }
 
-
+    /** Initialize data  */
     componentDidMount() {
         this.setState({
             width: this.canvasDiv.clientWidth,
@@ -45,6 +47,11 @@ class CreateTemplate extends Component {
         this.canvas.addEventListener("mousedown", this.getCursorPosition)
     }
 
+    /**
+     * @method
+     * @param {Object} event Event DOM
+     * @description Update X and Y coordinate of every user click on canvas
+     */
     getCursorPosition = (event) => {
         const rect = this.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -83,6 +90,13 @@ class CreateTemplate extends Component {
         })
     }
 
+    /**
+     * @method
+     * @param {int} x X-coordinate
+     * @param {int} y Y-coordinate
+     * @param {int} z Text to display on bubble
+     * @description Draw bubble centered on user click X and Y
+     */
     drawCoordinates = (x, y, z) => {
         const { diameter, json } = this.state
         var pointSize = diameter; // Change according to the size of the point.
@@ -92,7 +106,7 @@ class CreateTemplate extends Component {
         ctx.textBaseline = "middle";
         ctx.strokeStyle = "#ff2626"; // Red color
         ctx.beginPath(); //Start path
-        ctx.arc(x, y, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+        ctx.arc(x, y, pointSize/2, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
         ctx.stroke(); // Close the path and stroke.
         ctx.fillText(z, x, y);
         if (Number.isInteger(z) && z <= 1) {
@@ -104,13 +118,27 @@ class CreateTemplate extends Component {
         }
     }
 
+    /**
+     * @method
+     * @param {int} c ASCII Character
+     * @description Get next ASCII Character
+     */
     nextChar = (c) => {
         return String.fromCharCode(c.charCodeAt(0) + 1);
     }
+    /**
+     * @method
+     * @param {int} c ASCII Character
+     * @description Get prev ASCII Character
+     */
     prevChar = (c) => {
         return String.fromCharCode(c.charCodeAt(0) - 1);
     }
 
+    /**
+     * @method
+     * @description Redraw the whole canvas in the case of UNDO or CLEAR
+     */
     redraw = () => {
         this.state.json.forEach((bubble, i) => {
             const { x, y, text } = bubble
@@ -122,7 +150,7 @@ class CreateTemplate extends Component {
             ctx.textBaseline = "middle";
             ctx.strokeStyle = "#ff2626"; // Red color
             ctx.beginPath(); //Start path
-            ctx.arc(x, y, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+            ctx.arc(x, y, pointSize/2, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
             ctx.stroke(); // Close the path and stroke.
             ctx.fillText(text, x, y);
             if (i >= json.length - 1) {
@@ -135,6 +163,10 @@ class CreateTemplate extends Component {
         })
     }
 
+    /**
+     * @method
+     * @description Undo previous click. Remove last bubble
+     */
     undoCanvas = () => {
         this.setState(prevState => {
             return {
@@ -149,6 +181,10 @@ class CreateTemplate extends Component {
         })
     }
 
+    /**
+     * @method
+     * @description Clear Canvas. Remove all bubbles in the canvas
+     */
     clearCanvas = () => {
         var ctx = this.canvas.getContext("2d");
         ctx.clearRect(0, 0, this.state.width, this.state.height);
@@ -159,26 +195,46 @@ class CreateTemplate extends Component {
         })
     }
 
+    /**
+     * @method
+     * @description Handle generic event
+     * @param {Object} event Event DOM
+     */
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.name === "isB" ? e.target.checked : e.target.value
         })
     }
 
+    /**
+     * @method
+     * @param {Object} e Event DOM
+     * @param {int} val new diameter
+     * @description Handle Slider value(diameter) change
+     */
     handleSliderChange = (e, val) => {
         this.setState({
             diameter: val
         })
     }
-
+    /**
+     * @method 
+     * @description SetState to hide loader */
     hideLoader = () => {
         this.setState({ loading: false });
     }
-
+    /**
+     * @method 
+     * @description SetState to show loader */
     showLoader = () => {
         this.setState({ loading: true });
     }
 
+    /**
+     * @method
+     * @param {Object} event Event DOM
+     * @description Handle Form submission to POST to backend
+     */
     handleSubmit = (event) => {
         event.preventDefault()
         this.showLoader()
@@ -289,7 +345,7 @@ class CreateTemplate extends Component {
                                 valueLabelDisplay="on"
                                 onChange={this.handleSliderChange}
                                 min={10}
-                                max={50}
+                                max={80}
                             />
                             <ButtonGroup variant="outlined" fullWidth className="mt-3">
                                 <Button color="primary" onClick={this.clearCanvas}>

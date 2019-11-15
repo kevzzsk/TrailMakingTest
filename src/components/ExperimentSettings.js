@@ -8,22 +8,34 @@ import Typography from '@material-ui/core/Typography';
 import BubbleScreen from "./BubbleScreen"
 import { Button } from '@material-ui/core';
 
+/** Settings page for each experiment */
 class ExperimentSettings extends Component {
 
-
+    /** @constructor */
     constructor(props) {
         super(props)
         this.state = {
             expanded: ""
         }
     }
-
+    /**
+     * @method
+     * @param {Object} panel Expanded panel, shown when state is expanded
+     * @param {Object} event event DOM
+     * @param {bool} isExpanded Boolean if panel is expaned
+     * @description Show panel object if it is expanded, else show nothing
+     */
     handleChange = (panel) => (event, isExpanded) => {
         this.setState({
             expanded: isExpanded ? panel : false
         })
     }
 
+    /**
+     * @method
+     * @param {Object} event Event DOM
+     * @description Handle button click for patient under doctor supervision to do the test
+     */
     handleDoExperiment =(event) =>{
         this.props.history.push({
             pathname: '/form', state: {

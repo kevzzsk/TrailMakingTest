@@ -3,12 +3,12 @@ import React,{Component} from 'react';
 import { Paper, Button, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import Steppers from './Steppers'
-import axios from "axios"
 
+
+/**
+ * Display participant details and results as confirmation page
+ */
 class CompletionPage extends Component {
-
-
-    // KEEP INFO IN DATABASE
 
     render(){
         const { experimentID, payload, activeStep,trail } = this.props.location.state

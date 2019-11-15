@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/createNewExp/CreateExperimentForm.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/createNewExp/CreateExperimentForm.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react'
+
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import FormControl from '@material-ui/core/FormControl';
+import Slider from '@material-ui/core/Slider';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Tooltip from '@material-ui/core/Tooltip';
+
+
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
+import 'date-fns';
+import { differenceInCalendarDays, toDate } from 'date-fns'
+import axios from "axios"
+import { Link } from 'react-router-dom'
+
+
+/**
+ * Forms for researcher to create a new experiment
+ */
+class CreateExperimentForm extends Component {
+    static defaultProps = {
+        onChangeTemplate: () => { },
+        templates: []
+    }
+    /** @constructor */
+    constructor(props) {
+        super(props);
+        this.state = {
+            startDate: toDate(new Date()),
+            endDate: toDate(new Date()),
+            duration: 0,
+            description: "",
+            ExperimentName: "",
+            ExperimentID: 0,
+            numTemplates: 2,
+            trails: [],
+            dataLoaded: false
+        }
+    }
+    marks = [
+        {
+            value: 1,
+            label: '1',
+        },
+        {
+            value: 2,
+            label: '2',
+        },
+        {
+            value: 3,
+            label: '3',
+        },
+        {
+            value: 4,
+            label: '4',
+        },
+    ]
+
+    /** Handle Initial loading of page */
+    componentDidMount() {
+        this.reGenerateID();
+        axios.get("https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/getAllTemplate")
+            .then(res => {
+                this.setState({
+                    trails: res.data.templateExperiments,
+                    dataLoaded: true
+                })
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    /**
+     * @method
+     * @description Handle generic event
+     * @param {Object} event Event DOM
+     */
+    handleChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    }
+
+    /**
+     * @method
+     * @param {Object} e Event DOM
+     * @param {int} val Value of slider
+     * @description Handle Slider value change
+     */
+    handleSliderChange = (e, val) => {
+        this.setState({
+            numTemplates: val
+        })
+    }
+
+    /**
+     * @method
+     * @param {Object} date StartDate choosen
+     * @description Update StartDate state
+     */
+    handleStartDateChange = (date) => {
+        this.setState({
+            startDate: date
+        }, () => this.calcDuration())
+    }
+
+    /**
+     * @method
+     * @param {Object} date EndDate choosen
+     * @description Update EndDate state
+     */
+    handleEndDateChange = (date) => {
+        this.setState({
+            endDate: date
+        }, () => this.calcDuration())
+    }
+
+    /**
+     * @method
+     * @description calculate duration when End/Start date changes
+     */
+    calcDuration = () => {
+        if (this.state.startDate !== null &amp;&amp; this.state.endDate !== null) {
+            this.setState({
+                duration: differenceInCalendarDays(this.state.endDate, this.state.startDate)
+            })
+        }
+    }
+
+    /**
+     * @method
+     * @description Recompute experiment ID (randomize)
+     */
+    reGenerateID = () => {
+        let first = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 1).toUpperCase();
+        let ranID = String((Math.random() * 10000).toFixed(0)).padStart(4, "0");
+        this.setState({
+            ExperimentID: first + ranID
+        })
+    }  
+
+
+    /**
+     * @method
+     * @param {Object} event Event DOM
+     * @description Handle Form submission, route to next page /user-page/create-experiment/1
+     */
+    handleSubmit = (event) => {
+        event.preventDefault()
+        this.props.history.push({
+            pathname: "/user-page/create-experiment/1",
+            state: {
+                metaData: this.state,
+                accountID:this.props.location.state.accountID
+            },
+        });
+
+    }
+
+    render() {
+        return (
+            &lt;div className="cexp-bg">
+                &lt;Grid container spacing={0} direction="column" justify="flex-start" alignItems="stretch" className="h-100 w-100">
+                    &lt;form onSubmit={this.handleSubmit}>
+                        &lt;Grid item className="text-center mt-3">
+                            &lt;Typography variant="h3">Create New Experiment&lt;/Typography>
+                        &lt;/Grid>
+                        &lt;Grid item>
+                            &lt;Grid container spacing={2} direction="column" justify="center" alignItems="center" className="nested-grid-top">
+                                &lt;Grid item className="cexp-form-item" >
+                                    &lt;Paper className="p-4 mt-3 d-flex align-items-baseline justify-content-between">
+                                        &lt;Typography variant="h5" display="inline" >Experiment ID:&lt;/Typography>&lt;Typography display="inline" variant="h5" className="float-right">{this.state.ExperimentID}&lt;Tooltip title="re-generate">&lt;IconButton onClick={this.reGenerateID} className="px-2 py-auto">&lt;i className="fas fa-redo fa-lg">&lt;/i>&lt;/IconButton>&lt;/Tooltip>&lt;/Typography>
+                                    &lt;/Paper>
+                                &lt;/Grid>
+                                &lt;Grid item className="cexp-form-item" >
+                                    &lt;Paper className="p-4">
+                                        &lt;Grid container spacing={2} direction="column" justify="flex-start" alignItems="flex-start">
+                                            &lt;FormControl variant="outlined" className="w-100">
+                                                &lt;TextField
+                                                    required
+                                                    label="ExperimentName"
+                                                    name="ExperimentName"
+                                                    value={this.state.ExperimentName}
+                                                    onChange={this.handleChange}
+                                                    margin="normal"
+                                                    variant="outlined"
+                                                />
+                                            &lt;/FormControl>
+                                            &lt;Typography id="discrete-slider-custom" gutterBottom>
+                                                Number of Trails
+                                        &lt;/Typography>
+                                            &lt;Slider
+                                                aria-labelledby="number-of-templates"
+                                                step={1}
+                                                name="numTemplates"
+                                                value={this.state.numTemplates}
+                                                valueLabelDisplay="auto"
+                                                marks={this.marks}
+                                                onChange={this.handleSliderChange}
+                                                min={1}
+                                                max={4}
+                                            />
+                                            &lt;MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                &lt;KeyboardDatePicker
+                                                    disableToolbar
+                                                    variant="inline"
+                                                    inputVariant="outlined"
+                                                    format="dd/MM/yyyy"
+                                                    margin="normal"
+                                                    disablePast
+                                                    id="startDate"
+                                                    label="Start Date"
+                                                    value={this.state.startDate}
+                                                    onChange={this.handleStartDateChange}
+                                                    KeyboardButtonProps={{
+                                                        'aria-label': 'change start date',
+                                                    }}
+                                                    className="w-100"
+                                                />
+                                            &lt;/MuiPickersUtilsProvider>
+                                            &lt;MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                &lt;KeyboardDatePicker
+                                                    disableToolbar
+                                                    variant="inline"
+                                                    inputVariant="outlined"
+                                                    format="dd/MM/yyyy"
+                                                    margin="normal"
+                                                    id="endDate"
+                                                    label="End Date"
+                                                    minDate={this.state.startDate}
+                                                    minDateMessage="End Date should not be before Start Date"
+                                                    value={this.state.endDate}
+                                                    onChange={this.handleEndDateChange}
+                                                    KeyboardButtonProps={{
+                                                        'aria-label': 'change start date',
+                                                    }}
+                                                    className="w-100"
+                                                />
+                                            &lt;/MuiPickersUtilsProvider>
+                                            &lt;FormControl variant="outlined" className="w-100">
+                                                &lt;TextField
+                                                    id="outlined-duration"
+                                                    label="Duration"
+                                                    value={this.state.duration}
+                                                    margin="normal"
+                                                    variant="outlined"
+                                                    InputProps={{
+                                                        endAdornment: &lt;InputAdornment position="end">Days&lt;/InputAdornment>,
+                                                        readOnly: true
+                                                    }}
+
+                                                />
+                                            &lt;/FormControl>
+                                            &lt;FormControl variant="outlined" className="w-100">
+                                                &lt;TextField
+                                                    required
+                                                    label="Desciption"
+                                                    name="description"
+                                                    value={this.state.description}
+                                                    onChange={this.handleChange}
+                                                    margin="normal"
+                                                    variant="outlined"
+                                                    multiline
+                                                />
+                                            &lt;/FormControl>
+                                        &lt;/Grid>
+                                    &lt;/Paper>
+                                &lt;/Grid>
+                            &lt;/Grid>
+                        &lt;/Grid>
+                        &lt;Grid item className="w-100 mb-4 mt-4">
+                            &lt;Grid container spacing={0} direction="row" justify="center" alignItems="center" className="nested-grid-bot">
+                                &lt;Grid item >
+                                    &lt;ButtonGroup>
+                                        &lt;Link to="/user-page">&lt;Button variant="text" className="mr-1" size="large" >Back&lt;/Button>&lt;/Link>
+                                        &lt;Button disabled={!this.state.dataLoaded} type="submit" variant="contained">Continue&lt;/Button>
+                                    &lt;/ButtonGroup>
+                                &lt;/Grid>
+                            &lt;/Grid>
+                        &lt;/Grid>
+                    &lt;/form>
+                &lt;/Grid>
+
+            &lt;/div>
+        )
+    }
+}
+
+
+export default CreateExperimentForm;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="Appbar.html">Appbar</a></li><li><a href="BlogPage.html">BlogPage</a></li><li><a href="Bubble.html">Bubble</a></li><li><a href="BubbleCreator.html">BubbleCreator</a></li><li><a href="BubbleScreen.html">BubbleScreen</a></li><li><a href="CompletionPage.html">CompletionPage</a></li><li><a href="CreateCompleted.html">CreateCompleted</a></li><li><a href="CreateExperiment.html">CreateExperiment</a></li><li><a href="CreateExperimentForm.html">CreateExperimentForm</a></li><li><a href="CreateSubmission.html">CreateSubmission</a></li><li><a href="CreateTemplate.html">CreateTemplate</a></li><li><a href="DoctorPage.html">DoctorPage</a></li><li><a href="ExperimentCard.html">ExperimentCard</a></li><li><a href="ExperimentPage.html">ExperimentPage</a></li><li><a href="ExperimentSettings.html">ExperimentSettings</a></li><li><a href="ExperimentStat.html">ExperimentStat</a></li><li><a href="ExperimentTest.html">ExperimentTest</a></li><li><a href="Footer.html">Footer</a></li><li><a href="ForgetPassPage.html">ForgetPassPage</a></li><li><a href="HomePage.html">HomePage</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="PersonalParticulars.html">PersonalParticulars</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="SideParameter.html">SideParameter</a></li><li><a href="SignInLink.html">SignInLink</a></li><li><a href="SignUpPage.html">SignUpPage</a></li><li><a href="SubmissionPage.html">SubmissionPage</a></li><li><a href="UserPage.html">UserPage</a></li><li><a href="UserPageCard.html">UserPageCard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 15 2019 11:09:09 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
