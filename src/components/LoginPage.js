@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
     Button,
     Snackbar,
@@ -7,11 +7,15 @@ import {
     FormControl,
     TextField,
     CircularProgress,
-    Paper,
-    Avatar
+    Paper
 } from '@material-ui/core';
 import axios from 'axios';
 
+
+
+/**
+ * Display Login forms
+ */
 class LoginPage extends Component {
 
     cancelToken = axios.CancelToken;
@@ -25,11 +29,16 @@ class LoginPage extends Component {
         loading: false,
         accountType: 0
     }
-
+    
+    /** cancel subscription and unmount safely */
     componentWillUnmount() {
         this.souce.cancel("Operation Cancelled")
     }
 
+    /**
+     * @method
+     * @description Generic handler for all events
+     */
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value,
@@ -37,14 +46,25 @@ class LoginPage extends Component {
         })
     }
 
+    /**
+     * @method
+     * @description Hide Loader animation
+     */
     hideLoader = () => {
         this.setState({ loading: false });
     }
-
+    /**
+     * @method
+     * @description Show Loader animation
+     */
     showLoader = () => {
         this.setState({ loading: true });
     }
 
+    /**
+     * @method
+     * @description Verify Login particulars with backend
+     */
     checkLogin = () => {
         this.showLoader()
         try {

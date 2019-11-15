@@ -11,6 +11,10 @@ import { differenceInCalendarDays, toDate } from 'date-fns'
 
 import { Link, withRouter } from 'react-router-dom'
 
+
+/**
+ * Side bar of Create new Experiment which displays relevant information
+ */
 class SideParameter extends Component {
 
     static defaultProps = {
@@ -18,6 +22,7 @@ class SideParameter extends Component {
         trails: []
     }
 
+    /** @constructor */
     constructor(props) {
         super(props);
         this.state = {
@@ -34,6 +39,7 @@ class SideParameter extends Component {
         this.inputLabel = React.createRef(null)
     }
 
+    /** Set initial data */
     componentDidMount() {
         this.setState({
             labelWidth: this.inputLabel.current.offsetWidth,
@@ -48,6 +54,7 @@ class SideParameter extends Component {
         })
     }
 
+    /** Update page when refresh or next page */
     componentDidUpdate(prevProps){
         if(prevProps.trail !== this.props.trail){
             this.setState({
@@ -64,7 +71,11 @@ class SideParameter extends Component {
         }
     }
 
-
+    /**
+     * @method
+     * @param {Object} event Event DOM
+     * @description Update Trail based on user selected trail
+     */
     handleTrailChange = (event) => {
         this.setState({
             trail: this.props.metaData.trails.find((item)=> String(item.templateExperimentID)=== event.target.value),
@@ -73,21 +84,41 @@ class SideParameter extends Component {
         })
         this.props.onChangeTrail(event.target.value)
     }
-
+    /**
+     * @method
+     * @param {Object} templates templates data
+     * @description generate options for dropdown template selection
+     * @returns {Object} List of options
+     */
     genTemplateOptions = (templates) => {
         return templates.map(item => <option key={item.templateExperimentID} value={item.templateExperimentID}>{item.templateName}</option>)
     }
 
+    /**
+     * @method
+     * @description Handle generic event
+     * @param {Object} event Event DOM
+     */
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
         })
     }
 
+    /**
+     * @method
+     * @description handle return/back button
+     */
     goBack = () => {
         this.props.history.goBack()
-    }
+    }  
 
+    /**
+     * @method
+     * @param {Object} metadata data
+     * @description Get next routing route
+     * @returns {string} Return pathname String
+     */
     getPathName = (metadata) => {
         if (metadata.numTemplates > parseInt(this.props.match.params.id)) {
             return "/user-page/create-experiment/" + (parseInt(this.props.match.params.id) + 1)

@@ -3,13 +3,16 @@ import Skeleton from "@material-ui/lab/Skeleton"
 import { Redirect } from "react-router-dom"
 import axios from "axios"
 
-
+/**
+ * Transition page for POST of new experiment to database
+ */
 class CreateSubmission extends Component {
 
     state = {
         loading: true
     }
 
+    /** Post Data */
     componentDidMount() {
         let data = {}
         const { accountID, metaData, payload } = this.props.location.state

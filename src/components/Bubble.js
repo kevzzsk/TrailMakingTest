@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Trails from '@orcatech/react-neuropsych-trails';
 
+/** Single Bubble */
 class Bubble extends React.PureComponent {
 
 	static propTypes = {

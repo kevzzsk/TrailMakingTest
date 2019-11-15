@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
-import UserPageCard from './UserPageCard';
-import exData from '../template/exData';
 
 import ViewExperiment from "./ViewExperiment"
 
+/**
+ * Researcher Account Page. Shows the dashboard for researcher
+ */
 class UserPage extends Component {
 
     state={
@@ -14,6 +15,10 @@ class UserPage extends Component {
         dataLoaded:false
     }
 
+    /**
+     * @method
+     * @description Ensure page is loaded with appropriate account data. Get cache data from localstorage
+     */
     componentWillMount(){
         
         if (this.props.location.state !== undefined){

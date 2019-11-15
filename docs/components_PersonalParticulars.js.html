@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/PersonalParticulars.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/PersonalParticulars.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react'
+
+import Switch from "@material-ui/core/Switch"
+import TextField from "@material-ui/core/TextField"
+import Paper from "@material-ui/core/Paper"
+import Button from "@material-ui/core/Button"
+import Typography from "@material-ui/core/Typography"
+import FormControl from "@material-ui/core/FormControl"
+import FormLabel from "@material-ui/core/FormLabel"
+import RadioGroup from "@material-ui/core/RadioGroup"
+import ButtonGroup from "@material-ui/core/ButtonGroup"
+import FormControlLabel from "@material-ui/core/FormControlLabel"
+import InputLabel from "@material-ui/core/InputLabel"
+import Select from "@material-ui/core/Select"
+import Grid from "@material-ui/core/Grid"
+import Radio from "@material-ui/core/Radio"
+import Divider from "@material-ui/core/Divider"
+import Steppers from './Steppers'
+
+/**
+ * PersonalParticulars handles participant form page where user data is collected
+ */
+class PersonalParticulars extends Component {
+
+    static defaultProps = {
+        trail: "",
+        activeStep: 0,
+        test: false,
+        id: 0,
+        data: ""
+    }
+
+    /** @constructor */
+    constructor(props) {
+        super(props)
+        this.state = {
+            ExperimentID: 0,
+            ExperimentName: "",
+            trail: [],
+            age: "",
+            pastIllnesses: "",
+            gender: "male",
+            income: null,
+            incomelabelWidth: 0,
+            occupation: "",
+            smoker: "no",
+            exercise: "",
+            doctorID: "",
+            name: "",
+            haveDoctor: false
+        }
+        this.incomeLabel = React.createRef(null)
+        this.educationLabel = React.createRef(null)
+        this.exerciseLabel = React.createRef(null)
+        this.required = true // for debugging purposes
+    }
+
+    /** init relevant data
+     * @param {string} experimentID Experiment ID
+     * @param {int} incomelabelWidth Label width of income input form
+     * @param {int} exerciseLabelWidth Label width of exercice input form
+     * @param {int} educationlabelWidth Label width of education input form
+     */
+    componentDidMount() {
+        this.setState({
+            ExperimentID: this.props.location.state.experimentID,
+            incomelabelWidth: this.incomeLabel.current.offsetWidth,
+            exerciseLabelWidth: this.exerciseLabel.current.offsetWidth,
+            educationlabelWidth: this.educationLabel.current.offsetWidth,
+        })
+    }
+
+
+    /** 
+     * @method
+     * @param {Object} event input event
+     * @description Toggle switch button when participant is under doctor supervision
+    */
+    handleSwitchChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.checked,
+            name: "",
+            doctorID: ""
+        })
+    }
+
+    /** 
+     * @method
+     * @param {Object} event input event
+     * @description handles generic input form update
+    */
+    handleChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    }
+
+    /** 
+     * @method
+     * @description verify and validate that all input fields in the form is filled. Once verified, the details are pushed into the next page /test
+     * @param {Object} e event DOM of form
+     * 
+     */
+    handleSubmit = (e) => {
+        e.preventDefault()
+        console.log("SUBMIT")
+        this.props.history.push({
+            pathname: '/test',
+            state: {
+                experimentID: this.state.ExperimentID,
+                doctorID: this.state.doctorID,
+                expIndex: this.props.location.state.expIndex,
+                payload: this.props.data,
+                activeStep: this.props.location.state.activeStep + 1,
+                participantDetails: {
+                    "age": this.state.age,
+                    "gender": this.state.gender,
+                    "income": this.state.income,
+                    "education": this.state.education,
+                    "occupation": this.state.occupation,
+                    "smoker": this.state.smoker,
+                    "pastIllnesses": this.state.pastIllnesses,
+                    "exercise": this.state.exercise,
+                    "name":this.state.name
+                },
+                trail: this.props.location.state.trails
+            }
+        })
+    }
+
+    render() {
+        return (
+            &lt;div className="bg-minus-app">
+                &lt;Grid container spacing={0} direction="column" justify="space-between" alignItems="stretch" className="h-100 m-auto form-container">
+
+                    &lt;form onSubmit={this.handleSubmit}>
+                        &lt;Grid item>
+                            &lt;Grid container spacing={2} direction="column" justify="center" alignItems="stretch" className="nested-grid-top">
+                                &lt;Grid item >
+                                    &lt;Paper className="p-4 mt-3 mx-3">
+                                        &lt;div className="d-flex align-items-baseline justify-content-between">
+                                            &lt;Typography variant="h5" display="inline" >Experiment ID:&lt;/Typography>&lt;Typography display="inline" variant="h5" className="float-right font-weight-bold">{this.state.ExperimentID}&lt;/Typography>
+                                        &lt;/div>
+                                    &lt;/Paper>
+                                &lt;/Grid>
+                                &lt;Grid item >
+                                    &lt;Paper className="p-4 mx-3 mb-2">
+                                        &lt;FormControl variant="outlined" className="w-100">
+                                            &lt;TextField
+                                                required={this.required}
+                                                id="outlined-duration"
+                                                label="Age"
+                                                name="age"
+                                                onChange={this.handleChange}
+                                                value={this.state.age}
+                                                margin="normal"
+                                                variant="outlined"
+                                                type="number"
+                                            />
+                                        &lt;/FormControl>
+                                        &lt;FormControl component="fieldset" className="ml-1 mt-2" >
+                                            &lt;FormLabel component="legend">Gender&lt;/FormLabel>
+                                            &lt;RadioGroup row aria-label="gender" name="gender" value={this.state.gender} onChange={this.handleChange} className="ml-2">
+                                                &lt;FormControlLabel value="male" control={&lt;Radio color="primary" />} label="Male" />
+                                                &lt;FormControlLabel value="female" control={&lt;Radio color="primary" />} label="Female" />
+                                                &lt;FormControlLabel value="other" control={&lt;Radio color="primary" />} label="Other" />
+                                            &lt;/RadioGroup>
+                                        &lt;/FormControl>
+                                        &lt;FormControl variant="outlined" className="w-100 mb-2 pb-2">
+                                            &lt;InputLabel ref={this.incomeLabel} htmlFor="outlined-age-native-simple">
+                                                Income In Previous Year
+                                            &lt;/InputLabel>
+                                            &lt;Select
+                                                required={this.required}
+                                                native
+                                                value={this.state.income}
+                                                onChange={this.handleChange}
+                                                name="income"
+                                                labelWidth={this.state.incomelabelWidth}
+                                            >
+                                                &lt;option value="" />
+                                                &lt;option value={0}>$0&lt;/option>
+                                                &lt;option value={1}>$1 to $9,999&lt;/option>
+                                                &lt;option value={2}>$10,000 to $24,999&lt;/option>
+                                                &lt;option value={3}>$25,000 to $49,999&lt;/option>
+                                                &lt;option value={4}>$50,000 to $74,999&lt;/option>
+                                                &lt;option value={5}>$75,000 to $99,999&lt;/option>
+                                                &lt;option value={6}>$100,000 to $ 149,999&lt;/option>
+                                                &lt;option value={7}>$150,000 and greater&lt;/option>
+                                                &lt;option value={8}>Prefer not to answer&lt;/option>
+                                            &lt;/Select>
+                                        &lt;/FormControl>
+                                        &lt;FormControl variant="outlined" className="w-100">
+                                            &lt;InputLabel ref={this.educationLabel} htmlFor="outlined-age-native-simple">
+                                                Education
+                                            &lt;/InputLabel>
+                                            &lt;Select
+                                                required={this.required}
+                                                native
+                                                value={this.state.education}
+                                                onChange={this.handleChange}
+                                                name="education"
+                                                labelWidth={this.state.educationlabelWidth}
+                                            >
+                                                &lt;option value="" />
+                                                &lt;option value={0}>No Schooling Completed&lt;/option>
+                                                &lt;option value={1}>Primary Education&lt;/option>
+                                                &lt;option value={2}>Secondary Education&lt;/option>
+                                                &lt;option value={3}>Diploma&lt;/option>
+                                                &lt;option value={4}>Tertiary Education&lt;/option>
+                                                &lt;option value={5}>Bachelor's degree&lt;/option>
+                                                &lt;option value={6}>Master's degree&lt;/option>
+                                                &lt;option value={7}>Professional degree&lt;/option>
+                                                &lt;option value={8}>Doctorate degree&lt;/option>
+                                            &lt;/Select>
+                                        &lt;/FormControl>
+                                        &lt;FormControl variant="outlined" className="w-100">
+                                            &lt;TextField
+                                                required={this.required}
+                                                label="Occupation"
+                                                name="occupation"
+                                                value={this.state.occupation}
+                                                onChange={this.handleChange}
+                                                margin="normal"
+                                                variant="outlined"
+                                            />
+                                        &lt;/FormControl>
+                                        &lt;FormControl component="fieldset" className="ml-1 mt-2" >
+                                            &lt;FormLabel component="legend">Are you a smoker?&lt;/FormLabel>
+                                            &lt;RadioGroup row aria-label="smoker" name="smoker" value={this.state.smoker} onChange={this.handleChange} className="ml-2">
+                                                &lt;FormControlLabel value="no" control={&lt;Radio color="primary" />} label="No" />
+                                                &lt;FormControlLabel value="yes" control={&lt;Radio color="primary" />} label="Yes" />
+                                            &lt;/RadioGroup>
+                                        &lt;/FormControl>
+                                        &lt;FormControl variant="outlined" className="w-100 mt-n2 pt-n1">
+                                            &lt;TextField
+                                                required={this.required}
+                                                label="Past Illnesses"
+                                                name="pastIllnesses"
+                                                value={this.state.pastIllnesses}
+                                                onChange={this.handleChange}
+                                                margin="normal"
+                                                variant="outlined"
+                                            />
+                                        &lt;/FormControl>
+                                        &lt;FormControl variant="outlined" className="w-100 mt-2">
+                                            &lt;InputLabel ref={this.exerciseLabel} htmlFor="outlined-age-native-simple">
+                                                How Often Do You Exercise?
+                                            &lt;/InputLabel>
+                                            &lt;Select
+                                                required={this.required}
+                                                native
+                                                value={this.state.exercise}
+                                                onChange={this.handleChange}
+                                                name="exercise"
+                                                labelWidth={this.state.exerciseLabelWidth}
+                                            >
+                                                &lt;option value="" />
+                                                &lt;option value={0}>Every day&lt;/option>
+                                                &lt;option value={1}>More than twice a week&lt;/option>
+                                                &lt;option value={2}>Once a week&lt;/option>
+                                                &lt;option value={3}>More than twice a month&lt;/option>
+                                                &lt;option value={4}>Once a month&lt;/option>
+                                                &lt;option value={5}>Never at all&lt;/option>
+                                            &lt;/Select>
+                                        &lt;/FormControl>
+                                        &lt;Divider className="mt-4" variant="middle" />
+                                        &lt;FormControlLabel
+                                            className="pt-2"
+                                            control={&lt;Switch
+                                                checked={this.state.haveDoctor}
+                                                name="haveDoctor"
+                                                onChange={this.handleSwitchChange}
+                                                value="haveDoctor"
+                                                color="primary"
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                            />}
+                                            label="Doctor Supervision"
+                                        />
+                                        &lt;FormControl variant="outlined" className="w-100 mt-n2">
+                                            &lt;TextField
+                                                disabled={!this.state.haveDoctor}
+                                                required={this.state.haveDoctor}
+                                                id="outlined-doctorID"
+                                                label="Doctor ID"
+                                                name="doctorID"
+                                                onChange={this.handleChange}
+                                                value={this.state.doctorID}
+                                                margin="normal"
+                                                variant="outlined"
+                                                type="number"
+                                            />
+                                        &lt;/FormControl>
+                                        &lt;FormControl variant="outlined" className="w-100">
+                                            &lt;TextField
+                                                disabled={!this.state.haveDoctor}
+                                                required={this.state.haveDoctor}
+                                                id="outlined-name"
+                                                label="Name"
+                                                name="name"
+                                                onChange={this.handleChange}
+                                                value={this.state.name}
+                                                margin="normal"
+                                                variant="outlined"
+                                                type="text"
+                                            />
+                                        &lt;/FormControl>
+                                    &lt;/Paper>
+                                &lt;/Grid>
+                            &lt;/Grid>
+                        &lt;/Grid>
+                        &lt;Grid item className="w-100 mb-4 mt-2">
+                            &lt;Grid container spacing={0} direction="column" justify="center" alignItems="center" className="nested-grid-bot">
+                                &lt;Grid item className="w-100">
+                                    &lt;Steppers trails={this.props.location.state.trails} activeStep={this.props.activeStep} className="p-2" />
+                                &lt;/Grid>
+                                &lt;Grid item >
+                                    &lt;ButtonGroup>
+                                        &lt;Button variant="text" className="mr-1" size="large" onClick={() => this.props.history.goBack()} >Back&lt;/Button>
+                                        &lt;Button variant="contained" type="submit">Continue&lt;/Button>
+                                    &lt;/ButtonGroup>
+                                &lt;/Grid>
+                            &lt;/Grid>
+                        &lt;/Grid>
+                    &lt;/form>
+                &lt;/Grid>
+            &lt;/div>
+        )
+    }
+}
+
+
+
+export default PersonalParticulars</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="Appbar.html">Appbar</a></li><li><a href="BlogPage.html">BlogPage</a></li><li><a href="Bubble.html">Bubble</a></li><li><a href="BubbleCreator.html">BubbleCreator</a></li><li><a href="BubbleScreen.html">BubbleScreen</a></li><li><a href="CompletionPage.html">CompletionPage</a></li><li><a href="CreateCompleted.html">CreateCompleted</a></li><li><a href="CreateExperiment.html">CreateExperiment</a></li><li><a href="CreateExperimentForm.html">CreateExperimentForm</a></li><li><a href="CreateSubmission.html">CreateSubmission</a></li><li><a href="CreateTemplate.html">CreateTemplate</a></li><li><a href="DoctorPage.html">DoctorPage</a></li><li><a href="ExperimentCard.html">ExperimentCard</a></li><li><a href="ExperimentPage.html">ExperimentPage</a></li><li><a href="ExperimentSettings.html">ExperimentSettings</a></li><li><a href="ExperimentStat.html">ExperimentStat</a></li><li><a href="ExperimentTest.html">ExperimentTest</a></li><li><a href="Footer.html">Footer</a></li><li><a href="ForgetPassPage.html">ForgetPassPage</a></li><li><a href="HomePage.html">HomePage</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="PersonalParticulars.html">PersonalParticulars</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="SideParameter.html">SideParameter</a></li><li><a href="SignInLink.html">SignInLink</a></li><li><a href="SignUpPage.html">SignUpPage</a></li><li><a href="SubmissionPage.html">SubmissionPage</a></li><li><a href="UserPage.html">UserPage</a></li><li><a href="UserPageCard.html">UserPageCard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 15 2019 11:09:09 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

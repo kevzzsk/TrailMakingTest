@@ -1,15 +1,18 @@
-import React, { PureComponent, Component } from 'react';
+import React, { Component } from 'react';
 
-import { Link, Prompt } from 'react-router-dom';
+import {Prompt } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import SideParameter from './SideParameter'
 import BubbleScreen from '../BubbleScreen'
 
-class CreateExperiment extends Component {
 
+/**
+ * Create New Experiment page where researcher can set choose the template
+ */
+class CreateExperiment extends Component {
+    /** @constructor */
     constructor(props) {
         super(props)
         this.state = {
@@ -21,10 +24,11 @@ class CreateExperiment extends Component {
         }
     }
 
+    /** Show loader to wait for mounting */
     componentWillMount() {
         this.showLoader()
     }
-
+    /** get templates when mounted */
     componentDidMount() {
         // get templates
         console.log(this.props)
@@ -38,6 +42,7 @@ class CreateExperiment extends Component {
         this.hideLoader()
     }
 
+    /** Handle next page when key changes since page is reused */
     componentDidUpdate(prevProps) {
         if (prevProps.location.key !== this.props.location.key) {
             this.setState({
@@ -49,17 +54,26 @@ class CreateExperiment extends Component {
         }
     }
 
-
+    /**
+     * @method
+     * @param {int} newTrailID new Trail ID
+     * @description Update trail Id when user select a new trail
+     */
     onChangeTrail = (newTrailID) => {
         this.setState({
             chosenTrail: this.state.trails.find((item) => String(item.templateExperimentID) === newTrailID)
         })
     }
 
+    /**
+     * @method 
+     * @description SetState to hide loader */
     hideLoader = () => {
         this.setState({ loading: false });
     }
-
+    /**
+     * @method 
+     * @description SetState to show loader */
     showLoader = () => {
         this.setState({ loading: true });
     }

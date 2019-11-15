@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/CreateTemplate.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/CreateTemplate.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react'
+
+
+import {
+    Switch,
+    FormControl,
+    TextField,
+    Typography,
+    Slider,
+    Button,
+    Paper,
+    ButtonGroup,
+    CircularProgress
+} from '@material-ui/core'
+
+import axios from 'axios'
+
+
+/** Create new Template page for Researcher */
+class CreateTemplate extends Component {
+    /** @constructor */
+    constructor(props) {
+        super(props);
+        this.state = {
+            isB: false,
+            heading: "",
+            name: "",
+            instruction: "",
+            diameter: 30,
+            json: [],
+            alphabet: "A",
+            number: 1,
+            width: 0,
+            height: 0,
+            loading: false,
+            desPartA: "When you are ready, click BEGIN.\nThere are numbers in circles on this page.\nPlease click on the circles from one number to the next, in order. Start at 1 , then go to 2 , then go to 3 , and so on.\nWork as quickly and accurately as you can.\n\nAt the end of the test please click on CONTINUE button",
+            desPartB: "When you are ready, click BEGIN.\nThere are numbers and letters in circles on this page.\nPlease click on the circles from one number to the next, in order. Start at number 1 , then go to the first letter A , then go to number 2 , and then the next letter B and so on.\nWork as quickly and accurately as you can.\n\nAt the end of the test please click on CONTINUE button",
+        }
+    }
+
+    /** Initialize data  */
+    componentDidMount() {
+        this.setState({
+            width: this.canvasDiv.clientWidth,
+            height: this.canvasDiv.clientHeight
+        })
+        this.canvas.addEventListener("mousedown", this.getCursorPosition)
+    }
+
+    /**
+     * @method
+     * @param {Object} event Event DOM
+     * @description Update X and Y coordinate of every user click on canvas
+     */
+    getCursorPosition = (event) => {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        var temp;
+        if (this.state.isB) {
+            if (this.state.json.length % 2 === 1) {
+                temp = this.state.alphabet;
+                this.setState({
+                    alphabet: this.nextChar(temp)
+                })
+            } else {
+                temp = this.state.number;
+                this.setState({
+                    number: temp + 1
+                })
+            }
+        }
+        else {
+            temp = this.state.number;
+            this.setState({
+                number: temp + 1
+            })
+        }
+        console.log("x: " + x + " y: " + y);
+        console.log(temp);
+        this.drawCoordinates(x, y, temp);
+        this.setState(prevState => {
+            return {
+                json: [...prevState.json, {
+                    "x": x,
+                    "y": y,
+                    "text": temp.toString()
+                }]
+            }
+        })
+    }
+
+    /**
+     * @method
+     * @param {int} x X-coordinate
+     * @param {int} y Y-coordinate
+     * @param {int} z Text to display on bubble
+     * @description Draw bubble centered on user click X and Y
+     */
+    drawCoordinates = (x, y, z) => {
+        const { diameter, json } = this.state
+        var pointSize = diameter; // Change according to the size of the point.
+        var ctx = this.canvas.getContext("2d");
+        ctx.font = "30px Arial"
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.strokeStyle = "#ff2626"; // Red color
+        ctx.beginPath(); //Start path
+        ctx.arc(x, y, pointSize/2, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+        ctx.stroke(); // Close the path and stroke.
+        ctx.fillText(z, x, y);
+        if (Number.isInteger(z) &amp;&amp; z &lt;= 1) {
+        }
+        else {
+            ctx.moveTo(json[json.length - 1]["x"], json[json.length - 1]["y"]);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+    }
+
+    /**
+     * @method
+     * @param {int} c ASCII Character
+     * @description Get next ASCII Character
+     */
+    nextChar = (c) => {
+        return String.fromCharCode(c.charCodeAt(0) + 1);
+    }
+    /**
+     * @method
+     * @param {int} c ASCII Character
+     * @description Get prev ASCII Character
+     */
+    prevChar = (c) => {
+        return String.fromCharCode(c.charCodeAt(0) - 1);
+    }
+
+    /**
+     * @method
+     * @description Redraw the whole canvas in the case of UNDO or CLEAR
+     */
+    redraw = () => {
+        this.state.json.forEach((bubble, i) => {
+            const { x, y, text } = bubble
+            const { diameter, json } = this.state
+            var pointSize = diameter; // Change according to the size of the point.
+            var ctx = this.canvas.getContext("2d");
+            ctx.font = "30px Arial"
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.strokeStyle = "#ff2626"; // Red color
+            ctx.beginPath(); //Start path
+            ctx.arc(x, y, pointSize/2, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+            ctx.stroke(); // Close the path and stroke.
+            ctx.fillText(text, x, y);
+            if (i >= json.length - 1) {
+            }
+            else {
+                ctx.moveTo(json[i + 1]["x"], json[i + 1]["y"]);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+        })
+    }
+
+    /**
+     * @method
+     * @description Undo previous click. Remove last bubble
+     */
+    undoCanvas = () => {
+        this.setState(prevState => {
+            return {
+                json: prevState.json.filter((_, i) => i &lt; prevState.json.length - 1), // remove last item on array
+                number: prevState.isB ? (prevState.json.length % 2 === 0 ? prevState.number : prevState.number - 1) : prevState.number - 1,
+                alphabet: prevState.isB ? (prevState.json.length % 2 === 0 ? this.prevChar(prevState.alphabet) : prevState.alphabet) : prevState.alphabet
+            }
+        }, () => {
+            var ctx = this.canvas.getContext("2d");
+            ctx.clearRect(0, 0, this.state.width, this.state.height);
+            this.redraw()
+        })
+    }
+
+    /**
+     * @method
+     * @description Clear Canvas. Remove all bubbles in the canvas
+     */
+    clearCanvas = () => {
+        var ctx = this.canvas.getContext("2d");
+        ctx.clearRect(0, 0, this.state.width, this.state.height);
+        this.setState({
+            number: 1,
+            alphabet: "A",
+            json: []
+        })
+    }
+
+    /**
+     * @method
+     * @description Handle generic event
+     * @param {Object} event Event DOM
+     */
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.name === "isB" ? e.target.checked : e.target.value
+        })
+    }
+
+    /**
+     * @method
+     * @param {Object} e Event DOM
+     * @param {int} val new diameter
+     * @description Handle Slider value(diameter) change
+     */
+    handleSliderChange = (e, val) => {
+        this.setState({
+            diameter: val
+        })
+    }
+    /**
+     * @method 
+     * @description SetState to hide loader */
+    hideLoader = () => {
+        this.setState({ loading: false });
+    }
+    /**
+     * @method 
+     * @description SetState to show loader */
+    showLoader = () => {
+        this.setState({ loading: true });
+    }
+
+    /**
+     * @method
+     * @param {Object} event Event DOM
+     * @description Handle Form submission to POST to backend
+     */
+    handleSubmit = (event) => {
+        event.preventDefault()
+        this.showLoader()
+
+        let body = {
+            templateName: this.state.name,
+            trail: {
+                width: this.state.width,
+                height: this.state.height,
+                diameter: this.state.diameter,
+                heading: this.state.heading,
+                instruction: this.state.isB ? this.state.desPartB : this.state.desPartA,
+                tokens: this.state.json
+            }
+        }
+
+        if (this.state.json.length &lt;= 0) {
+            this.hideLoader()
+            return false
+        }
+
+        axios.post("https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/createTemplate", body)
+            .then(res => {
+                console.log(res)
+                alert("Template Created!")
+                this.props.history.push({
+                    pathname: '/user-page'
+                })
+            })
+            .catch(err => {
+                console.log(err)
+                alert("Error! Template Not Created!")
+                return false;
+            })
+
+    }
+
+    render() {
+        return (
+            &lt;div className="ctemp-bg" >
+                &lt;div ref={elem => this.canvasDiv = elem} className="m-3 p-3 ">
+                    &lt;canvas ref={elem => this.canvas = elem} className="converingCanvas" width={this.state.width} height={this.state.height} style={{ border: "1px solid #000000" }}>&lt;/canvas>
+                &lt;/div>
+                &lt;div>
+                    &lt;form onSubmit={this.handleSubmit}>
+                        &lt;Paper className="m-3 ml-n2 p-3 align-items-center ctemp-side">
+                                &lt;h2>Create Template&lt;/h2>
+                            &lt;FormControl variant="outlined" className="w-100">
+                                &lt;TextField
+                                    required
+                                    id="outlined-name"
+                                    label="Template Name"
+                                    placeholder="SG001-EX"
+                                    name="name"
+                                    onChange={this.handleChange}
+                                    value={this.state.name}
+                                    margin="normal"
+                                    variant="outlined"
+                                    type="text"
+                                    rowsMax={1}
+                                />
+                            &lt;/FormControl>
+
+                            &lt;FormControl variant="outlined" className="w-100">
+                                &lt;TextField
+                                    required
+                                    id="outlined-heading"
+                                    label="Template Heading"
+                                    placeholder="Part X"
+                                    name="heading"
+                                    onChange={this.handleChange}
+                                    value={this.state.heading}
+                                    margin="normal"
+                                    variant="outlined"
+                                    type="text"
+                                    rowsMax={1}
+                                />
+                            &lt;/FormControl>
+                            &lt;FormControl variant="outlined" className="w-100">
+                                &lt;TextField
+                                    id="outlined-instruction"
+                                    label="Template Instruction"
+                                    placeholder="Click BEGIN to start"
+                                    name="instruction"
+                                    onChange={this.handleChange}
+                                    value={this.state.isB ? this.state.desPartB : this.state.desPartA}
+                                    margin="normal"
+                                    variant="outlined"
+                                    type="text"
+                                    multiline
+                                    inputProps={{
+                                        readOnly: true
+                                    }}
+                                />
+                            &lt;/FormControl>
+
+                            &lt;p>
+                                &lt;span>{this.state.isB ? "Part B" : "Part A"}&lt;/span> &lt;Switch value={this.isB} name="isB" onClick={this.handleChange} color="primary" />
+                            &lt;/p>
+                            &lt;Typography id="discrete-slider-custom" gutterBottom>
+                                Bubble Diameter
+                                        &lt;/Typography>
+                            &lt;Slider
+                                aria-labelledby="diameter"
+                                step={1}
+                                name="diameter"
+                                value={this.state.diameter}
+                                valueLabelDisplay="on"
+                                onChange={this.handleSliderChange}
+                                min={10}
+                                max={80}
+                            />
+                            &lt;ButtonGroup variant="outlined" fullWidth className="mt-3">
+                                &lt;Button color="primary" onClick={this.clearCanvas}>
+                                    Clear
+                            &lt;/Button>
+                                &lt;Button color="primary" onClick={this.undoCanvas}>
+                                    Undo
+                            &lt;/Button>
+                            &lt;/ButtonGroup>
+                            &lt;div className="position-relative mt-3">
+                                &lt;Button disabled={this.state.loading} variant="contained" color="primary" className="w-100" type="submit">
+                                    Create Template
+                            &lt;/Button>
+                                {this.state.loading &amp;&amp; &lt;CircularProgress size={40} className="button-loading" />}
+                            &lt;/div>
+
+                            &lt;Button className="mt-3" variant="outlined" onClick={() => this.props.history.goBack()}>back&lt;/Button>
+                        &lt;/Paper>
+                    &lt;/form>
+                &lt;/div>
+            &lt;/div>
+        )
+    }
+}
+
+
+export default CreateTemplate</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="Appbar.html">Appbar</a></li><li><a href="BlogPage.html">BlogPage</a></li><li><a href="Bubble.html">Bubble</a></li><li><a href="BubbleCreator.html">BubbleCreator</a></li><li><a href="BubbleScreen.html">BubbleScreen</a></li><li><a href="CompletionPage.html">CompletionPage</a></li><li><a href="CreateCompleted.html">CreateCompleted</a></li><li><a href="CreateExperiment.html">CreateExperiment</a></li><li><a href="CreateExperimentForm.html">CreateExperimentForm</a></li><li><a href="CreateSubmission.html">CreateSubmission</a></li><li><a href="CreateTemplate.html">CreateTemplate</a></li><li><a href="DoctorPage.html">DoctorPage</a></li><li><a href="ExperimentCard.html">ExperimentCard</a></li><li><a href="ExperimentPage.html">ExperimentPage</a></li><li><a href="ExperimentSettings.html">ExperimentSettings</a></li><li><a href="ExperimentStat.html">ExperimentStat</a></li><li><a href="ExperimentTest.html">ExperimentTest</a></li><li><a href="Footer.html">Footer</a></li><li><a href="ForgetPassPage.html">ForgetPassPage</a></li><li><a href="HomePage.html">HomePage</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="PersonalParticulars.html">PersonalParticulars</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="SideParameter.html">SideParameter</a></li><li><a href="SignInLink.html">SignInLink</a></li><li><a href="SignUpPage.html">SignUpPage</a></li><li><a href="SubmissionPage.html">SubmissionPage</a></li><li><a href="UserPage.html">UserPage</a></li><li><a href="UserPageCard.html">UserPageCard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 15 2019 11:09:09 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

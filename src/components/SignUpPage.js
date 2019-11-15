@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 
+/** Sign up page for new users */
 class SignUpPage extends Component{
 
+    /** 
+     * @method
+     * @description POST when user submit */
     handleSubmit = () => {
 
     }
-
     render() {
         return (
             <div>

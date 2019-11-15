@@ -5,14 +5,23 @@ import Footer from './Footer'
 import Appbar from './Appbar'
 import axios from "axios"
 
+/**
+* 
+* @param {Object} aboutRef Reference to About in home page 
+*/
 class HomePage extends Component {
-
+    
     state = {
         id: "",
         error: "",
         loading: false
     }
 
+    /**
+     * @method
+     * @description Handles submission of experiment ID
+     * @param {Object} event DOM reference to the form
+     */
     submitFormHandler = (event) => {
         event.preventDefault();
         console.log("SUBMIT")
@@ -41,15 +50,23 @@ class HomePage extends Component {
             })
     }
 
-
+    /**
+     * @method 
+     * @description SetState to hide loader */
     hideLoader = () => {
         this.setState({ loading: false });
     }
-
+    /** 
+     * @method
+     * @description SetState to show loader */
     showLoader = () => {
         this.setState({ loading: true });
     }
-
+    /** 
+     * @method
+     * @description Handle input change when user enter experimentID 
+     * @param {Object} e Event DOM
+    */
     handleOnChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value,

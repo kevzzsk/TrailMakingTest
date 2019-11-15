@@ -5,20 +5,21 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Stepper from '@material-ui/core/Stepper';
 import Paper from '@material-ui/core/Paper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from "@material-ui/lab/Skeleton"
 
 import BlogData from '../template/blogData'
 
+
+/** Blog page for participants to learn more about dementia patient and help lines */
 class BlogPage extends Component {
 
+    /** @member */
     state = {
         activeStep: 10,
         steps: ["He/she should see a doctor for an assessment and diagnosis.",
@@ -29,6 +30,7 @@ class BlogPage extends Component {
         loading: false
     }
 
+    /** Init Data */
     componentDidMount(){
         this.setState({loading:true})
         setTimeout(function() { //Start the timer
@@ -36,6 +38,11 @@ class BlogPage extends Component {
         }.bind(this), 1000)
     }
 
+    /**
+     * @method
+     * @param {int} index index of ICON
+     * @description return respective icon based on index
+     */
     getIconLabel = (index)=>{
         switch (index) {
             case 1:
@@ -53,11 +60,16 @@ class BlogPage extends Component {
         }
     }
 
+    /**
+     * @method
+     * @param {*} props 
+     * @description return Icon
+     * @returns {Object} Display ICON
+     */
     ColorlibStepIcon =(props)=> {
       
         return (
-          <div
-          >
+          <div>
             {this.getIconLabel(props.icon)}
           </div>
         );

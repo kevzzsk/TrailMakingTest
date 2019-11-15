@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, CardContent, Typography } from '@material-ui/core';
 
+/** Reuseable component to display user information as a card*/
 class UserPageCard extends Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         return (

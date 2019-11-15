@@ -2,11 +2,14 @@ import React, { Component } from 'react'
 
 import Bubble from "./Bubble"
 import Theme from "./Theme"
-import { minHeight } from '@material-ui/system';
 import PopUp from './Popup'
 
-class BubbleScreen extends Component {
 
+/**
+ * Handles the display and interactive part of the test. Display bubbles correctly
+ */
+class BubbleScreen extends Component {
+    /** @constructor */
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +26,7 @@ class BubbleScreen extends Component {
             stop: undefined,
             events: []
         };
-    }
+    }  
 
     static defaultProps = {
         //beginEndLabels: false,
@@ -44,7 +47,9 @@ class BubbleScreen extends Component {
         onMiss: (date, correctToken, x, y) => { }
     }
 
-
+    /**
+     * Initialize the neccessary data
+     */
     componentDidMount() {
         const height = this.divElement.clientHeight;
         const width = this.divElement.clientWidth;
@@ -54,6 +59,7 @@ class BubbleScreen extends Component {
         //console.time("START")
     }
 
+    /** Changes trail when necessary/updated */
     componentDidUpdate(){
         if(this.state.trail !== this.props.trail){
             this.setState({
@@ -63,13 +69,22 @@ class BubbleScreen extends Component {
         }
     }
 
+    /** 
+     * @method
+     * @description calculate Scale value for x-axis
+     * @returns {int} Scale value of X
+     */
     getScaleX = () => {
         let canvas_w = this.props.trail.width;
         let radius = this.props.trail.diameter/2
         let scale_x = (this.state.width-radius-5) / canvas_w;
         return scale_x
     }
-
+    /** 
+     * @method
+     * @description calculate Scale value for y-axis
+     * @returns {int} Scale value of Y
+     */
     getScaleY = () => {
         let canvas_h = this.props.trail.height;
         let radius = this.props.trail.diameter/2
@@ -77,6 +92,14 @@ class BubbleScreen extends Component {
         return scale_y
     }
 
+    /**
+     * @method
+     * @param {string} type Type of event: error,success or miss
+     * @param {Date} date DateTime of event click
+     * @param {Object} correctToken The correct next token 
+     * @param {Object} selectedToken The token selected by participants
+     * @description Update state with event for every click/interaction from user 
+     */
     update = (type, date, correctToken, selectedToken) => {
         this.data.events.push({
             stamp: date.getTime(),
@@ -87,6 +110,11 @@ class BubbleScreen extends Component {
         console.log(this.data.events[this.data.events.length - 1]);
     }
 
+    /**
+     * @method
+     * @param {Date} date DateTime of completion
+     * @description Update Completion progress and collect date time
+     */
     onCompleted = (date) => {
         this.data.stop = date.getTime();
         //console.log((this.data.stop - this.data.start) / 1000);
@@ -96,6 +124,12 @@ class BubbleScreen extends Component {
         this.props.onCompleted(this.data)
     }
 
+    /**
+     * @method
+     * @param {Object} e Event DOM
+     * @param {i} index index of bubble
+     * @description If participant selected correctly, update state to success, set color to green
+     */
     handleSuccess = (e, i) => {
 
         this.handled = true; // to prevent handleMiss from firing
@@ -107,7 +141,12 @@ class BubbleScreen extends Component {
             this.onCompleted(new Date());
         }
     }
-
+    /**
+     * @method
+     * @param {Object} e Event DOM
+     * @param {i} index index of bubble
+     * @description If participant selected wrongly, update state to error, display error message
+     */
     handleError = (e, i) => {
 
         this.handled = true; // to prevent handleMiss from firing
@@ -125,8 +164,13 @@ class BubbleScreen extends Component {
                 this.props.errorDuration
             );
         }
-    }
+    }   
 
+    /**
+     * @method
+     * @param {Object} e Event DOM
+     * @description If participant missed the bubbles, clicks will still be registered as miss
+     */
     handleMiss = (e) => {
         if (this.state.progress < this.props.trail.tokens.length - 1) { // stop handler when test is completed
             if (!this.handled) {
@@ -136,6 +180,11 @@ class BubbleScreen extends Component {
         }
     }
 
+    /**
+     * @method
+     * @description Generate each bubbles with necessary info and methods
+     * @returns {Object} return list of Bubbles objects initialised
+     */
     renderBubbles = () => {
         let tokens = this.props.trail.tokens;
         let diameter = this.props.trail.diameter;
@@ -176,6 +225,10 @@ class BubbleScreen extends Component {
         return bubbles;
     }
 
+    /**
+     * @method
+     * @description Display Completion message when progress is completed
+     */
     renderCompletionContent = () => {
         if (this.props.retry === false) {
             return this.props.completedText;

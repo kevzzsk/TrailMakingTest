@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Link from "@material-ui/core/Link"
 
+/** Footer for homepage */
 class Footer extends Component {
   render() {
     return (

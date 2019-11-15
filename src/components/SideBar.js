@@ -4,6 +4,11 @@ import { Grid, Paper, Typography, Button, ButtonGroup } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 import Steppers from "./Steppers"
+
+
+/**
+ * Side bar of Experiment which displays relevant information about the experiment
+ */
 class SideBar extends Component {
 
     static defaultProps={
@@ -18,6 +23,12 @@ class SideBar extends Component {
         trail: []
     }
 
+    /**
+     * @method
+     * @param {*} props 
+     * @description Get next routing route
+     * @returns {string} Return pathname String
+     */
     getPath = (props) => {
         if (props.test === true) {
             return "/experiment"

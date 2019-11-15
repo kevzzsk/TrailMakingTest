@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/BubbleCreator.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/BubbleCreator.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react'
+import Bubble from './Bubble';
+import { width } from '@material-ui/system';
+
+
+const HOOK_SVG = 'm129.03125 63.3125c0-34.914062-28.941406-63.3125-64.519531-63.3125-35.574219 0-64.511719 28.398438-64.511719 63.3125 0 29.488281 20.671875 54.246094 48.511719 61.261719v162.898437c0 53.222656 44.222656 96.527344 98.585937 96.527344h10.316406c54.363282 0 98.585938-43.304688 98.585938-96.527344v-95.640625c0-7.070312-4.640625-13.304687-11.414062-15.328125-6.769532-2.015625-14.082032.625-17.960938 6.535156l-42.328125 64.425782c-4.847656 7.390625-2.800781 17.3125 4.582031 22.167968 7.386719 4.832032 17.304688 2.792969 22.160156-4.585937l12.960938-19.71875v42.144531c0 35.582032-29.863281 64.527344-66.585938 64.527344h-10.316406c-36.714844 0-66.585937-28.945312-66.585937-64.527344v-162.898437c27.847656-7.015625 48.519531-31.773438 48.519531-61.261719zm-97.03125 0c0-17.265625 14.585938-31.3125 32.511719-31.3125 17.929687 0 32.511719 14.046875 32.511719 31.3125 0 17.261719-14.582032 31.3125-32.511719 31.3125-17.925781 0-32.511719-14.050781-32.511719-31.3125zm0 0'
+const HOOK_PATH = new Path2D(HOOK_SVG)
+const SCALE = 0.3
+const OFFSET_X = 60
+const OFFSET_Y = 265
+function draw(ctx, location) {
+    ctx.fillStyle = 'deepskyblue';
+    ctx.shadowColor = 'dodgerblue';
+    ctx.shadowBlur = 20;
+    ctx.save();
+    ctx.scale(SCALE, SCALE);
+    ctx.translate(location.x / SCALE - OFFSET_X, location.y / SCALE - OFFSET_Y);
+    ctx.fill(HOOK_PATH);
+    ctx.restore();
+}
+
+/** Draw all Bubbles for experiment */
+class BubbleCreator extends Component {
+    /** @constructor */
+    constructor(props) {
+        super(props)
+        this.state = {
+            height: 0,
+            width: 0,
+            locations: [],
+            ctx: null
+        }
+    }
+
+    /**
+     * Iinit canvas
+     */
+    componentDidMount() {
+        const height = this.divElement.clientHeight;
+        const width = this.divElement.clientWidth;
+        const ctx = this.canvasRef.getContext('2d');
+        this.setState({ height, width,ctx });
+    }
+    /**
+     * @method
+     * @param {e} e Event DOM
+     * @description check for every user click if its success,miss or error
+     */
+    handleCanvasClick(e){
+        const newLocation = { x: e.clientX, y: e.clientY };
+        this.setState({locations:[...this.state.locations,newLocation]})
+    }
+
+    render() {
+        const {locations} = this.state
+        console.log(locations)
+        return (
+            &lt;div
+                className="h-100"
+                ref={(divElement) => this.divElement = divElement}>
+                &lt;canvas 
+                    width={this.state.width} 
+                    height={this.state.height} 
+                    onClick={e => this.handleCanvasClick} 
+                    ref={(canvasRef) => this.canvasRef = canvasRef}>
+                &lt;/canvas>
+
+            &lt;/div>
+        )
+    }
+}
+
+export default BubbleCreator;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="Appbar.html">Appbar</a></li><li><a href="BlogPage.html">BlogPage</a></li><li><a href="Bubble.html">Bubble</a></li><li><a href="BubbleCreator.html">BubbleCreator</a></li><li><a href="BubbleScreen.html">BubbleScreen</a></li><li><a href="CompletionPage.html">CompletionPage</a></li><li><a href="CreateCompleted.html">CreateCompleted</a></li><li><a href="CreateExperiment.html">CreateExperiment</a></li><li><a href="CreateExperimentForm.html">CreateExperimentForm</a></li><li><a href="CreateSubmission.html">CreateSubmission</a></li><li><a href="CreateTemplate.html">CreateTemplate</a></li><li><a href="DoctorPage.html">DoctorPage</a></li><li><a href="ExperimentCard.html">ExperimentCard</a></li><li><a href="ExperimentPage.html">ExperimentPage</a></li><li><a href="ExperimentSettings.html">ExperimentSettings</a></li><li><a href="ExperimentStat.html">ExperimentStat</a></li><li><a href="ExperimentTest.html">ExperimentTest</a></li><li><a href="Footer.html">Footer</a></li><li><a href="ForgetPassPage.html">ForgetPassPage</a></li><li><a href="HomePage.html">HomePage</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="PersonalParticulars.html">PersonalParticulars</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="SideParameter.html">SideParameter</a></li><li><a href="SignInLink.html">SignInLink</a></li><li><a href="SignUpPage.html">SignUpPage</a></li><li><a href="SubmissionPage.html">SubmissionPage</a></li><li><a href="UserPage.html">UserPage</a></li><li><a href="UserPageCard.html">UserPageCard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 15 2019 11:09:09 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

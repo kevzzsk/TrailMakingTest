@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/LoginPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/LoginPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import { Link } from "react-router-dom";
+import {
+    Button,
+    Snackbar,
+    SnackbarContent,
+    FormControl,
+    TextField,
+    CircularProgress,
+    Paper
+} from '@material-ui/core';
+import axios from 'axios';
+
+
+
+/**
+ * Display Login forms
+ */
+class LoginPage extends Component {
+
+    cancelToken = axios.CancelToken;
+    souce = this.cancelToken.source();
+
+    state = {
+        username: "",
+        password: "",
+        success: null,
+        error: "",
+        loading: false,
+        accountType: 0
+    }
+    
+    /** cancel subscription and unmount safely */
+    componentWillUnmount() {
+        this.souce.cancel("Operation Cancelled")
+    }
+
+    /**
+     * @method
+     * @description Generic handler for all events
+     */
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value,
+            error: ""
+        })
+    }
+
+    /**
+     * @method
+     * @description Hide Loader animation
+     */
+    hideLoader = () => {
+        this.setState({ loading: false });
+    }
+    /**
+     * @method
+     * @description Show Loader animation
+     */
+    showLoader = () => {
+        this.setState({ loading: true });
+    }
+
+    /**
+     * @method
+     * @description Verify Login particulars with backend
+     */
+    checkLogin = () => {
+        this.showLoader()
+        try {
+            console.log(this.state)
+            // checks login details against DB
+            axios.get('https://cors-anywhere.herokuapp.com/https://easya.fyp2017.com/api/tmt/login', {
+                params: {
+                    username: this.state.username,
+                    password: this.state.password
+                }
+            })
+                .then(res => {
+                    console.log(res)
+                    this.hideLoader()
+                    this.props.login(res.data)
+                })
+                .catch(e => {
+                    //console.log(e)
+                    this.setState({
+                        success: false,
+                        error: "wrong credentials"
+                    })
+                    this.hideLoader()
+                });
+        } catch (err) {
+            if (axios.isCancel(err)) {
+                console.log("Request cancelled", err.message);
+
+            }
+        }
+    }
+
+    render() {
+        return (
+            &lt;div className="login-bg">
+                &lt;Paper className="m-auto login-item">
+                    &lt;form>
+                        &lt;div className="p-5">
+                            &lt;FormControl variant="outlined" className="w-100">
+                                &lt;TextField
+                                    required
+                                    id="outlined-username"
+                                    label="Username"
+                                    name="username"
+                                    error={this.state.error.length > 0}
+                                    onChange={this.handleChange}
+                                    value={this.state.username}
+                                    margin="normal"
+                                    variant="outlined"
+                                    type="username"
+                                    rowsMax={1}
+                                />
+                            &lt;/FormControl>
+                            &lt;FormControl variant="outlined" className="w-100">
+                                &lt;TextField
+                                    required
+                                    id="outlined-password"
+                                    label="Password"
+                                    name="password"
+                                    error={this.state.error.length > 0}
+                                    onChange={this.handleChange}
+                                    value={this.state.password}
+                                    margin="normal"
+                                    variant="outlined"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    rowsMax={1}
+                                />
+                            &lt;/FormControl>
+                            &lt;div className="position-relative mt-4">
+                                &lt;Button disabled={this.state.loading} className="btn experiment-btn" style={{ fontSize: "1rem" }} onClick={this.checkLogin}>
+                                    Login >
+                                &lt;/Button>
+                                {this.state.loading &amp;&amp; &lt;CircularProgress size={40} className="button-loading" />}
+                            &lt;/div>
+                            &lt;Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={this.state.success === false} autoHideDuration={600}>
+                                &lt;SnackbarContent variant="error" message="Wrong Username/Password!" />
+                            &lt;/Snackbar>
+
+                            &lt;div className="mt-2">
+                                &lt;Link to={'/sign-up-page'}>
+                                    &lt;span style={{ color: "#A0A0A0" }}>Sign up&lt;/span>
+                                &lt;/Link>
+                            &lt;/div>
+                            &lt;div >
+                                &lt;Link to={'/forget-password'}>
+                                    &lt;span style={{ color: "#A0A0A0" }}>Don't remember your password?&lt;/span>
+                                &lt;/Link>
+                            &lt;/div>
+
+
+                        &lt;/div>
+                    &lt;/form>
+                &lt;/Paper>
+            &lt;/div>
+        )
+    }
+}
+
+export default LoginPage;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="Appbar.html">Appbar</a></li><li><a href="BlogPage.html">BlogPage</a></li><li><a href="Bubble.html">Bubble</a></li><li><a href="BubbleCreator.html">BubbleCreator</a></li><li><a href="BubbleScreen.html">BubbleScreen</a></li><li><a href="CompletionPage.html">CompletionPage</a></li><li><a href="CreateCompleted.html">CreateCompleted</a></li><li><a href="CreateExperiment.html">CreateExperiment</a></li><li><a href="CreateExperimentForm.html">CreateExperimentForm</a></li><li><a href="CreateSubmission.html">CreateSubmission</a></li><li><a href="CreateTemplate.html">CreateTemplate</a></li><li><a href="DoctorPage.html">DoctorPage</a></li><li><a href="ExperimentCard.html">ExperimentCard</a></li><li><a href="ExperimentPage.html">ExperimentPage</a></li><li><a href="ExperimentSettings.html">ExperimentSettings</a></li><li><a href="ExperimentStat.html">ExperimentStat</a></li><li><a href="ExperimentTest.html">ExperimentTest</a></li><li><a href="Footer.html">Footer</a></li><li><a href="ForgetPassPage.html">ForgetPassPage</a></li><li><a href="HomePage.html">HomePage</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="PersonalParticulars.html">PersonalParticulars</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="SideParameter.html">SideParameter</a></li><li><a href="SignInLink.html">SignInLink</a></li><li><a href="SignUpPage.html">SignUpPage</a></li><li><a href="SubmissionPage.html">SubmissionPage</a></li><li><a href="UserPage.html">UserPage</a></li><li><a href="UserPageCard.html">UserPageCard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 15 2019 11:09:09 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

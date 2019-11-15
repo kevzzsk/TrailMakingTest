@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/SideBar.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/SideBar.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react'
+
+import { Grid, Paper, Typography, Button, ButtonGroup } from '@material-ui/core'
+import { Link } from 'react-router-dom'
+
+import Steppers from "./Steppers"
+
+
+/**
+ * Side bar of Experiment which displays relevant information about the experiment
+ */
+class SideBar extends Component {
+
+    static defaultProps={
+        activeStep: 0,
+        test: false,
+        id: 0,
+        heading:"SAMPLE PART A",
+        description:"THIS IS NOT PART OF THE EXPERIMENT!\n\nThere are numbers in circles on this page.\nPlease click on the circles from one number to the next, in order. Start at 1 , then go to 2 , then go to 3 , and so on.\nWork as quickly and accurately as you can.\n\nAt the end of the test please click on CONTINUE button",
+        expIndex:0,
+        data: "",
+        participantDetails: {},
+        trail: []
+    }
+
+    /**
+     * @method
+     * @param {*} props 
+     * @description Get next routing route
+     * @returns {string} Return pathname String
+     */
+    getPath = (props) => {
+        if (props.test === true) {
+            return "/experiment"
+        } else if (props.expIndex >= props.trail.length-1) {
+            return "/submission"
+        } else {
+            return "/experiment"
+        }
+    }
+
+
+    render() {
+        const {trail,expIndex,test,heading,description} = this.props
+        return (
+            &lt;div className="h-100">
+                &lt;Grid container spacing={0} direction="column" justify="space-between" alignItems="stretch" className="h-100">
+                    &lt;Grid item>
+                        &lt;Grid container spacing={2} direction="column" justify="center" alignItems="stretch" className="nested-grid-top">
+                            &lt;Grid item >
+                                &lt;Paper className="p-4 mt-3 mx-3">
+                                    &lt;Typography variant="h5">Experiment ID: {test ? "TEST" : this.props.id}&lt;/Typography>
+                                &lt;/Paper>
+                            &lt;/Grid>
+                            &lt;Grid item >
+                                &lt;Paper className="p-4 mx-3">
+                                    &lt;Typography variant="h4">{test? heading : trail[expIndex].heading}&lt;/Typography>
+                                    &lt;br />
+                                    &lt;Typography variant="h5" style={{fontWeight:"600"}}>Instructions:&lt;/Typography>
+                                    &lt;Typography variant="body2" style={{ whiteSpace: "pre-wrap", fontSize:"20px" }}>{test? description: trail[expIndex].description}&lt;/Typography>
+                                &lt;/Paper>
+                            &lt;/Grid>
+                        &lt;/Grid>
+                    &lt;/Grid>
+                    &lt;Grid item className="w-100 mb-4">
+                        &lt;Grid container spacing={0} direction="row" justify="center" alignItems="center" className="nested-grid-bot">
+                        &lt;Steppers trails={trail} activeStep={this.props.activeStep}/>
+                            &lt;Grid item >
+                                &lt;ButtonGroup>
+                                    &lt;Button variant="text" className="mr-1" size="large" onClick={()=> this.props.goBack()} >Cancel&lt;/Button>
+                                    &lt;Link to={{
+                                        pathname: this.getPath(this.props),
+                                        state: {
+                                            experimentID: this.props.id,
+                                            doctorID:this.props.doctorID,
+                                            expIndex: test ? expIndex : expIndex + 1,
+                                            payload: this.props.data,
+                                            activeStep:this.props.activeStep+1,
+                                            participantDetails:this.props.participantDetails,
+                                            trail:trail
+                                        }
+                                    }}>&lt;Button variant="contained">Continue&lt;/Button>&lt;/Link>
+
+                                &lt;/ButtonGroup>
+                            &lt;/Grid>
+                        &lt;/Grid>
+                    &lt;/Grid>
+                &lt;/Grid>
+            &lt;/div>
+        )
+    }
+}
+
+export default SideBar;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="Appbar.html">Appbar</a></li><li><a href="BlogPage.html">BlogPage</a></li><li><a href="Bubble.html">Bubble</a></li><li><a href="BubbleCreator.html">BubbleCreator</a></li><li><a href="BubbleScreen.html">BubbleScreen</a></li><li><a href="CompletionPage.html">CompletionPage</a></li><li><a href="CreateCompleted.html">CreateCompleted</a></li><li><a href="CreateExperiment.html">CreateExperiment</a></li><li><a href="CreateExperimentForm.html">CreateExperimentForm</a></li><li><a href="CreateSubmission.html">CreateSubmission</a></li><li><a href="CreateTemplate.html">CreateTemplate</a></li><li><a href="DoctorPage.html">DoctorPage</a></li><li><a href="ExperimentCard.html">ExperimentCard</a></li><li><a href="ExperimentPage.html">ExperimentPage</a></li><li><a href="ExperimentSettings.html">ExperimentSettings</a></li><li><a href="ExperimentStat.html">ExperimentStat</a></li><li><a href="ExperimentTest.html">ExperimentTest</a></li><li><a href="Footer.html">Footer</a></li><li><a href="ForgetPassPage.html">ForgetPassPage</a></li><li><a href="HomePage.html">HomePage</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="PersonalParticulars.html">PersonalParticulars</a></li><li><a href="SideBar.html">SideBar</a></li><li><a href="SideParameter.html">SideParameter</a></li><li><a href="SignInLink.html">SignInLink</a></li><li><a href="SignUpPage.html">SignUpPage</a></li><li><a href="SubmissionPage.html">SubmissionPage</a></li><li><a href="UserPage.html">UserPage</a></li><li><a href="UserPageCard.html">UserPageCard</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 15 2019 11:09:09 GMT+0800 (Singapore Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

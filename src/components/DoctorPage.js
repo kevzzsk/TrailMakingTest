@@ -7,6 +7,8 @@ import exData from '../template/exData';
 
 import ViewExperiment from "./ViewExperiment"
 
+
+/** Doctor page. Dashboard for doctor */
 class DoctorPage extends Component {
 
     state={
@@ -15,6 +17,10 @@ class DoctorPage extends Component {
     }
 
 
+    /**
+     * @method
+     * @description Ensure page is loaded with appropriate account data. Get cache data from localstorage
+     */
     componentWillMount(){
         if (this.props.location.state !== undefined ){
             localStorage.setItem("account",JSON.stringify(this.props.location.state.account))
@@ -39,6 +45,11 @@ class DoctorPage extends Component {
         
     }
 
+    /** 
+     * @method
+     * @description Generate a list of experiments on a card
+     * @returns {Object} list of experimentCards 
+     */
     genCards = () => {
         return exData.Experiments.map((item, index) => {
             return (<Link key={index} to={`/user-page/view-experiments/${item.experimentID}`}><UserPageCard key={index} title={item.title} experimentID={item.experimentID} status={item.status} daysOnline={item.daysOnline} respondents={item.respondents} createDate={item.createDate} startDate={item.startDate} endDate={item.endDate} /></Link>)
@@ -51,7 +62,12 @@ class DoctorPage extends Component {
                 <div className="dashboard-left">
                     <img className="rounded-circle" width="200px" height="200px" src={this.state.dataLoaded? this.state.account.avatarURL :require('./profile.png')} />
                     <div className="w-100 align-content-stretch">
-                        <Link to={"/doctor-page/view-experiments"}><Button size="large" color="primary" variant="contained" className="w-100 mt-3">View All Experiments</Button></Link>
+                        <Link to={{
+                            pathname:"/doctor-page/my-patients",
+                            state:{
+                                account:this.state.account
+                            }
+                        }}><Button size="large" color="primary" variant="contained" className="w-100 mt-3">View My Patients</Button></Link>
                     </div>
                 </div>
                 <div className="w-100 h-100">

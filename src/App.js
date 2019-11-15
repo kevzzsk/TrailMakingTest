@@ -9,7 +9,6 @@ import HomePage from './components/HomePage';
 import CompletionPage from './components/CompletionPage'
 import LoginPage from './components/LoginPage';
 import UserPage from './components/UserPage';
-import ViewExperiment from './components/ViewExperiment';
 import CreateExperiment from './components/createNewExp/CreateExperiment';
 import SignUpPage from './components/SignUpPage';
 import ForgetPassPage from './components/ForgetPassPage';
@@ -23,7 +22,14 @@ import CreateTemplate from './components/CreateTemplate'
 import BlogPage from './components/BlogPage'
 import SubmissionPage from './components/SubmissionPage'
 import CreateSubmission from "./components/createNewExp/CreateSubmission"
+import MyPatients from './components/MyPatients'
 class App extends Component {
+	/**
+	 * 
+	 * @param {*} props 
+	 */
+
+	/** @constructor */
 	constructor(props) {
 		super(props)
 		window.onclick = () => {
@@ -38,12 +44,21 @@ class App extends Component {
 		}
 	}
 
+	/**
+	 * @method
+	 */
 	componentDidMount() {
 		this.setState({
 			isAuthenticated: localStorage.getItem("isAuthenticated") === null ? false : localStorage.getItem("isAuthenticated") === "true"
 		})
 	}
 
+	/**
+	 * @method
+	 * @description Handle Login function which set isAuthenticated to True and route to the correct account page. Doctor (accountType 1) Researcher (accountType 2) 
+	 * @param {Object} acc Account object
+	 * @returns {void}
+	 */
 	login = (acc) => {
 		localStorage.setItem("isAuthenticated", "true")
 		this.setState({
@@ -65,6 +80,10 @@ class App extends Component {
 		}
 	}
 
+	/** 
+	 * @method
+	 * @description Handle logout button which set isAuthenticated to False and remove account data. Route back to /login
+	 */
 	logout = () => {
 		localStorage.setItem("isAuthenticated", "false")
 		localStorage.removeItem("account")
@@ -97,7 +116,7 @@ class App extends Component {
 					<Route path="/sign-up-page" exact component={SignUpPage} />
 					<Route path="/forget-password" exact component={ForgetPassPage} />
 					<Route path="/doctor-page" exact component={DoctorPage} />
-					<Route path="/doctor-page/view-experiments" exact component={ViewExperiment} />
+					<Route path="/doctor-page/my-patients" exact component={MyPatients} />
 					<Route path="/user-page/create-template" exact component={CreateTemplate} />
 					<Route path="/blog" exact component={BlogPage} />
 					<Route render={(props) => <HomePage {...props} aboutRef={this.state.aboutRef} />} />

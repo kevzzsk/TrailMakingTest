@@ -8,7 +8,6 @@ import Typography from "@material-ui/core/Typography"
 import FormControl from "@material-ui/core/FormControl"
 import FormLabel from "@material-ui/core/FormLabel"
 import RadioGroup from "@material-ui/core/RadioGroup"
-import InputAdornment from "@material-ui/core/InputAdornment"
 import ButtonGroup from "@material-ui/core/ButtonGroup"
 import FormControlLabel from "@material-ui/core/FormControlLabel"
 import InputLabel from "@material-ui/core/InputLabel"
@@ -16,9 +15,11 @@ import Select from "@material-ui/core/Select"
 import Grid from "@material-ui/core/Grid"
 import Radio from "@material-ui/core/Radio"
 import Divider from "@material-ui/core/Divider"
-import { Link } from "react-router-dom"
 import Steppers from './Steppers'
 
+/**
+ * PersonalParticulars handles participant form page where user data is collected
+ */
 class PersonalParticulars extends Component {
 
     static defaultProps = {
@@ -29,6 +30,7 @@ class PersonalParticulars extends Component {
         data: ""
     }
 
+    /** @constructor */
     constructor(props) {
         super(props)
         this.state = {
@@ -53,6 +55,12 @@ class PersonalParticulars extends Component {
         this.required = true // for debugging purposes
     }
 
+    /** init relevant data
+     * @param {string} experimentID Experiment ID
+     * @param {int} incomelabelWidth Label width of income input form
+     * @param {int} exerciseLabelWidth Label width of exercice input form
+     * @param {int} educationlabelWidth Label width of education input form
+     */
     componentDidMount() {
         this.setState({
             ExperimentID: this.props.location.state.experimentID,
@@ -62,6 +70,12 @@ class PersonalParticulars extends Component {
         })
     }
 
+
+    /** 
+     * @method
+     * @param {Object} event input event
+     * @description Toggle switch button when participant is under doctor supervision
+    */
     handleSwitchChange = (event) => {
         this.setState({
             [event.target.name]: event.target.checked,
@@ -70,12 +84,23 @@ class PersonalParticulars extends Component {
         })
     }
 
+    /** 
+     * @method
+     * @param {Object} event input event
+     * @description handles generic input form update
+    */
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
     }
 
+    /** 
+     * @method
+     * @description verify and validate that all input fields in the form is filled. Once verified, the details are pushed into the next page /test
+     * @param {Object} e event DOM of form
+     * 
+     */
     handleSubmit = (e) => {
         e.preventDefault()
         console.log("SUBMIT")

@@ -8,12 +8,15 @@ import Skeleton from "@material-ui/lab/Skeleton"
 import axios from "axios"
 
 import CanvasJS from '../assets/canvasjs.react'
-import exData from '../template/exData'
 import DatasetViews from './DatasetViews'
 import ExperimentSettings from "./ExperimentSettings"
 
 var CanvasJSChart = CanvasJS.CanvasJSChart;
 
+
+/**
+ * Shows experiment results in charts
+ */
 class ExperimentStat extends Component {
 
     constructor(props) {
@@ -26,15 +29,23 @@ class ExperimentStat extends Component {
             loading: false
         }
     }
-
+    /**
+     * @method
+     * @description Hide loader animation
+     */
     hideLoader = () => {
         this.setState({ loading: false });
     }
 
+    /**
+     * @method
+     * @description Show loader animation
+     */
     showLoader = () => {
         this.setState({ loading: true });
     }
 
+    /** get data based on ExperimentID clicked */
     componentWillMount() {
         // GET DATA based on Match ID
         this.showLoader()
@@ -59,6 +70,11 @@ class ExperimentStat extends Component {
             })
     }
 
+    /**
+     * @method
+     * @param {Object} data All participant results for that experiment
+     * @description Calculate all necessary metrics for graphs plotting
+     */
     getAllMetrics = (data) => {
         let metrics = ["totalTime", "success", "error", "miss", "error_rate", "miss_rate"]
         let processedData = data.templateExperiments.map(experiment => { return { 'label': experiment.heading, "data": this.getMetrics(experiment, metrics) } })
@@ -66,6 +82,13 @@ class ExperimentStat extends Component {
         this.setState({ processedData })
     }
 
+    /**
+     * @method
+     * @param {Object} exp Experiment data raw
+     * @param {Object} metrics List of metrics to be calculated
+     * @description Get all the metrics needed
+     * @returns {Object} object in specified metrics{list} passed in
+     */
     getMetrics = (exp, metrics) => {
         let returnVal = {
             [metrics[0]]: [],
@@ -80,6 +103,13 @@ class ExperimentStat extends Component {
         return returnVal
     }
 
+    /**
+     * @method
+     * @param {Object} exp Experiment data raw
+     * @param {Object} metrics List of metrics to be calculated
+     * @description Caculate metrics needed
+     * @returns {Array} array of [min_1, q1_2, q3_3, max_4, med_5]
+     */
     calcMetrics = (exp, metric) => {
         let data_array = []
         if (["error_rate", "miss_rate"].includes(metric)) {
@@ -97,6 +127,12 @@ class ExperimentStat extends Component {
         return [min_1, q1_2, q3_3, max_4, med_5]
     }
 
+    /**
+     * @method
+     * @param {Object} data participants results flattened
+     * @param {int} q quartile value to be calculated
+     * @returns {int} quartile result
+     */
     getQuartile = (data, q) => {
         data.sort(function (a, b) { return a - b });
         var pos = ((data.length) - 1) * q;
@@ -109,6 +145,7 @@ class ExperimentStat extends Component {
         }
     }
 
+    /** Custom StyledTabs */
     StyledTabs = withStyles({
         indicator: {
             display: 'flex',
@@ -122,6 +159,7 @@ class ExperimentStat extends Component {
         },
     })(props => <Tabs {...props} style={{ position: "sticky", top: '57px', zIndex: 10, backgroundColor: 'white' }} TabIndicatorProps={{ children: <div /> }} />);
 
+    /** Custom StyleTab */
     StyledTab = withStyles(theme => ({
         root: {
             textTransform: 'none',
@@ -135,13 +173,24 @@ class ExperimentStat extends Component {
         },
     }))(props => <Tab disableRipple {...props} />);
 
+    /**
+     * @method
+     * @param {Object} e Event DOM
+     * @param {Object} index index of selected tab
+     * @description Change the selected tab index based on click
+     */
     onTabChange = (e, index) => {
         this.setState({
             selectedTab: index
         })
     }
 
-
+    /**
+     * @method
+     * @description Plot Time Chart
+     * @param {Object} data Data needed to plot time chart
+     * @returns {object} Time Chart
+     */
     time_chart = (data) => {
         return {
             theme: "light2",
@@ -162,6 +211,12 @@ class ExperimentStat extends Component {
         }
     }
 
+    /**
+     * @method
+     * @description Plot Metrics Chart
+     * @param {Object} data Data needed to plot metric chart
+     * @returns {object} Metric Chart
+     */
     metrics_chart = (data) => {
         return {
             theme: "light2",
@@ -183,6 +238,12 @@ class ExperimentStat extends Component {
         }
     }
 
+    /**
+     * @method
+     * @description Plot Metric rate Chart
+     * @param {Object} data Data needed to plot metric rate chart
+     * @returns {object} Metric rate Chart
+     */
     metricsRate_chart = (data) => {
         return {
             theme: "light2",
@@ -202,8 +263,12 @@ class ExperimentStat extends Component {
                 ...data.map(trail => { return { label: trail.label + " (MissRate)", y: trail.data.miss_rate } })]
             }]
         }
-    }
+    }  
 
+    /**
+     * @method
+     * @description Discretize TotalTime as it is a continuous variable. aka binning
+     */
     discretizeTime = () => {
         let data = this.state.data.templateExperiments.map(each => each.experimentResults.map(participant => participant.totalTime))
         console.log(data)
@@ -247,6 +312,12 @@ class ExperimentStat extends Component {
         })
     }
 
+    /**
+     * @method
+     * @description Plot Scatter Chart
+     * @param {Object} data Data needed to plot scatter chart
+     * @returns {object} Scatter Chart
+     */
     scatter_chart = (timeBins) => {
         if (timeBins.data.length === 0) {
             return {
@@ -285,12 +356,15 @@ class ExperimentStat extends Component {
             },
             data: timeBins.data.map(((data, i) => {
                 return {
-                    type:"column",
-                    xValueFormatString:`${this.state.data.templateExperiments[i].heading} (##.#s)`,
+                    type: "column",
+                    name: this.state.data.templateExperiments[i].heading,
+                    showInLegend: true,
+                    xValueFormatString: `${this.state.data.templateExperiments[i].heading} (##.#s)`,
                     yValueFormatString: "# participants",
-                    dataPoints:data.data_bins.map((bin, j) => {
-                        return { y: bin.length, x: timeBins.data[i].min + (j * timeBins.range) + (timeBins.range / 2) }
-                    })
+                    dataPoints:
+                        data.data_bins.map((bin, j) => {
+                            return { y: bin.length, x: timeBins.data[i].min + (j * timeBins.range) + (timeBins.range / 2) }
+                        })
                 }
             }))
         }
@@ -298,7 +372,10 @@ class ExperimentStat extends Component {
 
 
 
-
+    /**
+     * @method
+     * @description Plot All Chart
+     */
     getCharts = () => {
 
         return <div className="w-100 chart-wrapper">
@@ -310,6 +387,10 @@ class ExperimentStat extends Component {
         </div>
     }
 
+    /**
+     * @method
+     * @description Display skeleton when loading
+     */
     genSkeleton = () => {
         return <div className="skeleton-graph">
             <Skeleton width="100%" height={400} />
@@ -319,6 +400,11 @@ class ExperimentStat extends Component {
         </div>
     }
 
+    /**
+     * @method
+     * @param {int} index index of active tab
+     * @description Display neccesary content based on selected tab
+     */
     genBody = (index) => {
         switch (index) {
             case 0:

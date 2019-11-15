@@ -19,9 +19,9 @@ function draw(ctx, location) {
     ctx.restore();
 }
 
-
+/** Draw all Bubbles for experiment */
 class BubbleCreator extends Component {
-
+    /** @constructor */
     constructor(props) {
         super(props)
         this.state = {
@@ -32,13 +32,20 @@ class BubbleCreator extends Component {
         }
     }
 
+    /**
+     * Iinit canvas
+     */
     componentDidMount() {
         const height = this.divElement.clientHeight;
         const width = this.divElement.clientWidth;
         const ctx = this.canvasRef.getContext('2d');
         this.setState({ height, width,ctx });
     }
-
+    /**
+     * @method
+     * @param {e} e Event DOM
+     * @description check for every user click if its success,miss or error
+     */
     handleCanvasClick(e){
         const newLocation = { x: e.clientX, y: e.clientY };
         this.setState({locations:[...this.state.locations,newLocation]})
